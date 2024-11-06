@@ -1,18 +1,17 @@
 import java.util.Scanner;
+import java.sql.*;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        // Create a scanner, we'll use this scanner for all menus by passing it as argument!
-        Scanner scanner = new Scanner(System.in);
-
-        mainMenu(scanner);
+        mainMenu();
     }
 
 
-    private static void mainMenu(Scanner input){
+    private static void mainMenu(){
         char choice;
+        Scanner input = new Scanner(System.in);
 
         while(true){
             System.out.print("Welcome to InsideJob!\n");
@@ -25,10 +24,10 @@ public class Main {
 
             switch(choice) {
                 case '1':
-                    loginChoice(input);
+                    loginChoice();
                     break;
                 case '2':
-                    registerChoice(input);
+                    registerChoice();
                     break;
                 case '3':
                     return;
@@ -41,8 +40,9 @@ public class Main {
     }
 
     //are you a worker or an employer?
-    private static void registerChoice(Scanner input){
+    private static void registerChoice(){
         char choice;
+        Scanner input = new Scanner(System.in);
         while (true) {
             System.out.println("Are you a worker or an employer?");
             System.out.println("1. Worker");
@@ -53,7 +53,7 @@ public class Main {
 
             switch (choice) {
                 case '1':
-                    // workerRegister()
+                    workerRegister();
                     break;
                 case '2':
                     // employerRegister()
@@ -64,7 +64,8 @@ public class Main {
         }
     }
 
-    private static void loginChoice(Scanner input){
+    private static void loginChoice(){
+        Scanner input = new Scanner(System.in);
         char choice;
 
         while (true) {
@@ -80,7 +81,8 @@ public class Main {
                     clearScreen();
                     return;
                 case '1':
-                    // workerLogin()
+                    workerLogin();
+                    break;
                 case '2':
                     // employerLogin()
                 default:
@@ -93,30 +95,54 @@ public class Main {
 
     private static void workerLogin(){
 
-        while(true){
+        // initialize variables
+        String email, password;
+        Scanner input = new Scanner(System.in);
+
+        // collect user input
+        while (true) {
+            System.out.print("Input your email: ");
+            email = input.nextLine();
+            System.out.print("Input your password: ");
+            password = input.nextLine();
 
 
+            // connect to database
+            try {
+                Connection db = DriverManager.getConnection("jdbc:mysql://localhost:3306/testschema", "root", "12345678");
 
+                // check if the user exists
+                Statement statement = db.createStatement();
+                ResultSet resultSet = statement.executeQuery(String.format("SELECT * FROM WORKERS WHERE email = '%s' AND password = '%s';", email, password));
 
+                // if user is found!
+                if (resultSet.next()) {
+                    System.out.println("Logged in!");
 
+                    // add constructors here!
+                    break;
+                }
+
+                // else break
+                else {
+                    System.out.println("No records found. Email or password may be incorrect");
+                    continue;
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
 
-        /*Input email
-        * input password
-        * if email and password IN database:
-        *   error
-        * else:
-        *   login, construct user object
-        * */
     }
 
     private static void employerLogin(){
         /*Input email
          * input password
          * if email and password IN database:
-         *   error
+         *   login, construct object
          * else:
-         *   login, construct user object
+         *   error!
          * */
     }
 
@@ -124,6 +150,51 @@ public class Main {
     private static void clearScreen(){
         for(int i = 0; i<50; i++){
             System.out.print('\n');
+        }
+    }
+
+
+    private static void workerRegister(){
+        // initialize variables
+        String email, password;
+        Scanner input = new Scanner(System.in);
+
+        // collect user input
+        while (true) {
+            System.out.print("Input your email: ");
+            email = input.nextLine();
+            System.out.print("Input your password: ");
+            password = input.nextLine();
+
+            // connect to database
+            try {
+                Connection db = DriverManager.getConnection("jdbc:mysql://localhost:3306/testschema", "root", "12345678");
+
+                // check if the user exists
+                Statement statement = db.createStatement();
+                ResultSet resultSet = statement.executeQuery(String.format("SELECT * FROM WORKERS WHERE email = '%s' AND password = '%s';", email, password));
+
+                // if user is valid (doesn't exist yet)!
+                if (!resultSet.next()) {
+
+                    Statement createWorker = db.createStatement();
+                    statement.executeQuery(String.format(
+                            "INSERT INTO workers (email, password) VALUES (%s, %s);"
+                            ,email, password));
+
+                    System.out.println("Added successfully!");
+
+                }
+
+                // else, create
+                else {
+                    System.out.println("Email already exists. Please log in.");
+                    continue;
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
