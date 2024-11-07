@@ -48,10 +48,13 @@ public class Main {
             System.out.println("1. Worker");
             System.out.println("2. Employer");
 
-            System.out.print("Input your choice: ");
+            System.out.print("Input your choice (0 to return): ");
             choice = input.nextLine().charAt(0);
 
             switch (choice) {
+                case '0':
+                    return;
+
                 case '1':
                     workerRegister();
                     break;
@@ -60,6 +63,7 @@ public class Main {
                     break;
                 default:
                     System.out.println("Please provide a valid input.");
+                    continue;
             }
         }
     }
@@ -78,7 +82,6 @@ public class Main {
 
             switch (choice) {
                 case '0':
-                    clearScreen();
                     return;
                 case '1':
                     workerLogin();
@@ -106,14 +109,17 @@ public class Main {
             System.out.print("Input your password: ");
             password = input.nextLine();
 
+            // isValid(email, password);
 
             // connect to database
             try {
                 Connection db = DriverManager.getConnection("jdbc:mysql://localhost:3306/testschema", "root", "12345678");
 
                 // check if the user exists
-                Statement statement = db.createStatement();
-                ResultSet resultSet = statement.executeQuery(String.format("SELECT * FROM WORKERS WHERE email = '%s' AND password = '%s';", email, password));
+                PreparedStatement query = db.prepareStatement("SELECT * FROM WORKERS WHERE email = ? AND password = ?;");
+                query.setString(1, email);
+                query.setString(2, password);
+                ResultSet resultSet = query.executeQuery();
 
                 // if user is found!
                 if (resultSet.next()) {
@@ -170,23 +176,24 @@ public class Main {
             try {
                 Connection db = DriverManager.getConnection("jdbc:mysql://localhost:3306/testschema", "root", "12345678");
 
-                // check if the user exists
-                Statement statement = db.createStatement();
-                ResultSet resultSet = statement.executeQuery(String.format("SELECT * FROM WORKERS WHERE email = '%s' AND password = '%s';", email, password));
+                // check if the person's email exists in db
+                PreparedStatement query = db.prepareStatement("SELECT * FROM WORKERS WHERE email = ?;");
+                query.setString(1, email);
+                ResultSet resultSet = query.executeQuery();
 
                 // if user is valid (doesn't exist yet)!
                 if (!resultSet.next()) {
 
-                    Statement createWorker = db.createStatement();
-                    statement.executeQuery(String.format(
-                            "INSERT INTO workers (email, password) VALUES (%s, %s);"
-                            ,email, password));
-
+                    // add to DB
+                    PreparedStatement statement = db.prepareStatement("INSERT INTO workers (email, password) VALUES (?, ?);");
+                    statement.setString(1, email);
+                    statement.setString(2, password);
+                    statement.executeUpdate();
                     System.out.println("Added successfully!");
-
+                    break;
                 }
 
-                // else, create
+                // else, error
                 else {
                     System.out.println("Email already exists. Please log in.");
                     continue;
