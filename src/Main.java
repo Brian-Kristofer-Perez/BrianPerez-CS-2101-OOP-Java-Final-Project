@@ -4,14 +4,13 @@ import java.sql.*;
 public class Main {
 
     public static void main(String[] args) {
-
-        mainMenu();
+        Scanner input = new Scanner(System.in);
+        mainMenu(input);
     }
 
 
-    private static void mainMenu(){
+    private static void mainMenu(Scanner input){
         char choice;
-        Scanner input = new Scanner(System.in);
 
         while(true){
             System.out.print("Welcome to InsideJob!\n");
@@ -24,25 +23,22 @@ public class Main {
 
             switch(choice) {
                 case '1':
-                    loginChoice();
+                    loginChoice(input);
                     break;
                 case '2':
-                    registerChoice();
+                    registerChoice(input);
                     break;
                 case '3':
                     return;
                 default:
-                    clearScreen();
                     System.out.println("Please enter a valid input");
-                    continue;
-        }
+            }
         }
     }
 
     //are you a worker or an employer?
-    private static void registerChoice(){
+    private static void registerChoice(Scanner input){
         char choice;
-        Scanner input = new Scanner(System.in);
         while (true) {
             System.out.println("Are you a worker or an employer?");
             System.out.println("1. Worker");
@@ -56,20 +52,19 @@ public class Main {
                     return;
 
                 case '1':
-                    workerRegister();
+                    workerRegister(input);
                     break;
                 case '2':
                     // employerRegister()
                     break;
                 default:
                     System.out.println("Please provide a valid input.");
-                    continue;
             }
         }
     }
 
-    private static void loginChoice(){
-        Scanner input = new Scanner(System.in);
+    private static void loginChoice(Scanner input){
+
         char choice;
 
         while (true) {
@@ -84,32 +79,38 @@ public class Main {
                 case '0':
                     return;
                 case '1':
-                    workerLogin();
-                    break;
+                    workerLogin(input);
+
+                    return;
                 case '2':
                     // employerLogin()
+                    return;
                 default:
-                    clearScreen();
                     System.out.println("Please provide a valid input.");
-                    continue;
             }
         }
     }
 
-    private static void workerLogin(){
+    private static void workerLogin(Scanner input){
 
         // initialize variables
         String email, password;
-        Scanner input = new Scanner(System.in);
 
         // collect user input
         while (true) {
-            System.out.print("Input your email: ");
+            System.out.print("Input your email (leave blank to return): ");
             email = input.nextLine();
-            System.out.print("Input your password: ");
+
+            if(email.isEmpty()){
+                return;
+            }
+
+            System.out.print("Input your password (leave blank to return): ");
             password = input.nextLine();
 
-            // isValid(email, password);
+            if(password.isEmpty()){
+                return;
+            }
 
             // connect to database
             try {
@@ -132,7 +133,6 @@ public class Main {
                 // else break
                 else {
                     System.out.println("No records found. Email or password may be incorrect");
-                    continue;
                 }
 
             } catch (SQLException e) {
@@ -152,25 +152,26 @@ public class Main {
          * */
     }
 
-    // simulate clearing a screen, since im not sure how java does it.
-    private static void clearScreen(){
-        for(int i = 0; i<50; i++){
-            System.out.print('\n');
-        }
-    }
 
-
-    private static void workerRegister(){
+    private static void workerRegister(Scanner input){
         // initialize variables
         String email, password;
-        Scanner input = new Scanner(System.in);
 
         // collect user input
         while (true) {
-            System.out.print("Input your email: ");
+            System.out.print("Input your email (leave blank to return): ");
             email = input.nextLine();
-            System.out.print("Input your password: ");
+
+            if(email.isEmpty()){
+                return;
+            }
+
+            System.out.print("Input your password (leave blank to return): ");
             password = input.nextLine();
+
+            if(password.isEmpty()){
+                return;
+            }
 
             // connect to database
             try {
@@ -196,7 +197,6 @@ public class Main {
                 // else, error
                 else {
                     System.out.println("Email already exists. Please log in.");
-                    continue;
                 }
 
             } catch (SQLException e) {
