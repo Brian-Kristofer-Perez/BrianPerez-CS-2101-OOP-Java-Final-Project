@@ -134,17 +134,12 @@ public class Main {
             }
 
             // connect to database
-            try {
-                Connection db = DriverManager.getConnection("jdbc:mysql://localhost:3306/testschema", "root", "12345678");
+            Database database = new Database();
 
-                // check if the user exists
-                PreparedStatement query = db.prepareStatement("SELECT * FROM WORKERS WHERE username = ? AND password = ?;");
-                query.setString(1, username);
-                query.setString(2, password);
-                ResultSet resultSet = query.executeQuery();
+            boolean valid = database.searchWorker(username, password);
 
                 // if user is found!
-                if (resultSet.next()) {
+                if (valid) {
                     System.out.println("Logged in!");
 
                     // add constructors here!
@@ -155,10 +150,6 @@ public class Main {
                 else {
                     System.out.println("No records found. username or password may be incorrect");
                 }
-
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
 
     }
@@ -185,30 +176,20 @@ public class Main {
             }
 
             // connect to database
-            try {
-                Connection db = DriverManager.getConnection("jdbc:mysql://localhost:3306/testschema", "root", "12345678");
+            Database database = new Database();
+            boolean valid = database.searchWorker(username, password);
 
-                // check if the user exists
-                PreparedStatement query = db.prepareStatement("SELECT * FROM employers WHERE username = ? AND password = ?;");
-                query.setString(1, username);
-                query.setString(2, password);
-                ResultSet resultSet = query.executeQuery();
+            // if user is found!
+            if (valid) {
+                System.out.println("Logged in!");
 
-                // if user is found!
-                if (resultSet.next()) {
-                    System.out.println("Logged in!");
+                // add constructors here!
+                break;
+            }
 
-                    // add constructors here!
-                    break;
-                }
-
-                // else break
-                else {
-                    System.out.println("No records found. username or password may be incorrect");
-                }
-
-            } catch (SQLException e) {
-                e.printStackTrace();
+            // else break
+            else {
+                System.out.println("No records found. username or password may be incorrect");
             }
         }
 
@@ -235,33 +216,18 @@ public class Main {
             }
 
             // connect to database
-            try {
-                Connection db = DriverManager.getConnection("jdbc:mysql://localhost:3306/testschema", "root", "12345678");
+            Database database = new Database();
+            boolean found = database.searchWorker(username);
 
-                // check if the person's username exists in db
-                PreparedStatement query = db.prepareStatement("SELECT * FROM WORKERS WHERE username = ?;");
-                query.setString(1, username);
-                ResultSet resultSet = query.executeQuery();
+            if (!found) {
+                database.addWorker(username, password);
+                System.out.println("Added successfully!");
+                break;
+            }
 
-                // if user is valid (doesn't exist yet)!
-                if (!resultSet.next()) {
-
-                    // add to DB
-                    PreparedStatement statement = db.prepareStatement("INSERT INTO workers (username, password) VALUES (?, ?);");
-                    statement.setString(1, username);
-                    statement.setString(2, password);
-                    statement.executeUpdate();
-                    System.out.println("Added successfully!");
-                    break;
-                }
-
-                // else, error
-                else {
-                    System.out.println("Username already exists.");
-                }
-
-            } catch (SQLException e) {
-                e.printStackTrace();
+            // else, error
+            else {
+                System.out.println("Username already exists.");
             }
         }
     }
@@ -287,33 +253,23 @@ public class Main {
             }
 
             // connect to database
-            try {
-                Connection db = DriverManager.getConnection("jdbc:mysql://localhost:3306/testschema", "root", "12345678");
+            Database database = new Database();
 
-                // check if the person's username exists in db
-                PreparedStatement query = db.prepareStatement("SELECT * FROM employers WHERE username = ?;");
-                query.setString(1, username);
-                ResultSet resultSet = query.executeQuery();
+            // check if the person's username exists in db
+            boolean exists = database.searchEmployer(username);
 
-                // if user is valid (doesn't exist yet)!
-                if (!resultSet.next()) {
+            // if user is valid (doesn't exist yet)!
+            if (!exists) {
 
-                    // add to DB
-                    PreparedStatement statement = db.prepareStatement("INSERT INTO employers (username, password) VALUES (?, ?);");
-                    statement.setString(1, username);
-                    statement.setString(2, password);
-                    statement.executeUpdate();
-                    System.out.println("Added successfully!");
-                    break;
-                }
+                // add to DB
+                database.addEmployer(username, password);
+                System.out.println("Added successfully!");
+                break;
+            }
 
-                // else, error
-                else {
-                    System.out.println("Username already exists.");
-                }
-
-            } catch (SQLException e) {
-                e.printStackTrace();
+            // else, error
+            else {
+                System.out.println("Username already exists.");
             }
         }
     }
