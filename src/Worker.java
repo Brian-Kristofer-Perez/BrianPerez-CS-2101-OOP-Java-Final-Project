@@ -1,15 +1,14 @@
 import java.util.Scanner;
 
 public class Worker extends User {
-    //private Resume resume;
+    private Resume resume;
     private String occupation;
 
-    // Sign in, with resume
-    public Worker(){}
+    public Worker(String name, String email, String occupation, Resume resume){
 
-    // Sign in, without resume
-    public Worker(String Resume){}
-
+        this.name = name;
+        this.resume = new Resume();
+    }
 
 
 
@@ -27,7 +26,6 @@ public class Worker extends User {
             System.out.println("4. Log out");
 
             System.out.print("Input your choice: ");
-
 
             // catch empty input errors!
             try {

@@ -1,8 +1,7 @@
 public abstract class User {
-    private String name;
-    private String field;
-    private String company;
-    private String email;
+    protected String name;
+    protected String company;
+    protected String email;
 }
 
 

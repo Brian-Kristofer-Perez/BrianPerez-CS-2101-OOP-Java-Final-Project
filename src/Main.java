@@ -177,7 +177,7 @@ public class Main {
 
             // connect to database
             Database database = new Database();
-            boolean valid = database.searchWorker(username, password);
+            boolean valid = database.searchEmployer(username, password);
 
             // if user is found!
             if (valid) {
@@ -215,7 +215,6 @@ public class Main {
                 return;
             }
 
-            // connect to database
             Database database = new Database();
             boolean found = database.searchWorker(username);
 
@@ -225,7 +224,6 @@ public class Main {
                 break;
             }
 
-            // else, error
             else {
                 System.out.println("Username already exists.");
             }

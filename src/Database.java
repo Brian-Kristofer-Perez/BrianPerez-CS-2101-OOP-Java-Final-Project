@@ -67,8 +67,6 @@ public class Database {
         return isFound;
     }
 
-
-
     public ResultSet queryEmployer(String username, String password){
 
         ResultSet resultSet = null;
@@ -137,7 +135,6 @@ public class Database {
 
     }
 
-
     public void addEmployer(String username, String password){
 
         try {
@@ -151,6 +148,13 @@ public class Database {
             e.printStackTrace();
         }
 
+    }
+
+    public void loadResume(String user){
+
+
+
+        return;
     }
 
 }
