@@ -141,8 +141,12 @@ public class Main {
                 // if user is found!
                 if (valid) {
                     System.out.println("Logged in!");
-
                     // add constructors here!
+
+                    // Worker user = new Worker(username, password);
+                    // user.loadDetails();
+                    // user.login();
+
                     break;
                 }
 

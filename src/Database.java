@@ -1,4 +1,5 @@
 import java.sql.*;
+import java.util.ArrayList;
 
 public class Database {
 
@@ -14,14 +15,13 @@ public class Database {
         }
     }
 
-    public ResultSet queryWorker(String username, String password){
+    public ResultSet queryWorker(String username){
 
         ResultSet resultSet = null;
 
         try {
-            PreparedStatement query = connection.prepareStatement("SELECT * FROM workers WHERE username = ? AND password = ?;");
+            PreparedStatement query = connection.prepareStatement("SELECT * FROM workers WHERE username = ?;");
             query.setString(1, username);
-            query.setString(2, password);
             resultSet = query.executeQuery();
         }
         catch (SQLException e) {
@@ -67,14 +67,13 @@ public class Database {
         return isFound;
     }
 
-    public ResultSet queryEmployer(String username, String password){
+    public ResultSet queryEmployer(String username){
 
         ResultSet resultSet = null;
 
         try {
-            PreparedStatement query = connection.prepareStatement("SELECT * FROM employers WHERE username = ? AND password = ?;");
+            PreparedStatement query = connection.prepareStatement("SELECT * FROM employers WHERE username = ?;");
             query.setString(1, username);
-            query.setString(2, password);
             resultSet = query.executeQuery();
         }
         catch (SQLException e) {
@@ -150,12 +149,91 @@ public class Database {
 
     }
 
-    public void loadResume(String user){
+    public int getWorkerID(String username){
+
+        int idWorker = 0;
+
+        try {
+            ResultSet resultSet = queryWorker(username);
+
+            // set the ResultSet pointer to the variable in the result set!
+            resultSet.next();
+            idWorker = resultSet.getInt("idWorker");
+        }
+
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+
+        return idWorker;
+    };
+
+    public void loadResume(int workerID){
+
+        String sql = "SELECT *" +
+                "FROM workers w " +
+                "JOIN resumes r ON w.idWorker = r.idWorker " +
+                "LEFT JOIN certifications c ON r.idResume = c.idResume " +
+                "LEFT JOIN workexperience we ON r.idResume = we.idResume " +
+                "WHERE w.idWorker = ?";
+
+        try {
+            PreparedStatement query = connection.prepareStatement(sql);
+            query.setInt(1, workerID);
+
+            ResultSet resultSet = query.executeQuery();
+
+            // pointer
+            resultSet.next();
+
+            // parse the result
+            String username = resultSet.getString("username");
+            String password = resultSet.getString("password");
+            int idWorker = resultSet.getInt("idWorker");
+            String resumeDesc = resultSet.getString("Summary");
+
+            ArrayList<String> certifications = new ArrayList<String>();
+            ArrayList<String> workExperience = new ArrayList<String>();
+
+            do{
+                String cert = resultSet.getString("certificationName");
+                String exp = resultSet.getString("experience");
+
+                if (!certifications.contains(cert)) {
+                    certifications.add(cert);
+                }
+
+                if(!workExperience.contains(exp)) {
+                    workExperience.add(exp);
+                }
+            } while(resultSet.next());
+
+            System.out.println(username);
+            System.out.println(password);
+            System.out.println(idWorker);
+            System.out.println(resumeDesc);
+
+            System.out.println("Certifications: ");
+            for(String i : certifications){
+                System.out.println(i);
+            }
+
+            System.out.println("Experience: ");
+            for(String i : workExperience){
+                System.out.println(i);
+            }
 
 
 
-        return;
+
+
+
+
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+
     }
-
 }
 

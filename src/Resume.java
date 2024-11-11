@@ -1,3 +1,6 @@
+import java.sql.Connection;
+import java.util.ArrayList;
+
 public class Resume {
 
     // Personal Information
@@ -9,16 +12,24 @@ public class Resume {
     // Resume Content
     private String summary;
 //    private String[] skills;
-    private String[] experience;
+    private ArrayList<String> experience;
 //    private String[] projects;
-    private String[] certifications;
+    private ArrayList<String> certifications;
 
 
 
     //default, no resume yet
     public Resume(){}
 
-    public Resume(String name, int age, String email, String[] workExperience, String educationalAttainment){}
+    public Resume(String summary, ArrayList<String> experience, ArrayList<String> certifications){
+        this.summary = summary;
+        this.experience = experience;
+        this.certifications = certifications;
+    }
+
+    public void load(String username){
+
+    }
 
     public void display(){
 

@@ -1,16 +1,18 @@
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class Worker extends User {
     private Resume resume;
-    private String occupation;
+    private String username;
 
-    public Worker(String name, String email, String occupation, Resume resume){
 
-        this.name = name;
+    // Constructor, loading details from DB will be to-follow
+    public Worker(String username){
+
+        this.username = username;
         this.resume = new Resume();
+
     }
-
-
 
 
     public void apply(){}
@@ -48,6 +50,7 @@ public class Worker extends User {
         }
 
     }
+
 
     public void logout(){}
     
