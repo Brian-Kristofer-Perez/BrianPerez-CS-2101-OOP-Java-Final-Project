@@ -13,8 +13,7 @@ public class Worker extends User {
         this.resume = new Resume();
 
     }
-
-
+    
     public void apply(){}
 
     public void login(Scanner input){

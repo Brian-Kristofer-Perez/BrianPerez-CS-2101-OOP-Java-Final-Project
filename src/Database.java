@@ -168,7 +168,7 @@ public class Database {
         return idWorker;
     };
 
-    public void loadResume(int workerID){
+    public void loadResume(int workerID, Resume resume){
 
         String sql = "SELECT *" +
                 "FROM workers w " +
@@ -195,6 +195,9 @@ public class Database {
             ArrayList<String> certifications = new ArrayList<String>();
             ArrayList<String> workExperience = new ArrayList<String>();
 
+
+            //printing the resume
+            /*
             do{
                 String cert = resultSet.getString("certificationName");
                 String exp = resultSet.getString("experience");
@@ -222,12 +225,7 @@ public class Database {
             for(String i : workExperience){
                 System.out.println(i);
             }
-
-
-
-
-
-
+            */
 
         }
         catch (SQLException e) {

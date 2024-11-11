@@ -143,7 +143,7 @@ public class Main {
                     System.out.println("Logged in!");
                     // add constructors here!
 
-                    // Worker user = new Worker(username, password);
+                    Worker user = new Worker(username);
                     // user.loadDetails();
                     // user.login();
 
