@@ -296,7 +296,43 @@ public class Database {
         return jobs;
     }
 
-    public void deleteJob(){
+
+    public void deleteJob(Job job, String employerName){
+
+        // get employer id
+        int employerID = queryEmployerID(employerName);
+
+        try {
+
+            // get jobID from traits
+
+            PreparedStatement getJobID = connection.prepareStatement("SELECT * FROM jobs WHERE title = ? AND description = ? AND salary = ? AND idEmployer = ?");
+            getJobID.setString(1, job.getJobTitle());
+            getJobID.setString(2, job.getJobDesc());
+            getJobID.setInt(3, job.getSalary());
+            getJobID.setInt(4, employerID);
+            ResultSet resultSet = getJobID.executeQuery();
+
+            resultSet.next();
+
+            int jobID = resultSet.getInt("idJob");
+
+
+            // delete from jobs table
+            PreparedStatement statement = connection.prepareStatement("DELETE FROM jobs WHERE idJob = ?");
+            statement.setInt(1, jobID);
+            statement.executeUpdate();
+
+            // delete from benefits table
+            PreparedStatement removeFromBenefits = connection.prepareStatement("DELETE FROM benefits WHERE idJob = ?");
+            removeFromBenefits.setInt(1, jobID);
+            removeFromBenefits.executeUpdate();
+
+
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
 
     }
 

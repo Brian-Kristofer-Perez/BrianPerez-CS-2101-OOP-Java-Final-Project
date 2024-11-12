@@ -70,6 +70,7 @@ public class Employer extends User {
                 benefit = input.nextLine();
 
                 if (benefit.isEmpty()) {
+                    input.nextLine(); //consume the newline
                     break;
                 } else {
                     benefits.add(benefit);
@@ -147,16 +148,17 @@ public class Employer extends User {
                 choice = Integer.parseInt(strChoice);
             } catch (NumberFormatException e) {
                 System.out.println("Please enter a valid input.");
+                continue;
             }
 
             choice--;
 
-            if(choice < jobList.size()){
+            if(choice < 0){
                 System.out.println("Input a valid index.");
                 continue;
             }
 
-            if(choice < jobList.size()-1 || choice > jobList.size()-1){
+            if(choice > jobList.size()-1){
                 System.out.println("Input a valid index.");
             }
             else{
@@ -164,7 +166,9 @@ public class Employer extends User {
             }
         }
 
-
+        database.deleteJob(jobList.get(choice), this.name);
+        System.out.println("Job deleted!");
+        return;
 
     }
 
@@ -197,7 +201,7 @@ public class Employer extends User {
                     // EXTRA MENU HERE()
                     break;
                 case '3':
-                    // deleteJob(input);
+                    deleteJobMenu(input);
                     break;
                 default:
                     System.out.println("Please provide a valid input.");
