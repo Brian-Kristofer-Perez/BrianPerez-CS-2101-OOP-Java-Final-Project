@@ -202,6 +202,9 @@ public class Employer extends User {
                 case '3':
                     deleteJobMenu(input);
                     break;
+                case '4':
+                    return;
+
                 default:
                     System.out.println("Please provide a valid input.");
             }
