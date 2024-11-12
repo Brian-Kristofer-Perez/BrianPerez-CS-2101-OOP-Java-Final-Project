@@ -70,7 +70,6 @@ public class Employer extends User {
                 benefit = input.nextLine();
 
                 if (benefit.isEmpty()) {
-                    input.nextLine(); //consume the newline
                     break;
                 } else {
                     benefits.add(benefit);
