@@ -15,22 +15,6 @@ public class Database {
         }
     }
 
-    public ResultSet queryWorker(String name){
-
-        ResultSet resultSet = null;
-
-        try {
-            PreparedStatement query = connection.prepareStatement("SELECT * FROM workers WHERE name = ?;");
-            query.setString(1, name);
-            resultSet = query.executeQuery();
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return resultSet;
-    }
-
 
     public boolean searchWorker(String name, String password){
 
@@ -67,22 +51,6 @@ public class Database {
         return isFound;
     }
 
-    public ResultSet queryEmployer(String name){
-
-        ResultSet resultSet = null;
-
-        try {
-            PreparedStatement query = connection.prepareStatement("SELECT * FROM employers WHERE name = ?;");
-            query.setString(1, name);
-            resultSet = query.executeQuery();
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return resultSet;
-    }
-
     // validating the login!
     public boolean searchEmployer(String name, String password){
 
@@ -101,7 +69,7 @@ public class Database {
         return isFound;
     }
 
-
+    // overload! first one is for validating the login, this one is just for registration, to prevent name conflict
     public boolean searchEmployer(String name){
 
         boolean isFound = false;
@@ -146,24 +114,48 @@ public class Database {
 
     }
 
-    public int getWorkerID(String name){
+    public int queryWorkerID(String name){
 
-        int idWorker = 0;
+        ResultSet resultSet = null;
+        int workerID = 0;
 
         try {
-            ResultSet resultSet = queryWorker(name);
-
-            // set the ResultSet pointer to the variable in the result set!
+            PreparedStatement query = connection.prepareStatement("SELECT * FROM workers WHERE name = ?;");
+            query.setString(1, name);
+            resultSet = query.executeQuery();
             resultSet.next();
-            idWorker = resultSet.getInt("idWorker");
-        }
 
-        catch(SQLException e){
+            workerID = resultSet.getInt("idWorker");
+
+        }
+        catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return idWorker;
+        return workerID;
     };
+
+    public int queryEmployerID(String name){
+
+        ResultSet resultSet = null;
+        int employerID = 0;
+
+        try {
+            PreparedStatement query = connection.prepareStatement("SELECT * FROM employers WHERE name = ?;");
+            query.setString(1, name);
+            resultSet = query.executeQuery();
+            resultSet.next();
+
+            employerID = resultSet.getInt("idEmployer");
+
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return employerID;
+    }
+
 
     public void loadResumeDetails(int workerID, Resume resume){
 
@@ -233,22 +225,27 @@ public class Database {
 
     }
 
-    public void addPosting(int employerID, Job job){
+    public void addPosting(String name, Job job){
 
         try {
 
+            // get the employer's ID
+            int employerID = queryEmployerID(name);
+
             // add the job to jobs table
-            PreparedStatement statement = this.connection.prepareStatement("INSERT INTO jobs (salary, description, idEmployer) VALUES (?, ?, ?);");
+            PreparedStatement statement = this.connection.prepareStatement("INSERT INTO jobs (salary, description, idEmployer, title) VALUES (?, ?, ?,?);");
             statement.setInt(1, job.getSalary());
             statement.setString(2, job.getJobDesc());
             statement.setInt(3, employerID);
+            statement.setString(4, job.getJobTitle());
             statement.executeUpdate();
 
             // get the job ID of the newly added job.
-            PreparedStatement getID = this.connection.prepareStatement("SELECT * FROM jobs WHERE salary = ? AND description = ? AND idEmployer = ?;");
+            PreparedStatement getID = this.connection.prepareStatement("SELECT * FROM jobs WHERE salary = ? AND description = ? AND idEmployer = ? AND title = ?;");
             getID.setInt(1, job.getSalary());
             getID.setString(2, job.getJobDesc());
             getID.setInt(3, employerID);
+            getID.setString(4, job.getJobTitle());
             ResultSet resultSet = getID.executeQuery();
 
             // move the pointer forward, and get the job ID
@@ -258,7 +255,9 @@ public class Database {
             // add benefits to benefits table, and link to jobs
             for(String benefit: job.getBenefits()) {
                 PreparedStatement addToBenefits = this.connection.prepareStatement("INSERT INTO benefits (idJob, benefit) VALUES (?, ?);");
-                statement.setString(2, job.getJobDesc());
+                addToBenefits.setInt(1, jobID);
+                addToBenefits.setString(2, benefit);
+                addToBenefits.executeUpdate();
             }
 
         }

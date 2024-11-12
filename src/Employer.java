@@ -4,18 +4,28 @@ import java.util.Scanner;
 public class Employer extends User {
 
     public Employer(String name){
-
+        this.name = name;
     }
 
-    public Job createJob(Scanner input){
+    // Getters and setters
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-        String jobTitle, jobDesc, benefit;
+
+    public void createJob(Scanner input){
+
+        String jobTitle, jobDesc, benefit, strSalary;
         int salary = 0;
         ArrayList<String> benefits = new ArrayList<>();
         Job newPosting = null;
 
+        // collect user input
         while(true) {
-            System.out.print("Input the job title (Leave empty to return): ");
+            System.out.print("Input the job title: ");
             jobTitle = input.nextLine();
 
             if (jobTitle.isEmpty()) {
@@ -23,7 +33,7 @@ public class Employer extends User {
                 continue;
             }
 
-            System.out.print("Input the job description (Leave empty to return): ");
+            System.out.print("Input the job description: ");
             jobDesc = input.nextLine();
 
             if (jobDesc.isEmpty()) {
@@ -33,12 +43,15 @@ public class Employer extends User {
 
             // making sure the integer input is valid
             try {
-                System.out.print("Input the job's monthly salary (0 to return): ");
-                salary = input.nextInt();
+                System.out.print("Input the job's monthly salary: ");
+                strSalary = input.nextLine();
 
-                // clear the newline
-                input.nextLine();
+                if(strSalary.isEmpty()){
+                    System.out.println("Please provide a proper value");
+                    continue;
+                }
 
+                salary = Integer.parseInt(strSalary);
 
                 if (salary <= 0) {
                     System.out.println("Please provide a proper value");
@@ -47,29 +60,38 @@ public class Employer extends User {
 
             } catch (RuntimeException e) {
                 System.out.println("Please input a valid number!");
+                continue;
             }
 
             // benefits input!
-            System.out.print("List down the other job benefits (leave empty to end): ");
-            benefit = input.nextLine();
 
-            if (benefit.isEmpty()) {
-                break;
-            } else {
-                benefits.add(benefit);
+            while(true) {
+                System.out.print("List down the other job benefits (leave empty to end): ");
+                benefit = input.nextLine();
+
+                if (benefit.isEmpty()) {
+                    break;
+                } else {
+                    benefits.add(benefit);
+                }
             }
 
+            break;
         }
 
+        // create the posting object, and add to database
         newPosting = new Job(jobTitle, jobDesc, salary,benefits);
-        return newPosting;
+        Database database = new Database();
+        database.addPosting(this.name, newPosting);
+
+        System.out.println("Job successfully created!");
     }
 
     public void login(Scanner input) {
         // user log-in menu here
         char choice;
         while (true) {
-            System.out.println("Welcome, [name]!");
+            System.out.println(String.format("Welcome, %s!", this.name));
             System.out.println("1. Create Job postings");
             System.out.println("2. View Job postings");
             System.out.println("3. Delete Job postings");
