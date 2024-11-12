@@ -87,13 +87,55 @@ public class Employer extends User {
         System.out.println("Job successfully created!");
     }
 
+
+    // overloaded method! this one automatically picks up the postings, and views them. Not indexed in order, though.
+    // If the functionality of ordered indexing is also needed, store it in a separate ArrayList, and pass it to the function below!
+    public void viewPostings(String employerName) {
+
+        Database database = new Database();
+
+        ArrayList<Job> jobList = database.queryJobs(employerName);
+        int counter = 0;
+
+        for (Job i : jobList) {
+
+            System.out.println(++counter +".  " + "Job title: " + i.getJobTitle());
+            System.out.println("\tDescription: " + i.getJobDesc());
+            System.out.println("\tMonthly Salary: " + i.getSalary() + " php");
+            System.out.println("\tBenefits: ");
+            for (String j : i.getBenefits()) {
+                System.out.println("\t" + j);
+            }
+            System.out.println();
+
+        }
+    }
+
+
+    // overloaded method! this one you have to manually pass the list, the other one automatically does.
+    public void viewPostings(String employerName, ArrayList<Job> jobList){
+
+        int counter = 0;
+        for (Job i : jobList) {
+
+            System.out.println(++counter + ".  " + "Job title: " + i.getJobTitle());
+            System.out.println("\tDescription: " + i.getJobDesc());
+            System.out.println("\tMonthly Salary: " + i.getSalary() + " php");
+            System.out.println("\tBenefits: ");
+            for (String j : i.getBenefits()) {
+                System.out.println("\t" + j);
+            }
+            System.out.println();
+        }
+    }
+
     public void login(Scanner input) {
         // user log-in menu here
         char choice;
         while (true) {
             System.out.println(String.format("Welcome, %s!", this.name));
             System.out.println("1. Create Job postings");
-            System.out.println("2. View Job postings");
+            System.out.println("2. Review Job postings");
             System.out.println("3. Delete Job postings");
             System.out.println("4. Log out");
 
@@ -112,7 +154,11 @@ public class Employer extends User {
                     createJob(input);
                     break;
                 case '2':
-                    // vie
+                    viewPostings(this.name);
+                    // EXTRA MENU HERE()
+                    break;
+                case '3':
+                    // deleteJob(input);
                     break;
                 default:
                     System.out.println("Please provide a valid input.");

@@ -1,5 +1,8 @@
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Database {
 
@@ -184,40 +187,6 @@ public class Database {
             ArrayList<String> certifications = new ArrayList<String>();
             ArrayList<String> workExperience = new ArrayList<String>();
 
-
-
-
-            //printing the resume
-            /*
-            do{
-                String cert = resultSet.getString("certificationName");
-                String exp = resultSet.getString("experience");
-
-                if (!certifications.contains(cert)) {
-                    certifications.add(cert);
-                }
-
-                if(!workExperience.contains(exp)) {
-                    workExperience.add(exp);
-                }
-            } while(resultSet.next());
-
-            System.out.println(name);
-            System.out.println(password);
-            System.out.println(idWorker);
-            System.out.println(resumeDesc);
-
-            System.out.println("Certifications: ");
-            for(String i : certifications){
-                System.out.println(i);
-            }
-
-            System.out.println("Experience: ");
-            for(String i : workExperience){
-                System.out.println(i);
-            }
-            */
-
         }
         catch (SQLException e) {
             e.printStackTrace();
@@ -268,5 +237,65 @@ public class Database {
 
 
     }
+
+    public ArrayList<Job> queryJobs(String name){
+
+        // get employer id
+        int employerID = queryEmployerID(name);
+        HashMap<Integer, Job> jobMap = new HashMap<Integer, Job>();
+
+        // query all jobs that have employerID as employer
+        try {
+
+            // get all jobID's that belong to that employer
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM jobs LEFT JOIN benefits on jobs.idJob = benefits.idJob WHERE idEmployer = ?;");
+            statement.setInt(1, employerID);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            // loop through resultSet
+            while(resultSet.next()){
+
+                // get their jobID
+                Integer id = resultSet.getInt("idJob");
+
+                // if it's already in the hashmap, get it, add a new benefit, put it back.
+                if(jobMap.containsKey(id)){
+
+                    Job job = jobMap.get(id);
+
+                    job.addBenefits(resultSet.getString("benefit"));
+
+                    jobMap.replace(id, job);
+                }
+
+                // else, add it to the hashmap
+                else{
+
+                    String title = resultSet.getString("title");
+                    String description = resultSet.getString("description");
+                    int salary = resultSet.getInt("salary");
+                    ArrayList<String> benefits = new ArrayList<String>();
+                    Job job = new Job(title, description, salary, benefits);
+                    job.addBenefits(resultSet.getString("benefit"));
+
+                    jobMap.put(id, job);
+                }
+
+            }
+
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        // pass it to a return arraylist
+        ArrayList<Job> jobs = new ArrayList<Job>(jobMap.values());
+
+        return jobs;
+    }
+
+
 }
 

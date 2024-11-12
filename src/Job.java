@@ -33,4 +33,8 @@ public class Job {
         return benefits;
     }
 
+    public void addBenefits(String benefit){
+       this.benefits.add(benefit);
+    }
+
 }
