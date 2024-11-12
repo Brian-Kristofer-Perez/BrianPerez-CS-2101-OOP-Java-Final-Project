@@ -15,13 +15,13 @@ public class Database {
         }
     }
 
-    public ResultSet queryWorker(String username){
+    public ResultSet queryWorker(String name){
 
         ResultSet resultSet = null;
 
         try {
-            PreparedStatement query = connection.prepareStatement("SELECT * FROM workers WHERE username = ?;");
-            query.setString(1, username);
+            PreparedStatement query = connection.prepareStatement("SELECT * FROM workers WHERE name = ?;");
+            query.setString(1, name);
             resultSet = query.executeQuery();
         }
         catch (SQLException e) {
@@ -32,13 +32,13 @@ public class Database {
     }
 
 
-    public boolean searchWorker(String username, String password){
+    public boolean searchWorker(String name, String password){
 
         boolean isFound = false;
 
         try {
-            PreparedStatement query = connection.prepareStatement("SELECT * FROM workers WHERE username = ? AND password = ?;");
-            query.setString(1, username);
+            PreparedStatement query = connection.prepareStatement("SELECT * FROM workers WHERE name = ? AND password = ?;");
+            query.setString(1, name);
             query.setString(2, password);
             isFound = query.executeQuery().next();
         }
@@ -50,14 +50,14 @@ public class Database {
     }
 
 
-    // overloading the method! the first one takes username and password, and this one takes only the username.
-    public boolean searchWorker(String username){
+    // overloading the method! the first one takes name and password, and this one takes only the name.
+    public boolean searchWorker(String name){
 
         boolean isFound = false;
 
         try {
-            PreparedStatement query = connection.prepareStatement("SELECT * FROM workers WHERE username = ?;");
-            query.setString(1, username);
+            PreparedStatement query = connection.prepareStatement("SELECT * FROM workers WHERE name = ?;");
+            query.setString(1, name);
             isFound = query.executeQuery().next();
         }
         catch (SQLException e) {
@@ -67,13 +67,13 @@ public class Database {
         return isFound;
     }
 
-    public ResultSet queryEmployer(String username){
+    public ResultSet queryEmployer(String name){
 
         ResultSet resultSet = null;
 
         try {
-            PreparedStatement query = connection.prepareStatement("SELECT * FROM employers WHERE username = ?;");
-            query.setString(1, username);
+            PreparedStatement query = connection.prepareStatement("SELECT * FROM employers WHERE name = ?;");
+            query.setString(1, name);
             resultSet = query.executeQuery();
         }
         catch (SQLException e) {
@@ -83,14 +83,14 @@ public class Database {
         return resultSet;
     }
 
-
-    public boolean searchEmployer(String username, String password){
+    // validating the login!
+    public boolean searchEmployer(String name, String password){
 
         boolean isFound = false;
 
         try {
-            PreparedStatement query = connection.prepareStatement("SELECT * FROM employers WHERE username = ? AND password = ?;");
-            query.setString(1, username);
+            PreparedStatement query = connection.prepareStatement("SELECT * FROM employers WHERE name = ? AND password = ?;");
+            query.setString(1, name);
             query.setString(2, password);
             isFound = query.executeQuery().next();
         }
@@ -102,14 +102,13 @@ public class Database {
     }
 
 
-    // overloading the method! the first one takes username and password, and this one takes only the username.
-    public boolean searchEmployer(String username){
+    public boolean searchEmployer(String name){
 
         boolean isFound = false;
 
         try {
-            PreparedStatement query = connection.prepareStatement("SELECT * FROM employers WHERE username = ?;");
-            query.setString(1, username);
+            PreparedStatement query = connection.prepareStatement("SELECT * FROM employers WHERE name = ?");
+            query.setString(1, name);
             isFound = query.executeQuery().next();
         }
         catch (SQLException e) {
@@ -119,14 +118,13 @@ public class Database {
         return isFound;
     }
 
-    public void addWorker(String username, String password){
+    public void addWorker(String name, String password){
 
         try {
-            PreparedStatement statement = this.connection.prepareStatement("INSERT INTO workers (username, password) VALUES (?, ?);");
-            statement.setString(1, username);
+            PreparedStatement statement = this.connection.prepareStatement("INSERT INTO workers (name, password) VALUES (?, ?);");
+            statement.setString(1, name);
             statement.setString(2, password);
             statement.executeUpdate();
-            System.out.println("Added successfully!");
         }
         catch(SQLException e){
             e.printStackTrace();
@@ -134,14 +132,13 @@ public class Database {
 
     }
 
-    public void addEmployer(String username, String password){
+    public void addEmployer(String name, String password){
 
         try {
-            PreparedStatement statement = this.connection.prepareStatement("INSERT INTO employers (username, password) VALUES (?, ?);");
-            statement.setString(1, username);
+            PreparedStatement statement = this.connection.prepareStatement("INSERT INTO employers (name, password) VALUES (?, ?);");
+            statement.setString(1, name);
             statement.setString(2, password);
             statement.executeUpdate();
-            System.out.println("Added successfully!");
         }
         catch(SQLException e){
             e.printStackTrace();
@@ -149,12 +146,12 @@ public class Database {
 
     }
 
-    public int getWorkerID(String username){
+    public int getWorkerID(String name){
 
         int idWorker = 0;
 
         try {
-            ResultSet resultSet = queryWorker(username);
+            ResultSet resultSet = queryWorker(name);
 
             // set the ResultSet pointer to the variable in the result set!
             resultSet.next();
@@ -168,7 +165,7 @@ public class Database {
         return idWorker;
     };
 
-    public void loadResume(int workerID, Resume resume){
+    public void loadResumeDetails(int workerID, Resume resume){
 
         String sql = "SELECT *" +
                 "FROM workers w " +
@@ -187,13 +184,15 @@ public class Database {
             resultSet.next();
 
             // parse the result
-            String username = resultSet.getString("username");
+            String name = resultSet.getString("name");
             String password = resultSet.getString("password");
             int idWorker = resultSet.getInt("idWorker");
-            String resumeDesc = resultSet.getString("Summary");
+            String summary = resultSet.getString("Summary");
 
             ArrayList<String> certifications = new ArrayList<String>();
             ArrayList<String> workExperience = new ArrayList<String>();
+
+
 
 
             //printing the resume
@@ -211,7 +210,7 @@ public class Database {
                 }
             } while(resultSet.next());
 
-            System.out.println(username);
+            System.out.println(name);
             System.out.println(password);
             System.out.println(idWorker);
             System.out.println(resumeDesc);
@@ -231,6 +230,43 @@ public class Database {
         catch (SQLException e) {
             e.printStackTrace();
         }
+
+    }
+
+    public void addPosting(int employerID, Job job){
+
+        try {
+
+            // add the job to jobs table
+            PreparedStatement statement = this.connection.prepareStatement("INSERT INTO jobs (salary, description, idEmployer) VALUES (?, ?, ?);");
+            statement.setInt(1, job.getSalary());
+            statement.setString(2, job.getJobDesc());
+            statement.setInt(3, employerID);
+            statement.executeUpdate();
+
+            // get the job ID of the newly added job.
+            PreparedStatement getID = this.connection.prepareStatement("SELECT * FROM jobs WHERE salary = ? AND description = ? AND idEmployer = ?;");
+            getID.setInt(1, job.getSalary());
+            getID.setString(2, job.getJobDesc());
+            getID.setInt(3, employerID);
+            ResultSet resultSet = getID.executeQuery();
+
+            // move the pointer forward, and get the job ID
+            resultSet.next();
+            int jobID = resultSet.getInt("idJob");
+
+            // add benefits to benefits table, and link to jobs
+            for(String benefit: job.getBenefits()) {
+                PreparedStatement addToBenefits = this.connection.prepareStatement("INSERT INTO benefits (idJob, benefit) VALUES (?, ?);");
+                statement.setString(2, job.getJobDesc());
+            }
+
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+
+
 
     }
 }

@@ -101,7 +101,6 @@ public class Main {
                     return;
                 case '1':
                     workerLogin(input);
-
                     return;
                 case '2':
                     employerLogin(input);
@@ -115,14 +114,14 @@ public class Main {
     private static void workerLogin(Scanner input){
 
         // initialize variables
-        String username, password;
+        String name, password;
 
         // collect user input
         while (true) {
-            System.out.print("Input your username (leave blank to return): ");
-            username = input.nextLine();
+            System.out.print("Input your name (leave blank to return): ");
+            name = input.nextLine();
 
-            if(username.isEmpty()){
+            if(name.isEmpty()){
                 return;
             }
 
@@ -136,15 +135,14 @@ public class Main {
             // connect to database
             Database database = new Database();
 
-            boolean valid = database.searchWorker(username, password);
+            boolean valid = database.searchWorker(name, password);
 
                 // if user is found!
                 if (valid) {
                     System.out.println("Logged in!");
                     // add constructors here!
 
-                    Worker user = new Worker(username);
-                    // user.loadDetails();
+                    Worker user = new Worker(name);
                     // user.login();
 
                     break;
@@ -152,7 +150,7 @@ public class Main {
 
                 // else break
                 else {
-                    System.out.println("No records found. username or password may be incorrect");
+                    System.out.println("No records found. name or password may be incorrect");
                 }
         }
 
@@ -161,14 +159,14 @@ public class Main {
     private static void employerLogin(Scanner input){
 
         // initialize variables
-        String username, password;
+        String name, password;
 
         // collect user input
         while (true) {
-            System.out.print("Input your username (leave blank to return): ");
-            username = input.nextLine();
+            System.out.print("Input your name (leave blank to return): ");
+            name = input.nextLine();
 
-            if(username.isEmpty()){
+            if(name.isEmpty()){
                 return;
             }
 
@@ -181,19 +179,22 @@ public class Main {
 
             // connect to database
             Database database = new Database();
-            boolean valid = database.searchEmployer(username, password);
+            boolean valid = database.searchEmployer(name, password);
 
             // if user is found!
             if (valid) {
                 System.out.println("Logged in!");
 
                 // add constructors here!
+                Employer employer = new Employer(name);
+                employer.login(input);
+
                 break;
             }
 
             // else break
             else {
-                System.out.println("No records found. username or password may be incorrect");
+                System.out.println("No records found. name or password may be incorrect");
             }
         }
 
@@ -201,14 +202,14 @@ public class Main {
 
     private static void workerRegister(Scanner input){
         // initialize variables
-        String username, password;
+        String name, password;
 
         // collect user input
         while (true) {
-            System.out.print("Input your username (leave blank to return): ");
-            username = input.nextLine();
+            System.out.print("Input your name (leave blank to return): ");
+            name = input.nextLine();
 
-            if(username.isEmpty()){
+            if(name.isEmpty()){
                 return;
             }
 
@@ -220,30 +221,30 @@ public class Main {
             }
 
             Database database = new Database();
-            boolean found = database.searchWorker(username);
+            boolean found = database.searchWorker(name);
 
             if (!found) {
-                database.addWorker(username, password);
+                database.addWorker(name, password);
                 System.out.println("Added successfully!");
                 break;
             }
 
             else {
-                System.out.println("Username already exists.");
+                System.out.println("Name already exists.");
             }
         }
     }
 
     private static  void employerRegister(Scanner input){
         // initialize variables
-        String username, password;
+        String name, password;
 
         // collect user input
         while (true) {
-            System.out.print("Input your username (leave blank to return): ");
-            username = input.nextLine();
+            System.out.print("Input your name (leave blank to return): ");
+            name = input.nextLine();
 
-            if(username.isEmpty()){
+            if(name.isEmpty()){
                 return;
             }
 
@@ -257,21 +258,21 @@ public class Main {
             // connect to database
             Database database = new Database();
 
-            // check if the person's username exists in db
-            boolean exists = database.searchEmployer(username);
+            // check if the person's name exists in db
+            boolean exists = database.searchEmployer(name);
 
             // if user is valid (doesn't exist yet)!
             if (!exists) {
 
                 // add to DB
-                database.addEmployer(username, password);
+                database.addEmployer(name, password);
                 System.out.println("Added successfully!");
                 break;
             }
 
             // else, error
             else {
-                System.out.println("Username already exists.");
+                System.out.println("Name already exists.");
             }
         }
     }

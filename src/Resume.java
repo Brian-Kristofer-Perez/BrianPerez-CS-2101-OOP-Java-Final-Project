@@ -4,16 +4,14 @@ import java.util.ArrayList;
 public class Resume {
 
     // Personal Information
-    private String name;
-    private String jobTitle;
-    private String email;
-    private String phone;
+//    private String name;
+//    private String jobTitle;
+//    private String email;
+//    private String phone;
 
     // Resume Content
     private String summary;
-//    private String[] skills;
     private ArrayList<String> experience;
-//    private String[] projects;
     private ArrayList<String> certifications;
 
 
@@ -27,7 +25,8 @@ public class Resume {
     }
 
 
-    // Setters
+
+    // Setters, for editing!
     public void setSummary(String summary){
         this.summary = summary;
     }
@@ -61,7 +60,6 @@ public class Resume {
 
         System.out.print("");
 
-        /*
         /*
         ==========================
               Your Name

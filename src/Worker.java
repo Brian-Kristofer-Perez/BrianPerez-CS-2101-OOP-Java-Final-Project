@@ -3,18 +3,15 @@ import java.util.Scanner;
 
 public class Worker extends User {
     private Resume resume;
-    private String username;
-
+    private Job occupation;
 
     // Constructor, loading details from DB will be to-follow
-    public Worker(String username){
+    public Worker(String name){
 
-        this.username = username;
+        this.name = name;
         this.resume = new Resume();
 
     }
-    
-    public void apply(){}
 
     public void login(Scanner input){
         // user log-in menu here
