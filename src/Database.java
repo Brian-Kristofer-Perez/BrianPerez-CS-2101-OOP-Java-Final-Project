@@ -296,6 +296,9 @@ public class Database {
         return jobs;
     }
 
+    public void deleteJob(){
+
+    }
 
 }
 

@@ -88,8 +88,8 @@ public class Employer extends User {
     }
 
 
-    // overloaded method! this one automatically picks up the postings, and views them. Not indexed in order, though.
-    // If the functionality of ordered indexing is also needed, store it in a separate ArrayList, and pass it to the function below!
+    // queries the postings based off of employer name, a full on database query.
+    // bear in mind the other variant of this method requires the query as a separate thing, for indexing order concerns and consistency.
     public void viewPostings(String employerName) {
 
         Database database = new Database();
@@ -112,8 +112,8 @@ public class Employer extends User {
     }
 
 
-    // overloaded method! this one you have to manually pass the list, the other one automatically does.
-    public void viewPostings(String employerName, ArrayList<Job> jobList){
+    // overloaded method! this one you have to manually pass the list, the other one automatically does based off of the name.
+    public void viewPostings(ArrayList<Job> jobList){
 
         int counter = 0;
         for (Job i : jobList) {
@@ -127,6 +127,45 @@ public class Employer extends User {
             }
             System.out.println();
         }
+    }
+
+    public void deleteJobMenu(Scanner input){
+
+        String strChoice;
+        int choice = 0;
+        Database database = new Database();
+        ArrayList<Job> jobList = database.queryJobs(this.name);
+
+        viewPostings(jobList);
+
+        // collect and validate user input
+        while(true) {
+            System.out.print("Input the number of the posting you want to delete: ");
+
+            strChoice = input.nextLine();
+            try {
+                choice = Integer.parseInt(strChoice);
+            } catch (NumberFormatException e) {
+                System.out.println("Please enter a valid input.");
+            }
+
+            choice--;
+
+            if(choice < jobList.size()){
+                System.out.println("Input a valid index.");
+                continue;
+            }
+
+            if(choice < jobList.size()-1 || choice > jobList.size()-1){
+                System.out.println("Input a valid index.");
+            }
+            else{
+                break;
+            }
+        }
+
+
+
     }
 
     public void login(Scanner input) {
