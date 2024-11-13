@@ -65,7 +65,11 @@ public class Worker extends User {
 
         // Print Summary
         System.out.println("Summary:");
-        System.out.println(this.resume.getSummary());
+        if (this.resume.getSummary().isEmpty()) {
+            System.out.println("No summary listed.");
+        } else {
+            System.out.println(this.resume.getSummary());
+        }
         System.out.println();
 
         // Print Experience
