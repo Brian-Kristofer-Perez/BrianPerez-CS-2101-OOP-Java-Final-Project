@@ -104,7 +104,7 @@ public class Employer extends User {
             System.out.println("\tMonthly Salary: " + i.getSalary() + " php");
             System.out.println("\tBenefits: ");
             for (String j : i.getBenefits()) {
-                System.out.println("\t" + j);
+                System.out.println("\t - " + j);
             }
             System.out.println();
 
@@ -123,7 +123,7 @@ public class Employer extends User {
             System.out.println("\tMonthly Salary: " + i.getSalary() + " php");
             System.out.println("\tBenefits: ");
             for (String j : i.getBenefits()) {
-                System.out.println("\t" + j);
+                System.out.println("\t - " + j);
             }
             System.out.println();
         }

@@ -1,4 +1,5 @@
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Worker extends User {
@@ -49,7 +50,7 @@ public class Worker extends User {
                     printResume();
                     break;
                 case '2':
-                    // viewJobPostings();
+                    printAllPostings();
                     break;
                 default:
                     System.out.println("Please provide a valid input.");
@@ -97,6 +98,35 @@ public class Worker extends User {
     }
 
     public void logout(){}
-    
+
+    public void printAllPostings() {
+
+        Database database = new Database();
+
+        ArrayList<Job> jobList = database.queryAllPostings();
+
+        int counter = 0;
+
+        for (Job i : jobList) {
+
+            System.out.println(++counter + ".  " + "Job Title: " + i.getJobTitle());
+            System.out.println("\tJob Description: " + i.getJobDesc());
+            System.out.println("\tSalary: Php " + i.getSalary());
+
+            // Print benefits
+            System.out.println("\tBenefits:");
+
+            // handle no benefits collected, check if it's empty
+            if (i.getBenefits() != null && !i.getBenefits().isEmpty()) {
+                for (String benefit : i.getBenefits()) {
+                    System.out.println("\t - " + benefit);
+                }
+            } else {
+                System.out.println("\t\tNo benefits listed.");
+            }
+
+            System.out.println();
+        }
+    }
 }
 

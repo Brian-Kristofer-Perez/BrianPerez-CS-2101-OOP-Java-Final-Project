@@ -1,3 +1,4 @@
+import javax.swing.plaf.nimbus.State;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -293,8 +294,6 @@ public class Database {
             e.printStackTrace();
         }
 
-
-
     }
 
     public ArrayList<Job> queryJobs(String name){
@@ -393,6 +392,60 @@ public class Database {
             e.printStackTrace();
         }
 
+    }
+
+
+    public ArrayList<Job> queryAllPostings(){
+
+        HashMap<Integer, Job> jobMap = new HashMap<Integer, Job>();
+
+        // query all jobs that have employerID as employer
+        try {
+
+            // get all jobID's
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM jobs LEFT JOIN benefits on jobs.idJob = benefits.idJob;");
+
+            ResultSet resultSet = statement.executeQuery();
+
+            // loop through resultSet
+            while(resultSet.next()){
+
+                // get their jobID
+                Integer id = resultSet.getInt("idJob");
+
+                // if it's already in the hashmap, get it, add a new benefit, put it back.
+                if(jobMap.containsKey(id)){
+
+                    Job job = jobMap.get(id);
+                    job.addBenefits(resultSet.getString("benefit"));
+                    jobMap.replace(id, job);
+                }
+
+                // else, add it to the hashmap
+                else{
+
+                    String title = resultSet.getString("title");
+                    String description = resultSet.getString("description");
+                    int salary = resultSet.getInt("salary");
+                    ArrayList<String> benefits = new ArrayList<String>();
+                    Job job = new Job(title, description, salary, benefits);
+                    job.addBenefits(resultSet.getString("benefit"));
+
+                    jobMap.put(id, job);
+                }
+
+            }
+
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        // pass it to a return arraylist
+        ArrayList<Job> jobs = new ArrayList<Job>(jobMap.values());
+
+        return jobs;
     }
 
 
