@@ -13,11 +13,22 @@ public class Worker extends User {
 
     }
 
+    // Getters!
+
+    public Resume getResume(){
+        return this.resume;
+    }
+
+    // Setters!
+    public void setResume(Resume resume){
+        this.resume = resume;
+    }
+
     public void login(Scanner input){
         // user log-in menu here
         char choice;
         while (true) {
-            System.out.println("Welcome, [name]!");
+            System.out.println(String.format("Welcome, %s!", this.name));
             System.out.println("1. View Resume");
             System.out.println("2. View Job Postings");
             System.out.println("3. View Current Job");
@@ -35,7 +46,7 @@ public class Worker extends User {
 
             switch (choice) {
                 case '1':
-                    // viewResume();
+                    printResume();
                     break;
                 case '2':
                     // viewJobPostings();
@@ -47,6 +58,39 @@ public class Worker extends User {
 
     }
 
+    public void printResume() {
+        System.out.println("----------------------------------------------------");
+        System.out.println("                    RESUME                         ");
+        System.out.println("----------------------------------------------------");
+
+        // Print Summary
+        System.out.println("Summary:");
+        System.out.println(this.resume.getSummary());
+        System.out.println();
+
+        // Print Experience
+        System.out.println("Experience:");
+        if (this.resume.getExperience().isEmpty()) {
+            System.out.println("No experience listed.");
+        } else {
+            for (String job : this.resume.getExperience()) {
+                System.out.println("- " + job);
+            }
+        }
+        System.out.println();
+
+        // Print Certifications
+        System.out.println("Certifications:");
+        if (this.resume.getCertifications().isEmpty()) {
+            System.out.println("No certifications listed.");
+        } else {
+            for (String certification : this.resume.getCertifications()) {
+                System.out.println("- " + certification);
+            }
+        }
+
+        System.out.println("----------------------------------------------------");
+    }
 
     public void logout(){}
     

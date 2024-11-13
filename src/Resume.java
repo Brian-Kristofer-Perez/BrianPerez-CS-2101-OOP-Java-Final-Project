@@ -10,9 +10,9 @@ public class Resume {
 //    private String phone;
 
     // Resume Content
-    private String summary;
-    private ArrayList<String> experience;
-    private ArrayList<String> certifications;
+    private String summary = "";
+    private ArrayList<String> experience = new ArrayList<String>();
+    private ArrayList<String> certifications = new ArrayList<String>();
 
 
     // constructors!

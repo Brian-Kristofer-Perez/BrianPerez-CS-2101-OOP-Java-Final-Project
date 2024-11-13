@@ -92,10 +92,21 @@ public class Database {
     public void addWorker(String name, String password){
 
         try {
+
+            // Add the workers themselves
             PreparedStatement statement = this.connection.prepareStatement("INSERT INTO workers (name, password) VALUES (?, ?);");
             statement.setString(1, name);
             statement.setString(2, password);
             statement.executeUpdate();
+
+            // Get workerID of the newly added worker;
+            int workerID = queryWorkerID(name);
+
+            // then ADD THEIR RESUMES AS EMPTY (sorry for screaming, I am very sleepy and need this energy to wake up!!!!)
+            PreparedStatement autoResume = this.connection.prepareStatement("INSERT INTO resumes (idWorker) VALUES (?); ");
+            autoResume.setInt(1, workerID);
+            autoResume.executeUpdate();
+
         }
         catch(SQLException e){
             e.printStackTrace();
@@ -159,40 +170,88 @@ public class Database {
         return employerID;
     }
 
+    // checks if a user with a specific name has a resume in the database!
+    public boolean checkResume(String workerName){
 
-    public void loadResumeDetails(int workerID, Resume resume){
+        boolean found = false;
 
-        String sql = "SELECT *" +
-                "FROM workers w " +
-                "JOIN resumes r ON w.idWorker = r.idWorker " +
-                "LEFT JOIN certifications c ON r.idResume = c.idResume " +
-                "LEFT JOIN workexperience we ON r.idResume = we.idResume " +
-                "WHERE w.idWorker = ?";
+        return true;
+    }
+
+    public Resume loadResume(String name){
+
+        int workerID = queryWorkerID(name);
+        Resume resume = new Resume();
 
         try {
-            PreparedStatement query = connection.prepareStatement(sql);
-            query.setInt(1, workerID);
 
-            ResultSet resultSet = query.executeQuery();
+            // get the resume of the person from resume table
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM resumes WHERE idWorker = ?");
+            statement.setInt(1, workerID);
 
-            // pointer
+            ResultSet resultSet = statement.executeQuery();
+
+            // get id of the queried resume, to get other related stuff.
             resultSet.next();
+            int resumeID = resultSet.getInt("idResume");
 
-            // parse the result
-            String name = resultSet.getString("name");
-            String password = resultSet.getString("password");
-            int idWorker = resultSet.getInt("idWorker");
-            String summary = resultSet.getString("Summary");
+            // get certifications
+            PreparedStatement getCerts = connection.prepareStatement("SELECT * FROM certifications WHERE idResume = ?");
+            getCerts.setInt(1, resumeID);
+            ResultSet certificationSet = getCerts.executeQuery();
 
-            ArrayList<String> certifications = new ArrayList<String>();
-            ArrayList<String> workExperience = new ArrayList<String>();
+            // get workExperience
+            PreparedStatement getExp = connection.prepareStatement("SELECT * FROM workexperience WHERE idResume = ?");
+            getExp.setInt(1, resumeID);
+            ResultSet experienceSet = getExp.executeQuery();
 
+
+            // now set it on that resume! (and handle edge case, if the resume has no summary and summary is null)
+            resume.setSummary(resultSet.getString("Summary") == null ? "" :resultSet.getString("Summary"));
+
+            while(certificationSet.next()){
+                resume.addCertification(certificationSet.getString("certificationName"));
+            };
+
+            while(experienceSet.next()){
+                resume.addExperience(experienceSet.getString("experience"));
+            };
+
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        catch (SQLException e) {
+
+        return resume;
+    }
+
+
+    public void saveResume(Worker worker, Resume resume){
+
+        int workerID = queryWorkerID(worker.getName());
+
+        try {
+            // insert into resumes
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO resumes (idWorker, summary) VALUES (?, ?)");
+            statement.setInt(1, workerID);
+            statement.setString(2, resume.getSummary());
+
+            // insert into certifications
+            for(String i: resume.getCertifications()){
+
+            }
+
+            // insert into workexperience
+            for(String i: resume.getExperience()){
+
+            }
+
+        } catch (SQLException e) {
             e.printStackTrace();
         }
 
     }
+
+
 
     public void addPosting(String name, Job job){
 
@@ -335,6 +394,8 @@ public class Database {
         }
 
     }
+
+
 
 }
 

@@ -67,10 +67,10 @@ public class Main {
 
                 case '1':
                     workerRegister(input);
-                    break;
+                    return;
                 case '2':
                     employerRegister(input);
-                    break;
+                    return;
                 default:
                     System.out.println("Please provide a valid input.");
             }
@@ -143,7 +143,8 @@ public class Main {
                     // add constructors here!
 
                     Worker user = new Worker(name);
-                    // user.login();
+
+                    user.login(input);
 
                     break;
                 }
