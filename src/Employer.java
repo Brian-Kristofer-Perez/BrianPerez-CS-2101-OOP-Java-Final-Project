@@ -97,17 +97,32 @@ public class Employer extends User {
         ArrayList<Job> jobList = database.queryJobs(employerName);
         int counter = 0;
 
-        for (Job i : jobList) {
 
-            System.out.println(++counter +".  " + "Job title: " + i.getJobTitle());
-            System.out.println("\tDescription: " + i.getJobDesc());
-            System.out.println("\tMonthly Salary: " + i.getSalary() + " php");
-            System.out.println("\tBenefits: ");
-            for (String j : i.getBenefits()) {
-                System.out.println("\t - " + j);
+        if(!jobList.isEmpty()) {
+            for (Job i : jobList) {
+
+                System.out.println(++counter + ".  " + "Job title: " + i.getJobTitle());
+                System.out.println("\tDescription: " + i.getJobDesc());
+                System.out.println("\tMonthly Salary: " + i.getSalary() + " php");
+                System.out.println("\tBenefits: ");
+                if (i.getBenefits() != null && !i.getBenefits().isEmpty()) {
+                    for (String j : i.getBenefits()) {
+                        if(!(j == null) && !j.isEmpty()){
+                            System.out.println("\t - " + j);
+                        }
+                        else{
+                            System.out.println("\t\tNo benefits listed.");
+                        }
+                    }
+                    System.out.println();
+                } else {
+                    System.out.println("\t\tNo benefits listed.");
+                }
+
             }
-            System.out.println();
-
+        }
+        else{
+            System.out.println("No jobs listed. ");
         }
     }
 
@@ -116,16 +131,33 @@ public class Employer extends User {
     public void viewPostings(ArrayList<Job> jobList){
 
         int counter = 0;
-        for (Job i : jobList) {
 
-            System.out.println(++counter + ".  " + "Job title: " + i.getJobTitle());
-            System.out.println("\tDescription: " + i.getJobDesc());
-            System.out.println("\tMonthly Salary: " + i.getSalary() + " php");
-            System.out.println("\tBenefits: ");
-            for (String j : i.getBenefits()) {
-                System.out.println("\t - " + j);
+        if(!jobList.isEmpty()) {
+            for (Job i : jobList) {
+
+                System.out.println(++counter + ".  " + "Job title: " + i.getJobTitle());
+                System.out.println("\tDescription: " + i.getJobDesc());
+                System.out.println("\tMonthly Salary: " + i.getSalary() + " php");
+                System.out.println("\tBenefits: ");
+
+                if (i.getBenefits() != null && !i.getBenefits().isEmpty()) {
+                    for (String j : i.getBenefits()) {
+
+                        if(!(j == null) && !j.isEmpty()){
+                            System.out.println("\t - " + j);
+                        }
+                        else{
+                            System.out.println("\t\tNo benefits listed.");
+                        }
+                    }
+                    System.out.println();
+                } else {
+                    System.out.println("\t\tNo benefits listed.");
+                }
             }
-            System.out.println();
+        }
+        else{
+            System.out.println("No jobs listed. ");
         }
     }
 

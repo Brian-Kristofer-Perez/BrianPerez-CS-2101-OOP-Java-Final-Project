@@ -119,7 +119,12 @@ public class Worker extends User {
             // handle no benefits collected, check if it's empty
             if (i.getBenefits() != null && !i.getBenefits().isEmpty()) {
                 for (String benefit : i.getBenefits()) {
-                    System.out.println("\t - " + benefit);
+                    if(!(benefit == null) && !benefit.isEmpty()){
+                        System.out.println("\t - " + benefit);
+                    }
+                    else{
+                        System.out.println("\t\tNo benefits listed.");
+                    }
                 }
             } else {
                 System.out.println("\t\tNo benefits listed.");
