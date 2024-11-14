@@ -448,7 +448,56 @@ public class Database {
         return jobs;
     }
 
+    public void updateResume(String workerName, String newSummary, ArrayList<String> newExperience, ArrayList<String> newCertifications){
 
+        try {
+            // get the workerID, then use it to get ResumeID
+            int idWorker = queryWorkerID(workerName);
+            PreparedStatement getResumeSet = connection.prepareStatement("SELECT * FROM resumes WHERE idWorker = ?");
+            getResumeSet.setInt(1, idWorker);
+
+            ResultSet resumeSet = getResumeSet.executeQuery();
+            resumeSet.next(); // I almost forgot! :)
+            int idResume = resumeSet.getInt("idResume");
+
+
+            // update the resume (summary only) that's already IN the database
+            PreparedStatement changeResume = connection.prepareStatement("UPDATE resumes SET summary = ? WHERE idWorker = ?");
+            changeResume.setString(1, newSummary);
+            changeResume.setInt(2, idWorker);
+            changeResume.executeUpdate();
+
+            // clear all previous related certifications related to that resume
+            PreparedStatement clearCert = connection.prepareStatement("DELETE FROM certifications WHERE idResume = ?");
+            clearCert.setInt(1, idResume);
+            clearCert.executeUpdate();
+
+            // clear all previous related experience related to that resume
+            PreparedStatement clearExp = connection.prepareStatement("DELETE FROM workexperience WHERE idResume = ?");
+            clearExp.setInt(1, idResume);
+            clearExp.executeUpdate();
+
+            // insert all previous related cert
+            PreparedStatement insertCert = connection.prepareStatement("INSERT INTO certifications (idResume, certificationName) VALUES (?, ?)");
+            insertCert.setInt(1, idResume);
+            for(String certification : newCertifications){
+                insertCert.setString(2, certification);
+                insertCert.executeUpdate();
+            }
+
+            // insert all previous related experience
+            PreparedStatement insertExp = connection.prepareStatement("INSERT INTO workexperience (idResume, experience) VALUES (?, ?)");
+            insertExp.setInt(1, idResume);
+            for(String experience : newExperience){
+                insertExp.setString(2, experience);
+                insertExp.executeUpdate();
+            }
+
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
 
 }
 

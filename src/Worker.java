@@ -26,14 +26,20 @@ public class Worker extends User {
     }
 
     public void login(Scanner input){
-        // user log-in menu here
+        // user log-in menu
+
+        // preload stuff, load resume
+        Database database = new Database();
+        this.resume = database.loadResume(this.name);
+
         char choice;
         while (true) {
             System.out.println(String.format("Welcome, %s!", this.name));
             System.out.println("1. View Resume");
-            System.out.println("2. View Job Postings");
-            System.out.println("3. View Current Job");
-            System.out.println("4. Log out");
+            System.out.println("2. Edit Resume");
+            System.out.println("3. View Job Postings");
+            System.out.println("4. View Current Job");
+            System.out.println("5. Log out");
 
             System.out.print("Input your choice: ");
 
@@ -50,6 +56,9 @@ public class Worker extends User {
                     printResume();
                     break;
                 case '2':
+                    editResume(input);
+                    break;
+                case '3':
                     printAllPostings();
                     break;
                 default:
@@ -97,8 +106,6 @@ public class Worker extends User {
         System.out.println("----------------------------------------------------");
     }
 
-    public void logout(){}
-
     public void printAllPostings() {
 
         Database database = new Database();
@@ -132,6 +139,54 @@ public class Worker extends User {
 
             System.out.println();
         }
+    }
+
+    public void editResume(Scanner input){
+
+        String newSummary, certification, experience;
+        ArrayList<String> newExperience = new ArrayList<String>();
+        ArrayList<String> newCertifications = new ArrayList<String>();
+
+        System.out.print("Enter the new summary: ");
+        newSummary = input.nextLine();
+
+        while (true){
+            System.out.print("Input the new certifications (leave empty to end): ");
+            certification = input.nextLine();
+
+            if(certification.isEmpty()){
+                break;
+            }
+            else{
+                newCertifications.add(certification);
+            }
+        }
+
+        while (true){
+            System.out.print("Input the new work experience (leave empty to end): ");
+            experience = input.nextLine();
+
+            if(experience.isEmpty()){
+                break;
+            }
+            else{
+                newExperience.add(experience);
+            }
+        }
+
+        // update the new resume
+        // in the program itself:
+
+        this.resume.setSummary(newSummary);
+        this.resume.setExperience(newExperience);
+        this.resume.setCertifications(newCertifications);
+
+        // in the database,
+        Database database = new Database();
+
+        // update it as well
+        database.updateResume(this.name, newSummary, newExperience, newCertifications);
+        System.out.println("Resume updated!");
     }
 }
 
