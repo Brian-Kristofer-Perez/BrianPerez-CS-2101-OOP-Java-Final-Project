@@ -386,6 +386,11 @@ public class Database {
             removeFromBenefits.setInt(1, jobID);
             removeFromBenefits.executeUpdate();
 
+            // delete from applications
+            PreparedStatement removeFromApplications = connection.prepareStatement("DELETE FROM applications WHERE idJob = ?");
+            removeFromApplications.setInt(1, jobID);
+            removeFromApplications.executeUpdate();
+
 
         }
         catch(SQLException e){
@@ -499,5 +504,8 @@ public class Database {
         }
     }
 
+    public void createApplication(Str worker, Job job){
+
+    }
 }
 
