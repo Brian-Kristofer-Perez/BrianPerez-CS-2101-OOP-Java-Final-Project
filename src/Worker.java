@@ -38,8 +38,9 @@ public class Worker extends User {
             System.out.println("1. View Resume");
             System.out.println("2. Edit Resume");
             System.out.println("3. View Job Postings");
-            System.out.println("4. View Current Job");
-            System.out.println("5. Log out");
+            System.out.println("4. Apply for a Job");
+            System.out.println("5. View Current Job");
+            System.out.println("6. Log out");
 
             System.out.print("Input your choice: ");
 
@@ -60,6 +61,10 @@ public class Worker extends User {
                     break;
                 case '3':
                     printAllPostings();
+                    break;
+                case '4':
+                    printAllPostings();
+                    applyForJob(input);
                     break;
                 default:
                     System.out.println("Please provide a valid input.");
@@ -141,6 +146,37 @@ public class Worker extends User {
         }
     }
 
+    public void printAllPostings(ArrayList<Job> jobList) {
+
+        int counter = 0;
+
+        for (Job i : jobList) {
+
+            System.out.println(++counter + ".  " + "Job Title: " + i.getJobTitle());
+            System.out.println("\tJob Description: " + i.getJobDesc());
+            System.out.println("\tSalary: Php " + i.getSalary());
+
+            // Print benefits
+            System.out.println("\tBenefits:");
+
+            // handle no benefits collected, check if it's empty
+            if (i.getBenefits() != null && !i.getBenefits().isEmpty()) {
+                for (String benefit : i.getBenefits()) {
+                    if(!(benefit == null) && !benefit.isEmpty()){
+                        System.out.println("\t - " + benefit);
+                    }
+                    else{
+                        System.out.println("\t\tNo benefits listed.");
+                    }
+                }
+            } else {
+                System.out.println("\t\tNo benefits listed.");
+            }
+
+            System.out.println();
+        }
+    }
+
     public void editResume(Scanner input){
 
         String newSummary, certification, experience;
@@ -187,6 +223,53 @@ public class Worker extends User {
         // update it as well
         database.updateResume(this.name, newSummary, newExperience, newCertifications);
         System.out.println("Resume updated!");
+    }
+
+    public void applyForJob(Scanner input){
+        Database database = new Database();
+        int idWorker = database.queryWorkerID(this.name);
+
+        ArrayList<Job> jobList = database.queryAllPostings();
+        String strChoice;
+        int choice, jobID = 0;
+        Job job;
+        printAllPostings(jobList);
+
+        while(true){
+            System.out.print("Input the number of the job you want to apply for (leave empty to return): ");
+            strChoice = input.nextLine();
+
+            if(strChoice.isEmpty()){
+                return;
+            }
+
+            try{
+                choice = Integer.parseInt(strChoice);
+            } catch (RuntimeException e) {
+                System.out.println("Input a valid number!");
+                continue;
+            }
+
+            --choice;
+            if(choice < 0 || choice > jobList.size()-1){
+                System.out.println("Input a valid number!");
+                continue;
+            }
+
+            else{
+                job = jobList.get(choice);
+                jobID = database.queryJobID(job);
+            }
+
+            if(database.applicationExists(idWorker, jobID)){
+                System.out.println("Application already exists!");
+            }
+            else {
+                database.createApplication(this.name, job);
+                System.out.println("Application submitted!");
+                return;
+            }
+        }
     }
 }
 

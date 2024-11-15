@@ -504,7 +504,68 @@ public class Database {
         }
     }
 
-    public void createApplication(Str worker, Job job){
+    public int queryJobID(Job job){
+
+        int idJob = 0;
+
+        // get job id
+        try {
+            PreparedStatement getJobID = connection.prepareStatement("SELECT * FROM jobs WHERE title = ? AND description = ? AND salary = ?");
+            getJobID.setString(1, job.getJobTitle());
+            getJobID.setString(2, job.getJobDesc());
+            getJobID.setInt(3, job.getSalary());
+            ResultSet jobSet = getJobID.executeQuery();
+            jobSet.next();
+            idJob = jobSet.getInt("idJob");
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+
+        return idJob;
+    }
+
+    public boolean applicationExists(int idWorker, int idJob){
+        // check if the current application (idWorker, idJob) already exists
+        try {
+            PreparedStatement getApplicationSet = connection.prepareStatement("SELECT * FROM applications WHERE idWorker = ? AND idJob = ?");
+            getApplicationSet.setInt(1, idWorker);
+            getApplicationSet.setInt(2, idJob);
+            ResultSet applicationSet = getApplicationSet.executeQuery();
+
+            // if applications exists,
+            if(applicationSet.next()){
+                return true;
+            }
+            // else,
+            else{
+                return false;
+            }
+
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    public void createApplication(String workerName, Job job){
+
+        // get worker id
+        int idWorker = queryWorkerID(workerName);
+        int idJob = queryJobID(job);
+
+        try {
+            // insert into applications
+            PreparedStatement addApplication = connection.prepareStatement("INSERT INTO applications (idWorker, idJob) VALUES (?, ?)");
+            addApplication.setInt(1, idWorker);
+            addApplication.setInt(2, idJob);
+            addApplication.executeUpdate();
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
 
     }
 }
