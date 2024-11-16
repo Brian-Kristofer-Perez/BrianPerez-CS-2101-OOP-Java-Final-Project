@@ -78,6 +78,16 @@ public class Worker extends User {
         System.out.println("                    RESUME                         ");
         System.out.println("----------------------------------------------------");
 
+        // Print Name
+        System.out.println("Name:");
+        if (this.name.isEmpty()) {
+            System.out.println("No name listed.");
+        } else {
+            System.out.println(this.name);
+        }
+        System.out.println();
+
+
         // Print Summary
         System.out.println("Summary:");
         if (this.resume.getSummary().isEmpty()) {
@@ -110,6 +120,55 @@ public class Worker extends User {
 
         System.out.println("----------------------------------------------------");
     }
+
+    public void printResume(int ctr) {
+        System.out.println("----------------------------------------------------");
+        System.out.println("                Resume #" + ctr +"                ");
+        System.out.println("----------------------------------------------------");
+
+        // Print Name
+        System.out.println("Name:");
+        if (this.name.isEmpty()) {
+            System.out.println("No name listed.");
+        } else {
+            System.out.println(this.name);
+        }
+        System.out.println();
+
+
+        // Print Summary
+        System.out.println("Summary:");
+        if (this.resume.getSummary().isEmpty()) {
+            System.out.println("No summary listed.");
+        } else {
+            System.out.println(this.resume.getSummary());
+        }
+        System.out.println();
+
+        // Print Experience
+        System.out.println("Experience:");
+        if (this.resume.getExperience().isEmpty()) {
+            System.out.println("No experience listed.");
+        } else {
+            for (String job : this.resume.getExperience()) {
+                System.out.println("- " + job);
+            }
+        }
+        System.out.println();
+
+        // Print Certifications
+        System.out.println("Certifications:");
+        if (this.resume.getCertifications().isEmpty()) {
+            System.out.println("No certifications listed.");
+        } else {
+            for (String certification : this.resume.getCertifications()) {
+                System.out.println("- " + certification);
+            }
+        }
+
+        System.out.println("----------------------------------------------------");
+    }
+
 
     public void printAllPostings() {
 

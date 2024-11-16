@@ -588,10 +588,11 @@ public class Database {
         return worker;
     }
 
-    public ArrayList<Application> queryApplications(Job job){
+    // get the list of workers tha are applying
+    public ArrayList<Worker> queryWorkersApplyingFor(Job job){
 
         int idJob = queryJobID(job);
-        ArrayList<Application> applications = new ArrayList<Application>();
+        ArrayList<Worker> applications = new ArrayList<Worker>();
         ArrayList<Integer> workerIDList = new ArrayList<Integer>();
 
         try {
@@ -609,8 +610,7 @@ public class Database {
             // get necessary details per workerID (worker name, and resume), and construct an application
             for(int i: workerIDList){
                 Worker newWorker = getWorkerFromID(i);
-                Application newApplication = new Application(newWorker, job);
-                applications.add(newApplication);
+                applications.add(newWorker);
             }
 
         }

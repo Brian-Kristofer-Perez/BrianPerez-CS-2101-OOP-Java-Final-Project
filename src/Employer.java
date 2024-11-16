@@ -88,45 +88,6 @@ public class Employer extends User {
     }
 
 
-    // queries the postings based off of employer name, a full on database query.
-    // bear in mind the other variant of this method requires the query as a separate thing, for indexing order concerns and consistency.
-    public void viewPostings(String employerName) {
-
-        Database database = new Database();
-
-        ArrayList<Job> jobList = database.queryJobs(employerName);
-        int counter = 0;
-
-
-        if(!jobList.isEmpty()) {
-            for (Job i : jobList) {
-
-                System.out.println(++counter + ".  " + "Job title: " + i.getJobTitle());
-                System.out.println("\tDescription: " + i.getJobDesc());
-                System.out.println("\tMonthly Salary: " + i.getSalary() + " php");
-                System.out.println("\tBenefits: ");
-                if (i.getBenefits() != null && !i.getBenefits().isEmpty()) {
-                    for (String j : i.getBenefits()) {
-                        if(!(j == null) && !j.isEmpty()){
-                            System.out.println("\t - " + j);
-                        }
-                        else{
-                            System.out.println("\t\tNo benefits listed.");
-                        }
-                    }
-                    System.out.println();
-                } else {
-                    System.out.println("\t\tNo benefits listed.");
-                }
-
-            }
-        }
-        else{
-            System.out.println("No jobs listed. ");
-        }
-    }
-
-
     // overloaded method! this one you have to manually pass the list, the other one automatically does based off of the name.
     public void viewPostings(ArrayList<Job> jobList){
 
@@ -203,12 +164,14 @@ public class Employer extends User {
 
     }
 
-    public void selectJobReview(Scanner input){
+    public void reviewPostings(Scanner input){
 
-    Database database = new Database();
-    String strChoice;
-    int choice;
-    ArrayList<Job> jobList = database.queryJobs(this.name);
+        Database database = new Database();
+        String strChoice;
+        int choice;
+        ArrayList<Job> jobList = database.queryJobs(this.name);
+
+        viewPostings(jobList);
 
         while(true){
             System.out.print("Input the number of the job you want to review (leave empty to return): ");
@@ -232,14 +195,26 @@ public class Employer extends User {
             }
 
             else{
-                Job job = jobList.get(choice);
-                ArrayList<Application>  applicationList = database.queryApplications(job);
-
-                for(Worker w : )
-
+                break;
             }
+        }
+
+        Job job = jobList.get(choice);
+        ArrayList<Worker> applicationList = database.queryWorkersApplyingFor(job);
+        int ctr = 0;
+
+        if(applicationList.isEmpty()){
+            System.out.println("No applications found.");
+        }
+        else {
+            System.out.println("Current Application Resumes: ");
+            for (Worker w : applicationList) {
+                w.printResume(++ctr);
+            }
+        }
 
     }
+
 
     public void login(Scanner input) {
         // user log-in menu here
@@ -248,9 +223,8 @@ public class Employer extends User {
             System.out.println(String.format("Welcome, %s!", this.name));
             System.out.println("1. Create Job postings");
             System.out.println("2. Review Job postings");
-            System.out.println("3. Review applications");
-            System.out.println("4. Delete Job postings");
-            System.out.println("5. Log out");
+            System.out.println("3. Delete Job postings");
+            System.out.println("4. Log out");
 
             System.out.print("Input your choice: ");
 
@@ -267,11 +241,10 @@ public class Employer extends User {
                     createJob(input);
                     break;
                 case '2':
-                    viewPostings(this.name);
+                    reviewPostings(input);
                     // EXTRA MENU HERE()
                     break;
                 case '3':
-                    // reviewApplications()
                     break;
                 case '4':
                     deleteJobMenu(input);
