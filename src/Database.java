@@ -296,10 +296,10 @@ public class Database {
 
     }
 
-    public ArrayList<Job> queryJobs(String name){
+    public ArrayList<Job> queryJobs(String employerName){
 
         // get employer id
-        int employerID = queryEmployerID(name);
+        int employerID = queryEmployerID(employerName);
         HashMap<Integer, Job> jobMap = new HashMap<Integer, Job>();
 
         // query all jobs that have employerID as employer
@@ -390,13 +390,10 @@ public class Database {
             PreparedStatement removeFromApplications = connection.prepareStatement("DELETE FROM applications WHERE idJob = ?");
             removeFromApplications.setInt(1, jobID);
             removeFromApplications.executeUpdate();
-
-
         }
         catch(SQLException e){
             e.printStackTrace();
         }
-
     }
 
 
@@ -464,7 +461,6 @@ public class Database {
             ResultSet resumeSet = getResumeSet.executeQuery();
             resumeSet.next(); // I almost forgot! :)
             int idResume = resumeSet.getInt("idResume");
-
 
             // update the resume (summary only) that's already IN the database
             PreparedStatement changeResume = connection.prepareStatement("UPDATE resumes SET summary = ? WHERE idWorker = ?");
@@ -566,6 +562,63 @@ public class Database {
         catch(SQLException e){
             e.printStackTrace();
         }
+
+    }
+
+    public Worker getWorkerFromID(int idWorker){
+
+        Worker worker;
+        String workerName = null;
+        try{
+
+        PreparedStatement getWorkerDetails = connection.prepareStatement("SELECT * FROM workers WHERE idWorker = ?");
+        getWorkerDetails.setInt(1, idWorker);
+
+        ResultSet workerRS = getWorkerDetails.executeQuery();
+        workerRS.next();
+
+        workerName = workerRS.getString("name");
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+
+        worker = new Worker(workerName);
+        worker.setResume(loadResume(workerName));
+        return worker;
+    }
+
+    public ArrayList<Application> queryApplications(Job job){
+
+        int idJob = queryJobID(job);
+        ArrayList<Application> applications = new ArrayList<Application>();
+        ArrayList<Integer> workerIDList = new ArrayList<Integer>();
+
+        try {
+
+            // query all applications for that specific job ID
+            PreparedStatement getAllApps = connection.prepareStatement("SELECT * FROM APPLICATIONS WHERE idJob = ?");
+            getAllApps.setInt(1, idJob);
+            ResultSet workerIDSet = getAllApps.executeQuery();
+            while(workerIDSet.next()){
+
+                Integer workerID = workerIDSet.getInt("idWorker");
+                workerIDList.add(workerID);
+            }
+
+            // get necessary details per workerID (worker name, and resume), and construct an application
+            for(int i: workerIDList){
+                Worker newWorker = getWorkerFromID(i);
+                Application newApplication = new Application(newWorker, job);
+                applications.add(newApplication);
+            }
+
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+
+        return applications;
 
     }
 }

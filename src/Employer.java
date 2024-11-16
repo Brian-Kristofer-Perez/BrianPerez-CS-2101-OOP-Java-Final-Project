@@ -203,6 +203,44 @@ public class Employer extends User {
 
     }
 
+    public void selectJobReview(Scanner input){
+
+    Database database = new Database();
+    String strChoice;
+    int choice;
+    ArrayList<Job> jobList = database.queryJobs(this.name);
+
+        while(true){
+            System.out.print("Input the number of the job you want to review (leave empty to return): ");
+            strChoice = input.nextLine();
+
+            if(strChoice.isEmpty()){
+                return;
+            }
+
+            try{
+                choice = Integer.parseInt(strChoice);
+            } catch (RuntimeException e) {
+                System.out.println("Input a valid number!");
+                continue;
+            }
+
+            --choice;
+            if(choice < 0 || choice > jobList.size()-1){
+                System.out.println("Input a valid number!");
+                continue;
+            }
+
+            else{
+                Job job = jobList.get(choice);
+                ArrayList<Application>  applicationList = database.queryApplications(job);
+
+                for(Worker w : )
+
+            }
+
+    }
+
     public void login(Scanner input) {
         // user log-in menu here
         char choice;
@@ -210,8 +248,9 @@ public class Employer extends User {
             System.out.println(String.format("Welcome, %s!", this.name));
             System.out.println("1. Create Job postings");
             System.out.println("2. Review Job postings");
-            System.out.println("3. Delete Job postings");
-            System.out.println("4. Log out");
+            System.out.println("3. Review applications");
+            System.out.println("4. Delete Job postings");
+            System.out.println("5. Log out");
 
             System.out.print("Input your choice: ");
 
@@ -232,9 +271,12 @@ public class Employer extends User {
                     // EXTRA MENU HERE()
                     break;
                 case '3':
-                    deleteJobMenu(input);
+                    // reviewApplications()
                     break;
                 case '4':
+                    deleteJobMenu(input);
+                    break;
+                case '5':
                     return;
 
                 default:
