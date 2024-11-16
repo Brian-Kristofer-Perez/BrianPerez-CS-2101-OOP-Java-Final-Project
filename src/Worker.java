@@ -11,7 +11,6 @@ public class Worker extends User {
 
         this.name = name;
         this.resume = new Resume();
-
     }
 
     // Getters!
@@ -25,12 +24,17 @@ public class Worker extends User {
         this.resume = resume;
     }
 
+    public void setJob(Job job){
+        this.occupation = job;
+    }
+
     public void login(Scanner input){
         // user log-in menu
 
-        // preload stuff, load resume
+        // preload stuff, load resume, and job
         Database database = new Database();
         this.resume = database.loadResume(this.name);
+        this.occupation = database.loadOccupation(this.name);
 
         char choice;
         while (true) {
@@ -63,8 +67,10 @@ public class Worker extends User {
                     printAllPostings();
                     break;
                 case '4':
-                    printAllPostings();
                     applyForJob(input);
+                    break;
+                case '5':
+                    displayCurrentJob();
                     break;
                 default:
                     System.out.println("Please provide a valid input.");
@@ -323,10 +329,47 @@ public class Worker extends User {
             if(database.applicationExists(idWorker, jobID)){
                 System.out.println("Application already exists!");
             }
+            else if (database.alreadyEmployed(idWorker)) {
+                System.out.println("You are already employed. Don't overwork yourself!");
+            }
             else {
                 database.createApplication(this.name, job);
                 System.out.println("Application submitted!");
                 return;
+            }
+        }
+    }
+
+    void displayCurrentJob(){
+
+        // fully check if the current job is actually the default "empty" one (i.e. unemployed)
+        boolean noTitle = this.occupation.getJobTitle().strip().isEmpty();
+        boolean noDesc = this.occupation.getJobDesc().strip().isEmpty();
+        boolean noSalary = this.occupation.getSalary() == 0;
+        boolean noBenefits = this.occupation.getBenefits().isEmpty();
+
+        if(noTitle && noDesc && noSalary && noBenefits){
+            System.out.println("You are currently unemployed. Find a job now!");
+        }
+
+        else {
+            System.out.println("Job title: " + (this.occupation.getJobTitle()));
+            System.out.println("Description: " + this.occupation.getJobDesc());
+            System.out.println("Monthly Salary: " + this.occupation.getSalary() + " php");
+            System.out.println("Benefits: ");
+
+            if (this.occupation.getBenefits() != null && !this.occupation.getBenefits().isEmpty()) {
+                for (String j : this.occupation.getBenefits()) {
+
+                    if (!(j == null) && !j.isEmpty()) {
+                        System.out.println("\t - " + j);
+                    } else {
+                        System.out.println("\tNo benefits listed.");
+                    }
+                }
+                System.out.println();
+            } else {
+                System.out.println("\tNo benefits listed.");
             }
         }
     }

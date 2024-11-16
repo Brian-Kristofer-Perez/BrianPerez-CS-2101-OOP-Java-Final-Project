@@ -306,7 +306,7 @@ public class Database {
         try {
 
             // get all jobID's that belong to that employer
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM jobs LEFT JOIN benefits on jobs.idJob = benefits.idJob WHERE idEmployer = ?;");
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM jobs LEFT JOIN benefits ON jobs.idJob = benefits.idJob WHERE idEmployer = ? AND NOT EXISTS (SELECT * FROM occupations WHERE occupations.idJob = jobs.idJob)");
             statement.setInt(1, employerID);
 
             ResultSet resultSet = statement.executeQuery();
@@ -390,6 +390,11 @@ public class Database {
             PreparedStatement removeFromApplications = connection.prepareStatement("DELETE FROM applications WHERE idJob = ?");
             removeFromApplications.setInt(1, jobID);
             removeFromApplications.executeUpdate();
+
+            // delete from occupations
+            PreparedStatement removeFromOccupation = connection.prepareStatement("DELETE FROM occupations WHERE idJob = ?");
+            removeFromOccupation.setInt(1, jobID);
+            removeFromOccupation.executeUpdate();
         }
         catch(SQLException e){
             e.printStackTrace();
@@ -621,5 +626,111 @@ public class Database {
         return applications;
 
     }
+
+
+    public Job loadOccupation(String workerName){
+
+        int idWorker = queryWorkerID(workerName);
+        Job job = new Job();
+
+        // load job from occupations.idJob -> idJob -> jobFromID()
+        try{
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM occupations WHERE idWorker = ?");
+            statement.setInt(1, idWorker);
+
+            ResultSet idRS = statement.executeQuery();
+
+            // if a job exists (user has a job!)
+            if(idRS.next()){
+                int idJob = idRS.getInt("idJob");
+                job = jobFromID(idJob);
+            }
+            // else, return the base job value
+            else{
+                return job;
+            }
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+
+        return job;
+    }
+
+
+    public Job jobFromID(int idJob){
+
+        Job job = null;
+        try {
+            PreparedStatement getJob = connection.prepareStatement("SELECT * FROM jobs WHERE idJob = ?");
+            getJob.setInt(1, idJob);
+
+            ResultSet jobRS = getJob.executeQuery();
+            jobRS.next();
+
+            String title = jobRS.getString("title");
+            String description = jobRS.getString("description");
+            int salary = jobRS.getInt("salary");
+            ArrayList<String> benefits = new ArrayList<String>();
+
+            job = new Job(title, description, salary, benefits);
+
+            PreparedStatement getBenefits = connection.prepareStatement("SELECT * FROM benefits WHERE idJob = ?");
+            getBenefits.setInt(1, idJob);
+
+            ResultSet benefitsRS = getBenefits.executeQuery();
+
+            while(benefitsRS.next()){
+                job.addBenefits(benefitsRS.getString("benefit"));
+            }
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return job;
+    }
+
+    public boolean alreadyEmployed(int idWorker){
+
+        try{
+            PreparedStatement preparedStatement = connection.prepareStatement( "SELECT * FROM occupations WHERE idWorker = ?");
+            preparedStatement.setInt(1, idWorker);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            return resultSet.next();
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    public void hireWorker(Worker worker, Job job){
+
+        int idWorker = queryWorkerID(worker.getName());
+        int idJob = queryJobID(job);
+
+        try{
+            // hiring the worker
+            PreparedStatement hireWorker = connection.prepareStatement("INSERT INTO occupations (idWorker, idJob) VALUES (?, ?)");
+            hireWorker.setInt(1, idWorker);
+            hireWorker.setInt(2, idJob);
+
+            hireWorker.executeUpdate();
+
+            // clearing ALL other applications and relevant information related to the job posting
+            PreparedStatement clearApps = connection.prepareStatement("DELETE FROM applications WHERE idJob = ?");
+            clearApps.setInt(1, idJob);
+            clearApps.executeUpdate();
+
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
 }
 

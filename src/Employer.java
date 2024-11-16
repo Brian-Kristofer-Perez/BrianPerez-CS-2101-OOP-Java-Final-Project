@@ -88,7 +88,6 @@ public class Employer extends User {
     }
 
 
-    // overloaded method! this one you have to manually pass the list, the other one automatically does based off of the name.
     public void viewPostings(ArrayList<Job> jobList){
 
         int counter = 0;
@@ -118,7 +117,7 @@ public class Employer extends User {
             }
         }
         else{
-            System.out.println("No jobs listed. ");
+            System.out.println("No vacant jobs listed. Try and make one!");
         }
     }
 
@@ -199,8 +198,8 @@ public class Employer extends User {
             }
         }
 
-        Job job = jobList.get(choice);
-        ArrayList<Worker> applicationList = database.queryWorkersApplyingFor(job);
+        Job jobSelection = jobList.get(choice);
+        ArrayList<Worker> applicationList = database.queryWorkersApplyingFor(jobSelection);
         int ctr = 0;
 
         if(applicationList.isEmpty()){
@@ -211,10 +210,48 @@ public class Employer extends User {
             for (Worker w : applicationList) {
                 w.printResume(++ctr);
             }
+
+            workerHireMenu(input, jobSelection, applicationList, database);
+            return;
         }
 
     }
 
+    public void workerHireMenu(Scanner input, Job job, ArrayList<Worker> applicationList, Database database){
+
+        String strChoice;
+        int choice;
+
+        while(true){
+            System.out.print("Input the number of the applicant you want to hire (leave empty to return): ");
+            strChoice = input.nextLine();
+
+            if(strChoice.isEmpty()){
+                return;
+            }
+
+            try{
+                choice = Integer.parseInt(strChoice);
+            } catch (RuntimeException e) {
+                System.out.println("Input a valid number!");
+                continue;
+            }
+
+            --choice;
+            if(choice < 0 || choice > applicationList.size()-1){
+                System.out.println("Input a valid number!");
+                continue;
+            }
+
+            else{
+                Worker worker = applicationList.get(choice);
+                database.hireWorker(worker, job);
+                System.out.println("Worker successfully hired!");
+                return;
+            }
+
+        }
+    }
 
     public void login(Scanner input) {
         // user log-in menu here
@@ -242,12 +279,12 @@ public class Employer extends User {
                     break;
                 case '2':
                     reviewPostings(input);
-                    // EXTRA MENU HERE()
                     break;
                 case '3':
+                    deleteJobMenu(input);
                     break;
                 case '4':
-                    deleteJobMenu(input);
+
                     break;
                 case '5':
                     return;

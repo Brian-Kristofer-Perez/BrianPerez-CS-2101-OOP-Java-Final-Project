@@ -16,6 +16,14 @@ public class Job {
 
    }
 
+   // default, empty, constructor
+   public Job(){
+       this.jobTitle = "";
+       this.jobDesc = "";
+       this.salary = 0;
+       this.benefits = new ArrayList<>();
+   }
+
    // Getters
    public String getJobTitle() {
        return jobTitle;

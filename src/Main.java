@@ -143,7 +143,6 @@ public class Main {
                     // add constructors here!
 
                     Worker user = new Worker(name);
-
                     user.login(input);
 
                     break;
