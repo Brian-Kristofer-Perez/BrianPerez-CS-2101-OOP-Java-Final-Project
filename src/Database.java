@@ -731,6 +731,46 @@ public class Database {
             e.printStackTrace();
         }
     }
+    
+    public ArrayList<Worker> queryEmployees(int employerID){
+
+        ArrayList<Worker> workerList = new ArrayList<Worker>();
+        try{
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM occupations join jobs ON occupations.idJob = jobs.idJob join workers ON occupations.idWorker = workers.idWorker where idEmployer = ?;");
+            statement.setInt(1, employerID);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            while(resultSet.next()){
+
+                String workerName = resultSet.getString("name");
+                Worker newWorker = new Worker(workerName);
+                Job newJob = loadOccupation(workerName);
+                newWorker.setJob(newJob);
+
+                workerList.add(newWorker);
+            }
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+
+        return workerList;
+    }
+
+    public void fireWorker(String workerName){
+
+        int idWorker = queryWorkerID(workerName);
+
+        try{
+            PreparedStatement fireEmployee = connection.prepareStatement("DELETE * FROM occupations WHERE idWorker = ?");
+            fireEmployee.setInt(1, idWorker);
+            fireEmployee.executeUpdate();
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
 
 }
 

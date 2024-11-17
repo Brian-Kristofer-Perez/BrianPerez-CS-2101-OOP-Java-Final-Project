@@ -132,9 +132,14 @@ public class Employer extends User {
 
         // collect and validate user input
         while(true) {
-            System.out.print("Input the number of the posting you want to delete: ");
+            System.out.print("Input the number of the posting you want to delete (leave empty to return): ");
 
             strChoice = input.nextLine();
+
+            if(strChoice.isEmpty()){
+                return;
+            }
+
             try {
                 choice = Integer.parseInt(strChoice);
             } catch (NumberFormatException e) {
@@ -253,6 +258,86 @@ public class Employer extends User {
         }
     }
 
+
+    public void manageEmployees(Scanner input){
+
+        Database database = new Database();
+        int idEmployer = database.queryEmployerID(this.name);
+
+        ArrayList<Worker> employeeList = database.queryEmployees(idEmployer);
+
+        if(employeeList.isEmpty()){
+            System.out.println("No employees found.");
+            return;
+        }
+
+        System.out.println("Employee List: \n");
+        int ctr = 0;
+        for(Worker i: employeeList){
+            System.out.println(++ctr +". " +"Employee name: " + i.getName());
+            System.out.println("Job Position: " + i.getOccupation().getJobTitle());
+            System.out.println();
+        }
+
+        Worker employee = selectEmployee(employeeList, input);
+
+        if(employee == null){
+            return;
+        }
+
+        String choiceStr;
+
+        System.out.println("Worker Record: ");
+        employee.printResume();
+
+        while(true) {
+            System.out.println("Fire this employee? (y/n) (leave empty to return): ");
+            choiceStr = input.nextLine();
+
+            if(choiceStr.isEmpty()){
+                return;
+            }
+
+            else if(choiceStr.equalsIgnoreCase("y")){
+                database.fireWorker(employee.getName());
+            }
+
+            else if(choiceStr.equalsIgnoreCase("n")){
+                return;
+            }
+
+            else{
+                System.out.println("Input a valid choice!");
+            }
+        }
+
+    }
+
+    private Worker selectEmployee(ArrayList<Worker> employeeList, Scanner input){
+        String strChoice;
+        int choice = 0;
+
+        while(true) {
+            System.out.print("Select number of the employee to review (leave empty to return): ");
+            strChoice = input.nextLine();
+
+            if (strChoice.isEmpty()) {
+                return null;
+            }
+            try {
+                choice = Integer.parseInt(strChoice);
+            } catch (RuntimeException e) {
+                System.out.println("Input a valid number!");
+            }
+            --choice;
+            if (choice < 0 || choice > employeeList.size() - 1) {
+                System.out.println("Input a valid number!");
+            } else {
+                return employeeList.get(choice);
+            }
+        }
+    }
+
     public void login(Scanner input) {
         // user log-in menu here
         char choice;
@@ -260,8 +345,9 @@ public class Employer extends User {
             System.out.println(String.format("Welcome, %s!", this.name));
             System.out.println("1. Create Job postings");
             System.out.println("2. Review Job postings");
-            System.out.println("3. Delete Job postings");
-            System.out.println("4. Log out");
+            System.out.println("3. Manage Employees");
+            System.out.println("4. Delete Job postings");
+            System.out.println("5. Log out");
 
             System.out.print("Input your choice: ");
 
@@ -281,10 +367,10 @@ public class Employer extends User {
                     reviewPostings(input);
                     break;
                 case '3':
-                    deleteJobMenu(input);
+                    manageEmployees(input);
                     break;
                 case '4':
-
+                    deleteJobMenu(input);
                     break;
                 case '5':
                     return;

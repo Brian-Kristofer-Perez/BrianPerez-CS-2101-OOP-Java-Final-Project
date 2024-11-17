@@ -19,6 +19,10 @@ public class Worker extends User {
         return this.resume;
     }
 
+    public Job getOccupation() {
+        return occupation;
+    }
+
     // Setters!
     public void setResume(Resume resume){
         this.resume = resume;
