@@ -177,6 +177,10 @@ public class Employer extends User {
 
         viewPostings(jobList);
 
+        if(jobList.isEmpty()){
+            return;
+        }
+
         while(true){
             System.out.print("Input the number of the job you want to review (leave empty to return): ");
             strChoice = input.nextLine();
