@@ -721,7 +721,7 @@ public class Database {
 
             hireWorker.executeUpdate();
 
-            // clearing ALL other applications and relevant information related to the job posting
+            // clearing ALL other applications once hired
             PreparedStatement clearApps = connection.prepareStatement("DELETE FROM applications WHERE idJob = ?");
             clearApps.setInt(1, idJob);
             clearApps.executeUpdate();

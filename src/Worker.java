@@ -391,6 +391,7 @@ public class Worker extends User {
                     database.fireWorker(this.name);
                     this.occupation = new Job();
                     System.out.println("You have successfully resigned!");
+                    return;
                 }
 
                 else if(choiceStr.equalsIgnoreCase("n")){
