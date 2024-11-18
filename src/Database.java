@@ -747,7 +747,8 @@ public class Database {
                 Worker newWorker = new Worker(workerName);
                 Job newJob = loadOccupation(workerName);
                 newWorker.setJob(newJob);
-
+                Resume newResume = loadResume(workerName);
+                newWorker.setResume(newResume);
                 workerList.add(newWorker);
             }
         }
@@ -763,7 +764,7 @@ public class Database {
         int idWorker = queryWorkerID(workerName);
 
         try{
-            PreparedStatement fireEmployee = connection.prepareStatement("DELETE * FROM occupations WHERE idWorker = ?");
+            PreparedStatement fireEmployee = connection.prepareStatement("DELETE FROM occupations WHERE idWorker = ?");
             fireEmployee.setInt(1, idWorker);
             fireEmployee.executeUpdate();
         }

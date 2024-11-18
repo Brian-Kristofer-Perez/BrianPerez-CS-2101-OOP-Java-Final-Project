@@ -252,6 +252,7 @@ public class Employer extends User {
                 Worker worker = applicationList.get(choice);
                 database.hireWorker(worker, job);
                 System.out.println("Worker successfully hired!");
+
                 return;
             }
 
@@ -291,7 +292,7 @@ public class Employer extends User {
         employee.printResume();
 
         while(true) {
-            System.out.println("Fire this employee? (y/n) (leave empty to return): ");
+            System.out.print("Fire this employee? (y/n): ");
             choiceStr = input.nextLine();
 
             if(choiceStr.isEmpty()){
@@ -300,6 +301,8 @@ public class Employer extends User {
 
             else if(choiceStr.equalsIgnoreCase("y")){
                 database.fireWorker(employee.getName());
+                System.out.println("Employee fired. Goodbye, " + employee.getName() +"!");
+                return;
             }
 
             else if(choiceStr.equalsIgnoreCase("n")){

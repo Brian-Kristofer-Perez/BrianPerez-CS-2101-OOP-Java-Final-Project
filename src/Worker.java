@@ -74,7 +74,7 @@ public class Worker extends User {
                     applyForJob(input);
                     break;
                 case '5':
-                    displayCurrentJob();
+                    displayCurrentJob(input);
                     break;
                 default:
                     System.out.println("Please provide a valid input.");
@@ -344,7 +344,7 @@ public class Worker extends User {
         }
     }
 
-    void displayCurrentJob(){
+    void displayCurrentJob(Scanner input){
 
         // fully check if the current job is actually the default "empty" one (i.e. unemployed)
         boolean noTitle = this.occupation.getJobTitle().strip().isEmpty();
@@ -357,7 +357,7 @@ public class Worker extends User {
         }
 
         else {
-            System.out.println("Job title: " + (this.occupation.getJobTitle()));
+            System.out.println("Job title: " + this.occupation.getJobTitle());
             System.out.println("Description: " + this.occupation.getJobDesc());
             System.out.println("Monthly Salary: " + this.occupation.getSalary() + " php");
             System.out.println("Benefits: ");
@@ -374,6 +374,32 @@ public class Worker extends User {
                 System.out.println();
             } else {
                 System.out.println("\tNo benefits listed.");
+            }
+
+            String choiceStr;
+            Database database = new Database();
+
+            while(true) {
+                System.out.print("Do you wish to resign? (y/n): ");
+                choiceStr = input.nextLine();
+
+                if(choiceStr.isEmpty()){
+                    return;
+                }
+
+                else if(choiceStr.equalsIgnoreCase("y")){
+                    database.fireWorker(this.name);
+                    this.occupation = new Job();
+                    System.out.println("You have successfully resigned!");
+                }
+
+                else if(choiceStr.equalsIgnoreCase("n")){
+                    return;
+                }
+
+                else{
+                    System.out.println("Input a valid choice!");
+                }
             }
         }
     }
