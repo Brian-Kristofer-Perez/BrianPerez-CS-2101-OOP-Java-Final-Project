@@ -22,6 +22,9 @@ public class Employer extends User {
 
         // collect user input
         while(true) {
+            System.out.println("====================================================");
+            System.out.println("            CREATE NEW JOB POSTING                 ");
+            System.out.println("====================================================");
             System.out.print("Input the job title: ");
             jobTitle = input.nextLine();
 
@@ -82,6 +85,7 @@ public class Employer extends User {
         database.addPosting(this.name, newPosting);
 
         System.out.println("Job successfully created!");
+        System.out.println("====================================================");
     }
 
 
@@ -90,28 +94,33 @@ public class Employer extends User {
         int counter = 0;
 
         if(!jobList.isEmpty()) {
+
+            System.out.println("====================================================");
+            System.out.println("                 JOB POSTINGS LIST                 ");
+            System.out.println("====================================================");
+
             for (Job i : jobList) {
+                System.out.println("Job #" + (++counter));
+                System.out.println("----------------------------------------------------");
+                System.out.println("Job Title       : " + i.getJobTitle());
+                System.out.println("Job Description : " + i.getJobDesc());
+                System.out.println("Salary          : PHP " + i.getSalary());
 
-                System.out.println(++counter + ".  " + "Job title: " + i.getJobTitle());
-                System.out.println("\tDescription: " + i.getJobDesc());
-                System.out.println("\tMonthly Salary: " + i.getSalary() + " php");
-                System.out.println("\tBenefits: ");
-
+                System.out.println("Benefits        : ");
                 if (i.getBenefits() != null && !i.getBenefits().isEmpty()) {
-                    for (String j : i.getBenefits()) {
-
-                        if(!(j == null) && !j.isEmpty()){
-                            System.out.println("\t - " + j);
-                        }
-                        else{
-                            System.out.println("\t\tNo benefits listed.");
+                    for (String benefit : i.getBenefits()) {
+                        if (benefit != null && !benefit.isEmpty()) {
+                            System.out.println("  - " + benefit);
                         }
                     }
-                    System.out.println();
                 } else {
-                    System.out.println("\t\tNo benefits listed.");
+                    System.out.println("  No benefits listed.");
                 }
+                System.out.println("----------------------------------------------------\n");
             }
+
+            System.out.println("====================================================");
+
         }
         else{
             System.out.println("No vacant jobs listed. Try and make one!");
@@ -124,6 +133,10 @@ public class Employer extends User {
         int choice = 0;
         Database database = new Database();
         ArrayList<Job> jobList = database.queryJobs(this.name);
+
+        if(jobList.isEmpty()){
+            return;
+        }
 
         viewPostings(jobList);
 
@@ -225,19 +238,19 @@ public class Employer extends User {
 
     public void workerHireMenu(Scanner input, Job job, ArrayList<Worker> applicationList, Database database){
 
-        String strChoice;
+        String stringChoice;
         int choice;
 
         while(true){
             System.out.print("Input the number of the applicant you want to hire (leave empty to return): ");
-            strChoice = input.nextLine();
+            stringChoice = input.nextLine();
 
-            if(strChoice.isEmpty()){
+            if(stringChoice.isEmpty()){
                 return;
             }
 
             try{
-                choice = Integer.parseInt(strChoice);
+                choice = Integer.parseInt(stringChoice);
             } catch (RuntimeException e) {
                 System.out.println("Input a valid number!");
                 continue;
@@ -268,18 +281,24 @@ public class Employer extends User {
 
         ArrayList<Worker> employeeList = database.queryEmployees(idEmployer);
 
-        if(employeeList.isEmpty()){
+        System.out.println("====================================================");
+        System.out.println("                    EMPLOYEE LIST                  ");
+        System.out.println("====================================================");
+
+        int ctr = 0;
+        if (!employeeList.isEmpty()) {
+            for (Worker i : employeeList) {
+                System.out.println("Employee #" + (++ctr));
+                System.out.println("----------------------------------------------------");
+                System.out.println("Name          : " + i.getName());
+                System.out.println("Job Position  : " + i.getOccupation().getJobTitle());
+                System.out.println("----------------------------------------------------\n");
+            }
+        } else {
             System.out.println("No employees found.");
-            return;
         }
 
-        System.out.println("Employee List: \n");
-        int ctr = 0;
-        for(Worker i: employeeList){
-            System.out.println(++ctr +". " +"Employee name: " + i.getName());
-            System.out.println("Job Position: " + i.getOccupation().getJobTitle());
-            System.out.println();
-        }
+        System.out.println("====================================================");
 
         Worker employee = selectEmployee(employeeList, input);
 
@@ -321,8 +340,12 @@ public class Employer extends User {
         String strChoice;
         int choice = 0;
 
+        if(employeeList.isEmpty()){
+            return null;
+        }
+
         while(true) {
-            System.out.print("Select number of the employee to review (leave empty to return): ");
+            System.out.print("Select the number of the employee to review (leave empty to return): ");
             strChoice = input.nextLine();
 
             if (strChoice.isEmpty()) {
@@ -377,6 +400,7 @@ public class Employer extends User {
                     deleteJobMenu(input);
                     break;
                 case '5':
+                    System.out.println("Logging out. Goodbye!W");
                     return;
 
                 default:
