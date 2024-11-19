@@ -41,7 +41,11 @@ public class Worker extends User {
 
         char choice;
         while (true) {
+            System.out.println("\n========================================");
+            System.out.println("      Welcome to Your Worker Portal     ");
+            System.out.println("========================================");
             System.out.println(String.format("Welcome, %s!", this.name));
+            System.out.println("What would you like to do today?");
             System.out.println("1. View Resume");
             System.out.println("2. Edit Resume");
             System.out.println("3. View Job Postings");
@@ -49,7 +53,7 @@ public class Worker extends User {
             System.out.println("5. View Current Job");
             System.out.println("6. Log out");
 
-            System.out.print("Input your choice: ");
+            System.out.print("Please enter your choice (1-6): ");
 
             // catch empty input errors!
             try {
@@ -75,6 +79,9 @@ public class Worker extends User {
                 case '5':
                     displayCurrentJob(input);
                     break;
+                case '6':
+                    System.out.println("Logging out... Goodbye!");
+                    return;
                 default:
                     System.out.println("Please provide a valid input.");
             }
@@ -82,10 +89,11 @@ public class Worker extends User {
 
     }
 
+    // resume used for personal viewing and editing
     public void printResume() {
-        System.out.println("----------------------------------------------------");
+        System.out.println("=====================================================");
         System.out.println("                    RESUME                         ");
-        System.out.println("----------------------------------------------------");
+        System.out.println("=====================================================");
 
         // Print Name
         System.out.println("Name:");
@@ -127,13 +135,14 @@ public class Worker extends User {
             }
         }
 
-        System.out.println("----------------------------------------------------");
+        System.out.println("=====================================================");
     }
 
+    // resume used for application
     public void printResume(int ctr) {
-        System.out.println("----------------------------------------------------");
+        System.out.println("=====================================================");
         System.out.println("                Resume #" + ctr +"                ");
-        System.out.println("----------------------------------------------------");
+        System.out.println("=====================================================");
 
         // Print Name
         System.out.println("Name:");
@@ -175,10 +184,11 @@ public class Worker extends User {
             }
         }
 
-        System.out.println("----------------------------------------------------");
+        System.out.println("=====================================================");
     }
 
 
+    // auto-queries the db stuff, irrespective of order
     public void printAllPostings() {
 
         Database database = new Database();
@@ -187,62 +197,73 @@ public class Worker extends User {
 
         int counter = 0;
 
-        for (Job i : jobList) {
+        if (jobList.isEmpty()) {
+            System.out.println("\nNo job postings available at the moment.");
+            System.out.println("Please check back later.");
+            return;
+        }
 
-            System.out.println(++counter + ".  " + "Job Title: " + i.getJobTitle());
-            System.out.println("\tJob Description: " + i.getJobDesc());
-            System.out.println("\tSalary: Php " + i.getSalary());
+        System.out.println("\n========================================");
+        System.out.println("        Available Job Postings          ");
+        System.out.println("========================================");
 
-            // Print benefits
+        for (Job job : jobList) {
+            System.out.println(String.format("\nJob #%d: %s", ++counter, job.getJobTitle()));
+            System.out.println("\tDescription: " + job.getJobDesc());
+            System.out.println("\tSalary: Php " + job.getSalary());
             System.out.println("\tBenefits:");
 
-            // handle no benefits collected, check if it's empty
-            if (i.getBenefits() != null && !i.getBenefits().isEmpty()) {
-                for (String benefit : i.getBenefits()) {
-                    if(!(benefit == null) && !benefit.isEmpty()){
+            if (job.getBenefits() != null && !job.getBenefits().isEmpty()) {
+                for (String benefit : job.getBenefits()) {
+                    if (benefit != null && !benefit.isEmpty()) {
                         System.out.println("\t - " + benefit);
-                    }
-                    else{
-                        System.out.println("\t\tNo benefits listed.");
                     }
                 }
             } else {
-                System.out.println("\t\tNo benefits listed.");
+                System.out.println("\t - No benefits listed.");
             }
-
-            System.out.println();
         }
+
+        System.out.println("\n========================================");
+        System.out.println();
+
     }
 
+    // takes a preset manually queried job order, used in cases where indexing is needed
     public void printAllPostings(ArrayList<Job> jobList) {
 
         int counter = 0;
 
-        for (Job i : jobList) {
+        if (jobList.isEmpty()) {
+            System.out.println("\nNo job postings available at the moment.");
+            System.out.println("Please check back later.");
+            return;
+        }
 
-            System.out.println(++counter + ".  " + "Job Title: " + i.getJobTitle());
-            System.out.println("\tJob Description: " + i.getJobDesc());
-            System.out.println("\tSalary: Php " + i.getSalary());
+        System.out.println("\n========================================");
+        System.out.println("        Available Job Postings          ");
+        System.out.println("========================================");
 
-            // Print benefits
+        for (Job job : jobList) {
+
+            System.out.println(String.format("\nJob #%d: %s", ++counter, job.getJobTitle()));
+            System.out.println("\tDescription: " + job.getJobDesc());
+            System.out.println("\tSalary: Php " + job.getSalary());
             System.out.println("\tBenefits:");
 
-            // handle no benefits collected, check if it's empty
-            if (i.getBenefits() != null && !i.getBenefits().isEmpty()) {
-                for (String benefit : i.getBenefits()) {
-                    if(!(benefit == null) && !benefit.isEmpty()){
+            if (job.getBenefits() != null && !job.getBenefits().isEmpty()) {
+                for (String benefit : job.getBenefits()) {
+                    if (benefit != null && !benefit.isEmpty()) {
                         System.out.println("\t - " + benefit);
-                    }
-                    else{
-                        System.out.println("\t\tNo benefits listed.");
                     }
                 }
             } else {
-                System.out.println("\t\tNo benefits listed.");
+                System.out.println("\t - No benefits listed.");
             }
-
-            System.out.println();
         }
+
+        System.out.println("\n========================================");
+        System.out.println();
     }
 
     public void editResume(Scanner input){
@@ -251,46 +272,59 @@ public class Worker extends User {
         ArrayList<String> newExperience = new ArrayList<String>();
         ArrayList<String> newCertifications = new ArrayList<String>();
 
+        System.out.println("\n========================================");
+        System.out.println("       Editing Your Resume           ");
+        System.out.println("========================================");
+
+        // Edit Summary
         System.out.print("Enter the new summary: ");
         newSummary = input.nextLine();
 
-        while (true){
-            System.out.print("Input the new certifications (leave empty to end): ");
+        // Edit Certifications
+        System.out.println("\n========================================");
+        System.out.println("       Adding Certifications         ");
+        System.out.println("========================================");
+
+        while (true) {
+            System.out.print("Input the new certifications (leave empty to finish): ");
             certification = input.nextLine();
 
-            if(certification.isEmpty()){
+            if (certification.isEmpty()) {
                 break;
-            }
-            else{
+            } else {
                 newCertifications.add(certification);
             }
         }
 
-        while (true){
-            System.out.print("Input the new work experience (leave empty to end): ");
+        // Edit Work Experience
+        System.out.println("\n========================================");
+        System.out.println("        Adding Work Experience           ");
+        System.out.println("========================================");
+
+        while (true) {
+            System.out.print("Input the new work experience (leave empty to finish): ");
             experience = input.nextLine();
 
-            if(experience.isEmpty()){
+            if (experience.isEmpty()) {
                 break;
-            }
-            else{
+            } else {
                 newExperience.add(experience);
             }
         }
 
-        // update the new resume
-        // in the program itself:
-
+        // Update the resume in the program
         this.resume.setSummary(newSummary);
         this.resume.setExperience(newExperience);
         this.resume.setCertifications(newCertifications);
 
-        // in the database,
+        // Update the resume in the database
         Database database = new Database();
-
-        // update it as well
         database.updateResume(this.name, newSummary, newExperience, newCertifications);
-        System.out.println("Resume updated!");
+
+        // Confirm that the resume has been updated
+        System.out.println("========================================");
+        System.out.println("     Resume Updated Successfully!       ");
+        System.out.println("========================================");
     }
 
     public void applyForJob(Scanner input){
@@ -356,9 +390,13 @@ public class Worker extends User {
         }
 
         else {
-            System.out.println("Job title: " + this.occupation.getJobTitle());
+            System.out.println("====================================================");
+            System.out.println("                CURRENT JOB DETAILS                ");
+            System.out.println("====================================================");
+
+            System.out.println("Job Title: " + this.occupation.getJobTitle());
             System.out.println("Description: " + this.occupation.getJobDesc());
-            System.out.println("Monthly Salary: " + this.occupation.getSalary() + " php");
+            System.out.println("Monthly Salary: " + this.occupation.getSalary() + " PHP");
             System.out.println("Benefits: ");
 
             if (this.occupation.getBenefits() != null && !this.occupation.getBenefits().isEmpty()) {
@@ -390,10 +428,12 @@ public class Worker extends User {
                     database.fireWorker(this.name);
                     this.occupation = new Job();
                     System.out.println("You have successfully resigned!");
+                    System.out.println("====================================================");
                     return;
                 }
 
                 else if(choiceStr.equalsIgnoreCase("n")){
+                    System.out.println("====================================================");
                     return;
                 }
 
