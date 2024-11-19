@@ -13,10 +13,14 @@ public class Main {
         char choice;
 
         while(true){
-            System.out.print("Welcome to InsideJob!\n");
-            System.out.println("1. Log in");
-            System.out.println("2. Sign up");
-            System.out.println("3. Exit");
+            System.out.println();
+            System.out.println("=================================");
+            System.out.println("      Welcome to InsideJob!     ");
+            System.out.println("=================================");
+            System.out.println("1. Log in to your account");
+            System.out.println("2. Create a new account");
+            System.out.println("3. Exit the application");
+            System.out.println();
             System.out.print("Input your choice: ");
 
             // catch empty input errors!
@@ -46,11 +50,14 @@ public class Main {
     private static void registerChoice(Scanner input){
         char choice;
         while (true) {
-            System.out.println("Are you a worker or an employer?");
+            System.out.println("====================================");
+            System.out.println("    Registration - Choose Role     ");
+            System.out.println("====================================");
+            System.out.println("Are you a Worker or an Employer?");
             System.out.println("1. Worker");
             System.out.println("2. Employer");
-
-            System.out.print("Input your choice (0 to return): ");
+            System.out.println();
+            System.out.print("Please input your choice (0 to return): ");
 
 
             // catch empty input errors!
@@ -82,11 +89,14 @@ public class Main {
         char choice;
 
         while (true) {
-            System.out.println("Are you a worker or an employer?");
+            System.out.println("====================================");
+            System.out.println("       Log In - Choose Role         ");
+            System.out.println("====================================");
+            System.out.println("Are you a Worker or an Employer?");
             System.out.println("1. Worker");
             System.out.println("2. Employer");
-
-            System.out.print("Input your choice (0 to return): ");
+            System.out.println();
+            System.out.print("Please input your choice (0 to return): ");
 
             // catch empty input errors!
             try {
@@ -118,17 +128,25 @@ public class Main {
 
         // collect user input
         while (true) {
+            System.out.println("=================================");
+            System.out.println("      Worker Login Process       ");
+            System.out.println("=================================");
+
+            // Prompt for name input
             System.out.print("Input your name (leave blank to return): ");
             name = input.nextLine();
 
-            if(name.isEmpty()){
+            if (name.isEmpty()) {
+                System.out.println("Returning to the previous menu...\n");
                 return;
             }
 
+            // Prompt for password input
             System.out.print("Input your password (leave blank to return): ");
             password = input.nextLine();
 
-            if(password.isEmpty()){
+            if (password.isEmpty()) {
+                System.out.println("Returning to the previous menu...\n");
                 return;
             }
 
@@ -140,8 +158,6 @@ public class Main {
                 // if user is found!
                 if (valid) {
                     System.out.println("Logged in!");
-                    // add constructors here!
-
                     Worker user = new Worker(name);
                     user.login(input);
 
@@ -163,17 +179,25 @@ public class Main {
 
         // collect user input
         while (true) {
+            System.out.println("=================================");
+            System.out.println("     Employer Login Process      ");
+            System.out.println("=================================");
+
+            // Prompt for name input
             System.out.print("Input your name (leave blank to return): ");
             name = input.nextLine();
 
-            if(name.isEmpty()){
+            if (name.isEmpty()) {
+                System.out.println("Returning to the previous menu...\n");
                 return;
             }
 
+            // Prompt for password input
             System.out.print("Input your password (leave blank to return): ");
             password = input.nextLine();
 
-            if(password.isEmpty()){
+            if (password.isEmpty()) {
+                System.out.println("Returning to the previous menu...\n");
                 return;
             }
 
@@ -206,17 +230,25 @@ public class Main {
 
         // collect user input
         while (true) {
+            System.out.println("=================================");
+            System.out.println("   Worker Registration Process   ");
+            System.out.println("=================================");
+
+            // Prompt for name input
             System.out.print("Input your name (leave blank to return): ");
             name = input.nextLine();
 
-            if(name.isEmpty()){
+            if (name.isEmpty()) {
+                System.out.println("Returning to the previous menu...\n");
                 return;
             }
 
+            // Prompt for password input
             System.out.print("Input your password (leave blank to return): ");
             password = input.nextLine();
 
-            if(password.isEmpty()){
+            if (password.isEmpty()) {
+                System.out.println("Returning to the previous menu...\n");
                 return;
             }
 
@@ -225,12 +257,12 @@ public class Main {
 
             if (!found) {
                 database.addWorker(name, password);
-                System.out.println("Added successfully!");
+                System.out.println("\nRegistration successful! Welcome aboard, " + name + "!\n");
                 break;
             }
 
             else {
-                System.out.println("Name already exists.");
+                System.out.println("\nName already exists. Please try a different name.");
             }
         }
     }
@@ -266,13 +298,13 @@ public class Main {
 
                 // add to DB
                 database.addEmployer(name, password);
-                System.out.println("Added successfully!");
+                System.out.println("\nRegistration successful! Welcome aboard, " + name + "!\n");
                 break;
             }
 
             // else, error
             else {
-                System.out.println("Name already exists.");
+                System.out.println("\nName already exists. Please try a different name.");
             }
         }
     }

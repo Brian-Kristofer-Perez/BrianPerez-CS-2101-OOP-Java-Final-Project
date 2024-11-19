@@ -25,7 +25,7 @@ public class Job {
    }
 
    // Getters
-   public String getJobTitle() {
+    public String getJobTitle() {
        return jobTitle;
    }
 

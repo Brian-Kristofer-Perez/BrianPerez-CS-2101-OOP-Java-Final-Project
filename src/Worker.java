@@ -14,7 +14,6 @@ public class Worker extends User {
     }
 
     // Getters!
-
     public Resume getResume(){
         return this.resume;
     }

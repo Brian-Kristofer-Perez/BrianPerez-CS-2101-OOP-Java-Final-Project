@@ -8,9 +8,6 @@ public class Employer extends User {
     }
 
     // Getters and setters
-    public String getName() {
-        return name;
-    }
     public void setName(String name) {
         this.name = name;
     }
