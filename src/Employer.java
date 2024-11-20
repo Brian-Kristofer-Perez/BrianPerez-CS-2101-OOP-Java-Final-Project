@@ -19,9 +19,9 @@ public class Employer extends User {
     private void createJob(Scanner input){
 
         String jobTitle, jobDesc, benefit, strSalary;
-        int salary = 0;
+        int salary;
         ArrayList<String> benefits = new ArrayList<>();
-        Job newPosting = null;
+        Job newPosting;
 
         // collect user input
         while(true) {
@@ -133,7 +133,7 @@ public class Employer extends User {
     private void deleteJobMenu(Scanner input){
 
         String strChoice;
-        int choice = 0;
+        int choice;
         Database database = new Database();
         ArrayList<Job> jobList = database.queryJobs(this.name);
 
@@ -177,7 +177,6 @@ public class Employer extends User {
 
         database.deleteJob(jobList.get(choice), this.name);
         System.out.println("Job deleted!");
-        return;
 
     }
 
@@ -212,7 +211,6 @@ public class Employer extends User {
             --choice;
             if(choice < 0 || choice > jobList.size()-1){
                 System.out.println("Input a valid number!");
-                continue;
             }
 
             else{
@@ -234,7 +232,6 @@ public class Employer extends User {
             }
 
             workerHireMenu(input, jobSelection, applicationList, database);
-            return;
         }
 
     }
@@ -262,7 +259,6 @@ public class Employer extends User {
             --choice;
             if(choice < 0 || choice > applicationList.size()-1){
                 System.out.println("Input a valid number!");
-                continue;
             }
 
             else{
