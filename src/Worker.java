@@ -288,8 +288,8 @@ public class Worker extends User {
     private void editResume(Scanner input){
 
         String newSummary, certification, experience;
-        ArrayList<String> newExperience = new ArrayList<String>();
-        ArrayList<String> newCertifications = new ArrayList<String>();
+        ArrayList<String> newExperience = new ArrayList<>();
+        ArrayList<String> newCertifications = new ArrayList<>();
 
         System.out.println("\n========================================");
         System.out.println("       Editing Your Resume           ");
@@ -352,7 +352,7 @@ public class Worker extends User {
 
         ArrayList<Job> jobList = database.queryAllPostings();
         String strChoice;
-        int choice, jobID = 0;
+        int choice, jobID;
         Job job;
         printAllPostings(jobList);
 
@@ -399,8 +399,8 @@ public class Worker extends User {
     private void displayCurrentJob(Scanner input){
 
         // fully check if the current job is actually the default "empty" one (i.e. unemployed)
-        boolean noTitle = this.occupation.getJobTitle().strip().isEmpty();
-        boolean noDesc = this.occupation.getJobDesc().strip().isEmpty();
+        boolean noTitle = this.occupation.getJobTitle().isBlank();
+        boolean noDesc = this.occupation.getJobDesc().isBlank();
         boolean noSalary = this.occupation.getSalary() == 0;
         boolean noBenefits = this.occupation.getBenefits().isEmpty();
 
