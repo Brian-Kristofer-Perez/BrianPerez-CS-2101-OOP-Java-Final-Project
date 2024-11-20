@@ -650,7 +650,8 @@ public class Database {
         return job;
     }
 
-
+    // this is a "helper" function, just there to make things more readable by subdividing code.
+    // Outside this class, this isn't really called. Might as well make private.
     private Job jobFromID(int idJob){
 
         Job job = null;

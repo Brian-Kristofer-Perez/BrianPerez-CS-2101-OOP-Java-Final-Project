@@ -13,7 +13,7 @@ public class Employer extends User {
     }
 
 
-    public void createJob(Scanner input){
+    private void createJob(Scanner input){
 
         String jobTitle, jobDesc, benefit, strSalary;
         int salary = 0;
@@ -89,7 +89,7 @@ public class Employer extends User {
     }
 
 
-    public void viewPostings(ArrayList<Job> jobList){
+    private void viewPostings(ArrayList<Job> jobList){
 
         int counter = 0;
 
@@ -127,7 +127,7 @@ public class Employer extends User {
         }
     }
 
-    public void deleteJobMenu(Scanner input){
+    private void deleteJobMenu(Scanner input){
 
         String strChoice;
         int choice = 0;
@@ -178,7 +178,7 @@ public class Employer extends User {
 
     }
 
-    public void reviewPostings(Scanner input){
+    private void reviewPostings(Scanner input){
 
         Database database = new Database();
         String strChoice;
@@ -236,7 +236,7 @@ public class Employer extends User {
 
     }
 
-    public void workerHireMenu(Scanner input, Job job, ArrayList<Worker> applicationList, Database database){
+    private void workerHireMenu(Scanner input, Job job, ArrayList<Worker> applicationList, Database database){
 
         String stringChoice;
         int choice;
@@ -274,7 +274,7 @@ public class Employer extends User {
     }
 
 
-    public void manageEmployees(Scanner input){
+    private void manageEmployees(Scanner input){
 
         Database database = new Database();
         int idEmployer = database.queryEmployerID(this.name);
