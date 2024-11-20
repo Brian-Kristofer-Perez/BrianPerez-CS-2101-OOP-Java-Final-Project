@@ -135,7 +135,7 @@ public class Main {
             System.out.print("Input your name (leave blank to return): ");
             name = input.nextLine();
 
-            if (name.isEmpty()) {
+            if (name.isBlank()) {
                 System.out.println("Returning to the previous menu...\n");
                 return;
             }
@@ -144,7 +144,7 @@ public class Main {
             System.out.print("Input your password (leave blank to return): ");
             password = input.nextLine();
 
-            if (password.isEmpty()) {
+            if (password.isBlank()) {
                 System.out.println("Returning to the previous menu...\n");
                 return;
             }
@@ -186,7 +186,7 @@ public class Main {
             System.out.print("Input your name (leave blank to return): ");
             name = input.nextLine();
 
-            if (name.isEmpty()) {
+            if (name.isBlank()) {
                 System.out.println("Returning to the previous menu...\n");
                 return;
             }
@@ -195,7 +195,7 @@ public class Main {
             System.out.print("Input your password (leave blank to return): ");
             password = input.nextLine();
 
-            if (password.isEmpty()) {
+            if (password.isBlank()) {
                 System.out.println("Returning to the previous menu...\n");
                 return;
             }
@@ -237,7 +237,7 @@ public class Main {
             System.out.print("Input your name (leave blank to return): ");
             name = input.nextLine();
 
-            if (name.isEmpty()) {
+            if (name.isBlank()) {
                 System.out.println("Returning to the previous menu...\n");
                 return;
             }
@@ -246,7 +246,7 @@ public class Main {
             System.out.print("Input your password (leave blank to return): ");
             password = input.nextLine();
 
-            if (password.isEmpty()) {
+            if (password.isBlank()) {
                 System.out.println("Returning to the previous menu...\n");
                 return;
             }
@@ -275,14 +275,14 @@ public class Main {
             System.out.print("Input your name (leave blank to return): ");
             name = input.nextLine();
 
-            if(name.isEmpty()){
+            if(name.isBlank()){
                 return;
             }
 
             System.out.print("Input your password (leave blank to return): ");
             password = input.nextLine();
 
-            if(password.isEmpty()){
+            if(password.isBlank()){
                 return;
             }
 
