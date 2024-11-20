@@ -189,7 +189,7 @@ public class Worker extends User {
 
 
     // auto-queries the db stuff, irrespective of order
-    public void printAllPostings() {
+    private void printAllPostings() {
 
         Database database = new Database();
 
@@ -230,7 +230,7 @@ public class Worker extends User {
     }
 
     // takes a preset manually queried job order, used in cases where indexing is needed
-    public void printAllPostings(ArrayList<Job> jobList) {
+    private void printAllPostings(ArrayList<Job> jobList) {
 
         int counter = 0;
 
@@ -266,7 +266,7 @@ public class Worker extends User {
         System.out.println();
     }
 
-    public void editResume(Scanner input){
+    private void editResume(Scanner input){
 
         String newSummary, certification, experience;
         ArrayList<String> newExperience = new ArrayList<String>();
@@ -327,7 +327,7 @@ public class Worker extends User {
         System.out.println("========================================");
     }
 
-    public void applyForJob(Scanner input){
+    private void applyForJob(Scanner input){
         Database database = new Database();
         int idWorker = database.queryWorkerID(this.name);
 
@@ -377,7 +377,7 @@ public class Worker extends User {
         }
     }
 
-    void displayCurrentJob(Scanner input){
+    private void displayCurrentJob(Scanner input){
 
         // fully check if the current job is actually the default "empty" one (i.e. unemployed)
         boolean noTitle = this.occupation.getJobTitle().strip().isEmpty();
