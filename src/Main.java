@@ -267,7 +267,7 @@ public class Main {
         }
     }
 
-    private static  void employerRegister(Scanner input){
+    private static void employerRegister(Scanner input){
         // initialize variables
         String name, password;
 
@@ -308,12 +308,4 @@ public class Main {
             }
         }
     }
-
-    /*
-    * Row, row, row your boat
-    * Gently down the stream,
-    * Merrily merrily merrily merrily
-    * Life is but a dream :)
-    * */
-
 }
