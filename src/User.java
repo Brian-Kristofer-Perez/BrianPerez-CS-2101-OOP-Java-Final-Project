@@ -29,7 +29,7 @@ public abstract class User {
         if(this.email == null){
             return "No email listed.";
         }
-        if(this.email.strip().isEmpty() || this.email == null){
+        if(this.email.isBlank()){
             return "No email listed.";
         }
         return this.email;
@@ -40,7 +40,7 @@ public abstract class User {
         if(this.contactNumber == null){
             return "No contact number listed.";
         }
-        if(this.contactNumber.strip().isEmpty()){
+        if(this.contactNumber.isBlank()){
             return "No contact number listed.";
         }
         return this.contactNumber;
