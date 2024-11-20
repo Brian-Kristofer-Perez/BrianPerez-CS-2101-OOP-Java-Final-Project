@@ -31,7 +31,7 @@ public class Employer extends User {
             System.out.print("Input the job title: ");
             jobTitle = input.nextLine();
 
-            if (jobTitle.isEmpty()) {
+            if (jobTitle.isBlank()) {
                 System.out.println("Please provide a proper value");
                 continue;
             }
@@ -39,7 +39,7 @@ public class Employer extends User {
             System.out.print("Input the job description: ");
             jobDesc = input.nextLine();
 
-            if (jobDesc.isEmpty()) {
+            if (jobDesc.isBlank()) {
                 System.out.println("Please provide a proper value");
                 continue;
             }
@@ -49,7 +49,7 @@ public class Employer extends User {
                 System.out.print("Input the job's monthly salary: ");
                 strSalary = input.nextLine();
 
-                if(strSalary.isEmpty()){
+                if(strSalary.isBlank()){
                     System.out.println("Please provide a proper value");
                     continue;
                 }
@@ -72,7 +72,7 @@ public class Employer extends User {
                 System.out.print("List down the other job benefits (leave empty to end): ");
                 benefit = input.nextLine();
 
-                if (benefit.isEmpty()) {
+                if (benefit.isBlank()) {
                     break;
                 } else {
                     benefits.add(benefit);
@@ -112,7 +112,7 @@ public class Employer extends User {
                 System.out.println("Benefits        : ");
                 if (i.getBenefits() != null && !i.getBenefits().isEmpty()) {
                     for (String benefit : i.getBenefits()) {
-                        if (benefit != null && !benefit.isEmpty()) {
+                        if (benefit != null && !benefit.isBlank()) {
                             System.out.println("  - " + benefit);
                         }
                     }
@@ -149,7 +149,7 @@ public class Employer extends User {
 
             strChoice = input.nextLine();
 
-            if(strChoice.isEmpty()){
+            if(strChoice.isBlank()){
                 return;
             }
 
@@ -197,7 +197,7 @@ public class Employer extends User {
             System.out.print("Input the number of the job you want to review (leave empty to return): ");
             strChoice = input.nextLine();
 
-            if(strChoice.isEmpty()){
+            if(strChoice.isBlank()){
                 return;
             }
 
@@ -245,7 +245,7 @@ public class Employer extends User {
             System.out.print("Input the number of the applicant you want to hire (leave empty to return): ");
             stringChoice = input.nextLine();
 
-            if(stringChoice.isEmpty()){
+            if(stringChoice.isBlank()){
                 return;
             }
 
@@ -317,7 +317,7 @@ public class Employer extends User {
             System.out.print("Fire this employee? (y/n): ");
             choiceStr = input.nextLine();
 
-            if(choiceStr.isEmpty()){
+            if(choiceStr.isBlank()){
                 return;
             }
 
@@ -350,7 +350,7 @@ public class Employer extends User {
             System.out.print("Select the number of the employee to review (leave empty to return): ");
             strChoice = input.nextLine();
 
-            if (strChoice.isEmpty()) {
+            if (strChoice.isBlank()) {
                 return null;
             }
             try {
