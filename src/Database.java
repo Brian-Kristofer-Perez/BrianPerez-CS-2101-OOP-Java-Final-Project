@@ -171,13 +171,6 @@ public class Database {
         return employerID;
     }
 
-    // checks if a user with a specific name has a resume in the database!
-    public boolean checkResume(String workerName){
-
-        boolean found = false;
-
-        return true;
-    }
 
     public Resume loadResume(String name){
 
@@ -658,7 +651,7 @@ public class Database {
     }
 
 
-    public Job jobFromID(int idJob){
+    private Job jobFromID(int idJob){
 
         Job job = null;
         try {
