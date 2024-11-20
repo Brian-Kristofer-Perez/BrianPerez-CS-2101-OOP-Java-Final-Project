@@ -6,9 +6,13 @@ public class Job {
    private String jobDesc;
    private int salary;
    private ArrayList<String> benefits;
+   private Employer employer;
 
-   public Job(String title, String jobDesc, int salary, ArrayList<String> benefits){
+   public Job(String title, String jobDesc, int salary, ArrayList<String> benefits, String employerName){
 
+       Database database = new Database();
+
+       this.employer = database.loadEmployer(employerName);
        this.jobTitle = title;
        this.jobDesc = jobDesc;
        this.salary = salary;
@@ -39,6 +43,10 @@ public class Job {
 
     public ArrayList<String> getBenefits() {
         return benefits;
+    }
+
+    public Employer getEmployer(){
+       return this.employer;
     }
 
     public void addBenefits(String benefit){

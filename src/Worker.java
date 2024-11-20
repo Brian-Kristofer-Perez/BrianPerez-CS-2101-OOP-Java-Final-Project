@@ -1,4 +1,3 @@
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -6,11 +5,16 @@ public class Worker extends User {
     private Resume resume;
     private Job occupation;
 
-    // Constructor, loading details from DB will be to-follow
+    // Constructor, loading details from DB as well
     public Worker(String name){
-
-        this.name = name;
+        super(name);
         this.resume = new Resume();
+
+        Database database = new Database();
+        this.setResume(database.loadResume(name));
+        this.setEmail(database.queryWorkerEmail(name));
+        this.setContactNumber(database.queryWorkerContactNo(name));
+        this.setOccupation(database.loadOccupation(name));
     }
 
     // Getters!
@@ -27,7 +31,7 @@ public class Worker extends User {
         this.resume = resume;
     }
 
-    public void setJob(Job job){
+    public void setOccupation(Job job){
         this.occupation = job;
     }
 
@@ -48,12 +52,14 @@ public class Worker extends User {
             System.out.println("What would you like to do today?");
             System.out.println("1. View Resume");
             System.out.println("2. Edit Resume");
-            System.out.println("3. View Job Postings");
-            System.out.println("4. Apply for a Job");
-            System.out.println("5. View Current Job");
-            System.out.println("6. Log out");
+            System.out.println("3. View Contact details");
+            System.out.println("4. Edit Contact details");
+            System.out.println("5. View Job Postings");
+            System.out.println("6. Apply for a Job");
+            System.out.println("7. View Current Job");
+            System.out.println("8. Log out");
 
-            System.out.print("Please enter your choice (1-6): ");
+            System.out.print("Please enter your choice (1-8): ");
 
             // catch empty input errors!
             try {
@@ -71,15 +77,21 @@ public class Worker extends User {
                     editResume(input);
                     break;
                 case '3':
-                    printAllPostings();
+                    printContactDetails();
                     break;
                 case '4':
-                    applyForJob(input);
+                    editContactDetails(input);
                     break;
                 case '5':
-                    displayCurrentJob(input);
+                    printAllPostings();
                     break;
                 case '6':
+                    applyForJob(input);
+                    break;
+                case '7':
+                    displayCurrentJob(input);
+                    break;
+                case '8':
                     System.out.println("Logging out... Goodbye!");
                     return;
                 default:
@@ -209,9 +221,13 @@ public class Worker extends User {
 
         for (Job job : jobList) {
             System.out.println(String.format("\nJob #%d: %s", ++counter, job.getJobTitle()));
+            System.out.println("\tEmployer: " + job.getEmployer().getName());
+            System.out.println("\tEmail: " + job.getEmployer().getEmail());
+            System.out.println("\tContact Number: " + job.getEmployer().getEmail());
             System.out.println("\tDescription: " + job.getJobDesc());
             System.out.println("\tSalary: Php " + job.getSalary());
             System.out.println("\tBenefits:");
+
 
             if (job.getBenefits() != null && !job.getBenefits().isEmpty()) {
                 for (String benefit : job.getBenefits()) {
@@ -247,6 +263,9 @@ public class Worker extends User {
         for (Job job : jobList) {
 
             System.out.println(String.format("\nJob #%d: %s", ++counter, job.getJobTitle()));
+            System.out.println("\tEmployer: " + job.getEmployer().getName());
+            System.out.println("\tEmail: " + job.getEmployer().getEmail());
+            System.out.println("\tContact Number: " + job.getEmployer().getEmail());
             System.out.println("\tDescription: " + job.getJobDesc());
             System.out.println("\tSalary: Php " + job.getSalary());
             System.out.println("\tBenefits:");
@@ -393,10 +412,12 @@ public class Worker extends User {
             System.out.println("====================================================");
             System.out.println("                CURRENT JOB DETAILS                ");
             System.out.println("====================================================");
-
             System.out.println("Job Title: " + this.occupation.getJobTitle());
             System.out.println("Description: " + this.occupation.getJobDesc());
             System.out.println("Monthly Salary: " + this.occupation.getSalary() + " PHP");
+            System.out.println("Employer: " + this.occupation.getEmployer().getName());
+            System.out.println("\t- Email: " + this.occupation.getEmployer().getEmail());
+            System.out.println("\t- Contact No: " + this.occupation.getEmployer().getContactNumber());
             System.out.println("Benefits: ");
 
             if (this.occupation.getBenefits() != null && !this.occupation.getBenefits().isEmpty()) {
@@ -442,6 +463,24 @@ public class Worker extends User {
                 }
             }
         }
+    }
+
+    protected void editContactDetails(Scanner input){
+
+        printContactDetails();
+        String newEmail, newContact;
+
+        System.out.print("Input the new email: ");
+        newEmail = input.nextLine();
+
+        System.out.print("Input the new contact number: ");
+        newContact = input.nextLine();
+
+        Database database = new Database();
+        database.setWorkerContactDetails(newEmail, newContact, this.name);
+
+        this.setEmail(newEmail);
+        this.setContactNumber(newContact);
     }
 }
 

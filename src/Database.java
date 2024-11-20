@@ -327,15 +327,13 @@ public class Database {
                     String description = resultSet.getString("description");
                     int salary = resultSet.getInt("salary");
                     ArrayList<String> benefits = new ArrayList<String>();
-                    Job job = new Job(title, description, salary, benefits);
+                    Job job = new Job(title, description, salary, benefits, employerName);
                     job.addBenefits(resultSet.getString("benefit"));
 
                     jobMap.put(id, job);
                 }
 
             }
-
-
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -394,12 +392,34 @@ public class Database {
         }
     }
 
+    public Employer loadEmployer(String employerName){
+
+        Employer employer = null;
+
+        int idEmployer = queryEmployerID(employerName);
+
+        try{
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM employers WHERE idEmployer = ?");
+            preparedStatement.setInt(1, idEmployer);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            resultSet.next();
+
+            employer = new Employer(resultSet.getString("name"));
+
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+
+        return employer;
+    }
 
     public ArrayList<Job> queryAllPostings(){
 
         HashMap<Integer, Job> jobMap = new HashMap<Integer, Job>();
 
-        // query all jobs that have employerID as employer
         try {
 
             // get all jobID's
@@ -411,33 +431,33 @@ public class Database {
             while(resultSet.next()){
 
                 // get their jobID
-                Integer id = resultSet.getInt("idJob");
+                Integer idJob = resultSet.getInt("idJob");
 
                 // if it's already in the hashmap, get it, add a new benefit, put it back.
-                if(jobMap.containsKey(id)){
+                if(jobMap.containsKey(idJob)){
 
-                    Job job = jobMap.get(id);
+                    Job job = jobMap.get(idJob);
                     job.addBenefits(resultSet.getString("benefit"));
-                    jobMap.replace(id, job);
+                    jobMap.replace(idJob, job);
                 }
 
                 // else, add it to the hashmap
                 else{
 
+                    int idEmployer = resultSet.getInt("idEmployer");
+                    Employer employer = getEmployerFromID(idEmployer);
+
                     String title = resultSet.getString("title");
                     String description = resultSet.getString("description");
                     int salary = resultSet.getInt("salary");
                     ArrayList<String> benefits = new ArrayList<String>();
-                    Job job = new Job(title, description, salary, benefits);
+                    Job job = new Job(title, description, salary, benefits, employer.getName());
                     job.addBenefits(resultSet.getString("benefit"));
 
-                    jobMap.put(id, job);
+                    jobMap.put(idJob, job);
                 }
 
             }
-
-
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -582,7 +602,6 @@ public class Database {
         }
 
         worker = new Worker(workerName);
-        worker.setResume(loadResume(workerName));
         return worker;
     }
 
@@ -665,9 +684,11 @@ public class Database {
             String title = jobRS.getString("title");
             String description = jobRS.getString("description");
             int salary = jobRS.getInt("salary");
+            int idEmployer = jobRS.getInt("idEmployer");
+            Employer employer = getEmployerFromID(idEmployer);
             ArrayList<String> benefits = new ArrayList<String>();
 
-            job = new Job(title, description, salary, benefits);
+            job = new Job(title, description, salary, benefits, employer.getName());
 
             PreparedStatement getBenefits = connection.prepareStatement("SELECT * FROM benefits WHERE idJob = ?");
             getBenefits.setInt(1, idJob);
@@ -739,10 +760,6 @@ public class Database {
 
                 String workerName = resultSet.getString("name");
                 Worker newWorker = new Worker(workerName);
-                Job newJob = loadOccupation(workerName);
-                newWorker.setJob(newJob);
-                Resume newResume = loadResume(workerName);
-                newWorker.setResume(newResume);
                 workerList.add(newWorker);
             }
         }
@@ -767,5 +784,145 @@ public class Database {
         }
     }
 
+    public String queryWorkerContactNo(String workerName){
+
+        int idWorker = queryWorkerID(workerName);
+        String strNo = "";
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM workers WHERE idWorker = ?");
+            preparedStatement.setInt(1, idWorker);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if(resultSet.next()) {
+                strNo = resultSet.getString("contactno");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return strNo;
+    }
+
+    public String queryWorkerEmail(String workerName){
+
+        int idWorker = queryWorkerID(workerName);
+        String email = "";
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM workers WHERE idWorker = ?");
+            preparedStatement.setInt(1, idWorker);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if(resultSet.next()) {
+                email = resultSet.getString("email");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return email;
+    }
+
+    public String queryEmployerContactNo(String employerName){
+
+        int idEmployer = queryEmployerID(employerName);
+        String strNo = "";
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM employers WHERE idEmployer = ?");
+            preparedStatement.setInt(1, idEmployer);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if(resultSet.next()) {
+                strNo = resultSet.getString("contactno");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return strNo;
+    }
+
+    public String queryEmployerEmail(String employerName){
+
+        int idEmployer = queryEmployerID(employerName);
+        String email = "";
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM employers WHERE idEmployer = ?");
+            preparedStatement.setInt(1, idEmployer);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if(resultSet.next()) {
+                email = resultSet.getString("email");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return email;
+    }
+
+    public Employer getEmployerFromID (int idEmployer){
+        Employer employer = null;
+
+        try{
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM employers WHERE idEmployer = ?");
+            preparedStatement.setInt(1, idEmployer);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+
+            String employerName = resultSet.getString("name");
+
+            employer = new Employer(employerName);
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+
+        return employer;
+    }
+
+    public void setWorkerContactDetails(String newEmail, String newContact, String workerName){
+
+        int idWorker = queryWorkerID(workerName);
+
+        try{
+            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE workers SET email = ?, contactno = ? WHERE idWorker = ?");
+            preparedStatement.setString(1, newEmail);
+            preparedStatement.setString(2, newContact);
+            preparedStatement.setInt(3, idWorker);
+            preparedStatement.executeUpdate();
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void setEmployerContactDetails(String newEmail, String newContact, String employerName){
+
+        int idEmployer = queryEmployerID(employerName);
+
+        try{
+            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE employers SET email = ?, contactno = ? WHERE idEmployer = ?");
+            preparedStatement.setString(1, newEmail);
+            preparedStatement.setString(2, newContact);
+            preparedStatement.setInt(3, idEmployer);
+            preparedStatement.executeUpdate();
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
 }
 

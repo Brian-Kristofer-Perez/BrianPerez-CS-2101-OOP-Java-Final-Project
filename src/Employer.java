@@ -4,7 +4,10 @@ import java.util.Scanner;
 public class Employer extends User {
 
     public Employer(String name){
-        this.name = name;
+        super(name);
+        Database database = new Database();
+        setEmail(database.queryEmployerEmail(name));
+        setContactNumber(database.queryEmployerContactNo(name));
     }
 
     // Getters and setters
@@ -80,7 +83,7 @@ public class Employer extends User {
         }
 
         // create the posting object, and add to database
-        newPosting = new Job(jobTitle, jobDesc, salary,benefits);
+        newPosting = new Job(jobTitle, jobDesc, salary,benefits, this.name);
         Database database = new Database();
         database.addPosting(this.name, newPosting);
 
@@ -265,6 +268,7 @@ public class Employer extends User {
             else{
                 Worker worker = applicationList.get(choice);
                 database.hireWorker(worker, job);
+                worker.setOccupation(job);
                 System.out.println("Worker successfully hired!");
 
                 return;
@@ -292,6 +296,8 @@ public class Employer extends User {
                 System.out.println("----------------------------------------------------");
                 System.out.println("Name          : " + i.getName());
                 System.out.println("Job Position  : " + i.getOccupation().getJobTitle());
+                System.out.println("Email         : " + i.getEmail());
+                System.out.println("Contact No    : " + i.getContactNumber());
                 System.out.println("----------------------------------------------------\n");
             }
         } else {
@@ -365,6 +371,24 @@ public class Employer extends User {
         }
     }
 
+    protected void editContactDetails(Scanner input){
+
+        printContactDetails();
+        String newEmail, newContact;
+
+        System.out.print("Input the new email: ");
+        newEmail = input.nextLine();
+
+        System.out.print("Input the new contact number: ");
+        newContact = input.nextLine();
+
+        Database database = new Database();
+        database.setEmployerContactDetails(newEmail, newContact, this.name);
+
+        this.setEmail(newEmail);
+        this.setContactNumber(newContact);
+    }
+
     public void login(Scanner input) {
         // user log-in menu here
         char choice;
@@ -372,9 +396,11 @@ public class Employer extends User {
             System.out.println(String.format("Welcome, %s!", this.name));
             System.out.println("1. Create Job postings");
             System.out.println("2. Review Job postings");
-            System.out.println("3. Manage Employees");
-            System.out.println("4. Delete Job postings");
-            System.out.println("5. Log out");
+            System.out.println("3. View contact details");
+            System.out.println("4. Edit contact details");
+            System.out.println("5. Manage employees");
+            System.out.println("6. Delete job postings");
+            System.out.println("7. Log out");
 
             System.out.print("Input your choice: ");
 
@@ -394,12 +420,18 @@ public class Employer extends User {
                     reviewPostings(input);
                     break;
                 case '3':
-                    manageEmployees(input);
+                    printContactDetails();
                     break;
                 case '4':
-                    deleteJobMenu(input);
+                    editContactDetails(input);
                     break;
                 case '5':
+                    manageEmployees(input);
+                    break;
+                case '6':
+                    deleteJobMenu(input);
+                    break;
+                case '7':
                     System.out.println("Logging out. Goodbye!W");
                     return;
 
