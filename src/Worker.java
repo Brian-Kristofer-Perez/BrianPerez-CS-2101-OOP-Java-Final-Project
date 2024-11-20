@@ -109,7 +109,7 @@ public class Worker extends User {
 
         // Print Name
         System.out.println("Name:");
-        if (this.name.isEmpty()) {
+        if (this.name.isBlank()) {
             System.out.println("No name listed.");
         } else {
             System.out.println(this.name);
@@ -119,7 +119,7 @@ public class Worker extends User {
 
         // Print Summary
         System.out.println("Summary:");
-        if (this.resume.getSummary().isEmpty()) {
+        if (this.resume.getSummary().isBlank()) {
             System.out.println("No summary listed.");
         } else {
             System.out.println(this.resume.getSummary());
@@ -158,7 +158,7 @@ public class Worker extends User {
 
         // Print Name
         System.out.println("Name:");
-        if (this.name.isEmpty()) {
+        if (this.name.isBlank()) {
             System.out.println("No name listed.");
         } else {
             System.out.println(this.name);
@@ -168,7 +168,7 @@ public class Worker extends User {
 
         // Print Summary
         System.out.println("Summary:");
-        if (this.resume.getSummary().isEmpty()) {
+        if (this.resume.getSummary().isBlank()) {
             System.out.println("No summary listed.");
         } else {
             System.out.println(this.resume.getSummary());
@@ -231,7 +231,7 @@ public class Worker extends User {
 
             if (job.getBenefits() != null && !job.getBenefits().isEmpty()) {
                 for (String benefit : job.getBenefits()) {
-                    if (benefit != null && !benefit.isEmpty()) {
+                    if (benefit != null && !benefit.isBlank()) {
                         System.out.println("\t - " + benefit);
                     }
                 }
@@ -272,7 +272,7 @@ public class Worker extends User {
 
             if (job.getBenefits() != null && !job.getBenefits().isEmpty()) {
                 for (String benefit : job.getBenefits()) {
-                    if (benefit != null && !benefit.isEmpty()) {
+                    if (benefit != null && !benefit.isBlank()) {
                         System.out.println("\t - " + benefit);
                     }
                 }
@@ -308,7 +308,7 @@ public class Worker extends User {
             System.out.print("Input the new certifications (leave empty to finish): ");
             certification = input.nextLine();
 
-            if (certification.isEmpty()) {
+            if (certification.isBlank()) {
                 break;
             } else {
                 newCertifications.add(certification);
@@ -324,7 +324,7 @@ public class Worker extends User {
             System.out.print("Input the new work experience (leave empty to finish): ");
             experience = input.nextLine();
 
-            if (experience.isEmpty()) {
+            if (experience.isBlank()) {
                 break;
             } else {
                 newExperience.add(experience);
@@ -360,7 +360,7 @@ public class Worker extends User {
             System.out.print("Input the number of the job you want to apply for (leave empty to return): ");
             strChoice = input.nextLine();
 
-            if(strChoice.isEmpty()){
+            if(strChoice.isBlank()){
                 return;
             }
 
@@ -423,7 +423,7 @@ public class Worker extends User {
             if (this.occupation.getBenefits() != null && !this.occupation.getBenefits().isEmpty()) {
                 for (String j : this.occupation.getBenefits()) {
 
-                    if (!(j == null) && !j.isEmpty()) {
+                    if (!(j == null) && !j.isBlank()) {
                         System.out.println("\t - " + j);
                     } else {
                         System.out.println("\tNo benefits listed.");
@@ -441,7 +441,7 @@ public class Worker extends User {
                 System.out.print("Do you wish to resign? (y/n): ");
                 choiceStr = input.nextLine();
 
-                if(choiceStr.isEmpty()){
+                if(choiceStr.isBlank()){
                     return;
                 }
 
