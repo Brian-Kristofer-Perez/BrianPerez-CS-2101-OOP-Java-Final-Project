@@ -1,9 +1,7 @@
-import javax.swing.plaf.nimbus.State;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
 
 public class Database {
 
@@ -131,7 +129,7 @@ public class Database {
 
     public int queryWorkerID(String name){
 
-        ResultSet resultSet = null;
+        ResultSet resultSet;
         int workerID = 0;
 
         try {
@@ -148,11 +146,11 @@ public class Database {
         }
 
         return workerID;
-    };
+    }
 
     public int queryEmployerID(String name){
 
-        ResultSet resultSet = null;
+        ResultSet resultSet;
         int employerID = 0;
 
         try {
@@ -205,11 +203,11 @@ public class Database {
 
             while(certificationSet.next()){
                 resume.addCertification(certificationSet.getString("certificationName"));
-            };
+            }
 
             while(experienceSet.next()){
                 resume.addExperience(experienceSet.getString("experience"));
-            };
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -217,35 +215,6 @@ public class Database {
 
         return resume;
     }
-
-
-    public void saveResume(Worker worker, Resume resume){
-
-        int workerID = queryWorkerID(worker.getName());
-
-        try {
-            // insert into resumes
-            PreparedStatement statement = connection.prepareStatement("INSERT INTO resumes (idWorker, summary) VALUES (?, ?)");
-            statement.setInt(1, workerID);
-            statement.setString(2, resume.getSummary());
-
-            // insert into certifications
-            for(String i: resume.getCertifications()){
-
-            }
-
-            // insert into workexperience
-            for(String i: resume.getExperience()){
-
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-
 
     public void addPosting(String name, Job job){
 
@@ -293,7 +262,7 @@ public class Database {
 
         // get employer id
         int employerID = queryEmployerID(employerName);
-        HashMap<Integer, Job> jobMap = new HashMap<Integer, Job>();
+        HashMap<Integer, Job> jobMap = new HashMap<>();
 
         // query all jobs that have employerID as employer
         try {
@@ -326,7 +295,7 @@ public class Database {
                     String title = resultSet.getString("title");
                     String description = resultSet.getString("description");
                     int salary = resultSet.getInt("salary");
-                    ArrayList<String> benefits = new ArrayList<String>();
+                    ArrayList<String> benefits = new ArrayList<>();
                     Job job = new Job(title, description, salary, benefits, employerName);
                     job.addBenefits(resultSet.getString("benefit"));
 
@@ -340,9 +309,7 @@ public class Database {
         }
 
         // pass it to a return arraylist
-        ArrayList<Job> jobs = new ArrayList<Job>(jobMap.values());
-
-        return jobs;
+        return new ArrayList<>(jobMap.values());
     }
 
 
@@ -418,7 +385,7 @@ public class Database {
 
     public ArrayList<Job> queryAllPostings(){
 
-        HashMap<Integer, Job> jobMap = new HashMap<Integer, Job>();
+        HashMap<Integer, Job> jobMap = new HashMap<>();
 
         try {
 
@@ -450,7 +417,7 @@ public class Database {
                     String title = resultSet.getString("title");
                     String description = resultSet.getString("description");
                     int salary = resultSet.getInt("salary");
-                    ArrayList<String> benefits = new ArrayList<String>();
+                    ArrayList<String> benefits = new ArrayList<>();
                     Job job = new Job(title, description, salary, benefits, employer.getName());
                     job.addBenefits(resultSet.getString("benefit"));
 
@@ -463,9 +430,7 @@ public class Database {
         }
 
         // pass it to a return arraylist
-        ArrayList<Job> jobs = new ArrayList<Job>(jobMap.values());
-
-        return jobs;
+        return new ArrayList<>(jobMap.values());
     }
 
     public void updateResume(String workerName, String newSummary, ArrayList<String> newExperience, ArrayList<String> newCertifications){
@@ -548,13 +513,7 @@ public class Database {
             ResultSet applicationSet = getApplicationSet.executeQuery();
 
             // if applications exists,
-            if(applicationSet.next()){
-                return true;
-            }
-            // else,
-            else{
-                return false;
-            }
+            return applicationSet.next();
 
         }
         catch(SQLException e){
@@ -609,8 +568,8 @@ public class Database {
     public ArrayList<Worker> queryWorkersApplyingFor(Job job){
 
         int idJob = queryJobID(job);
-        ArrayList<Worker> applications = new ArrayList<Worker>();
-        ArrayList<Integer> workerIDList = new ArrayList<Integer>();
+        ArrayList<Worker> applications = new ArrayList<>();
+        ArrayList<Integer> workerIDList = new ArrayList<>();
 
         try {
 
@@ -686,7 +645,7 @@ public class Database {
             int salary = jobRS.getInt("salary");
             int idEmployer = jobRS.getInt("idEmployer");
             Employer employer = getEmployerFromID(idEmployer);
-            ArrayList<String> benefits = new ArrayList<String>();
+            ArrayList<String> benefits = new ArrayList<>();
 
             job = new Job(title, description, salary, benefits, employer.getName());
 
@@ -749,7 +708,7 @@ public class Database {
     
     public ArrayList<Worker> queryEmployees(int employerID){
 
-        ArrayList<Worker> workerList = new ArrayList<Worker>();
+        ArrayList<Worker> workerList = new ArrayList<>();
         try{
             PreparedStatement statement = connection.prepareStatement("SELECT * FROM occupations join jobs ON occupations.idJob = jobs.idJob join workers ON occupations.idWorker = workers.idWorker where idEmployer = ?;");
             statement.setInt(1, employerID);
