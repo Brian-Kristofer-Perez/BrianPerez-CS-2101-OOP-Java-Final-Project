@@ -1,14 +1,16 @@
+package Database;
+import Documents.*;
+import Users.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-
-public class Database {
+public class DatabaseConnection {
 
     private Connection connection;
 
     // connect to database!
-    public Database(){
+    public DatabaseConnection(){
         try{
         this.connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/testschema", "root", "12345678");
         }
@@ -883,5 +885,7 @@ public class Database {
             e.printStackTrace();
         }
     }
+
+
 }
 

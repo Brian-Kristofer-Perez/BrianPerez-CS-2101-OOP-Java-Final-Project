@@ -1,3 +1,7 @@
+import Database.DatabaseConnection;
+import Users.Employer;
+import Users.Worker;
+
 import java.util.Scanner;
 
 public class Main {
@@ -5,8 +9,8 @@ public class Main {
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
         mainMenu(input);
+        input.close();
     }
-
 
     private static void mainMenu(Scanner input){
         char choice;
@@ -70,7 +74,6 @@ public class Main {
             switch (choice) {
                 case '0':
                     return;
-
                 case '1':
                     workerRegister(input);
                     return;
@@ -150,7 +153,7 @@ public class Main {
             }
 
             // connect to database
-            Database database = new Database();
+            DatabaseConnection database = new DatabaseConnection();
 
             boolean valid = database.searchWorker(name, password);
 
@@ -201,7 +204,7 @@ public class Main {
             }
 
             // connect to database
-            Database database = new Database();
+            DatabaseConnection database = new DatabaseConnection();
             boolean valid = database.searchEmployer(name, password);
 
             // if user is found!
@@ -251,7 +254,7 @@ public class Main {
                 return;
             }
 
-            Database database = new Database();
+            DatabaseConnection database = new DatabaseConnection();
             boolean found = database.searchWorker(name);
 
             if (!found) {
@@ -287,7 +290,7 @@ public class Main {
             }
 
             // connect to database
-            Database database = new Database();
+            DatabaseConnection database = new DatabaseConnection();
 
             // check if the person's name exists in db
             boolean exists = database.searchEmployer(name);

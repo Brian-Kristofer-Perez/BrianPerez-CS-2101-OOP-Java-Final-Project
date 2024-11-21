@@ -1,5 +1,9 @@
+package Users;
 import java.util.ArrayList;
 import java.util.Scanner;
+import Database.DatabaseConnection;
+import Documents.*;
+import Users.*;
 
 public class Worker extends User {
     private Resume resume;
@@ -10,7 +14,7 @@ public class Worker extends User {
         super(name);
         this.resume = new Resume();
 
-        Database database = new Database();
+        DatabaseConnection database = new DatabaseConnection();
         this.setResume(database.loadResume(name));
         this.setEmail(database.queryWorkerEmail(name));
         this.setContactNumber(database.queryWorkerContactNo(name));
@@ -39,7 +43,7 @@ public class Worker extends User {
         // user log-in menu
 
         // preload stuff, load resume, and job
-        Database database = new Database();
+        DatabaseConnection database = new DatabaseConnection();
         this.resume = database.loadResume(this.name);
         this.occupation = database.loadOccupation(this.name);
 
@@ -203,7 +207,7 @@ public class Worker extends User {
     // auto-queries the db stuff, irrespective of order
     private void printAllPostings() {
 
-        Database database = new Database();
+        DatabaseConnection database = new DatabaseConnection();
 
         ArrayList<Job> jobList = database.queryAllPostings();
 
@@ -337,7 +341,7 @@ public class Worker extends User {
         this.resume.setCertifications(newCertifications);
 
         // Update the resume in the database
-        Database database = new Database();
+        DatabaseConnection database = new DatabaseConnection();
         database.updateResume(this.name, newSummary, newExperience, newCertifications);
 
         // Confirm that the resume has been updated
@@ -347,7 +351,7 @@ public class Worker extends User {
     }
 
     private void applyForJob(Scanner input){
-        Database database = new Database();
+        DatabaseConnection database = new DatabaseConnection();
         int idWorker = database.queryWorkerID(this.name);
 
         ArrayList<Job> jobList = database.queryAllPostings();
@@ -435,7 +439,7 @@ public class Worker extends User {
             }
 
             String choiceStr;
-            Database database = new Database();
+            DatabaseConnection database = new DatabaseConnection();
 
             while(true) {
                 System.out.print("Do you wish to resign? (y/n): ");
@@ -476,7 +480,7 @@ public class Worker extends User {
         System.out.print("Input the new contact number: ");
         newContact = input.nextLine();
 
-        Database database = new Database();
+        DatabaseConnection database = new DatabaseConnection();
         database.setWorkerContactDetails(newEmail, newContact, this.name);
 
         this.setEmail(newEmail);

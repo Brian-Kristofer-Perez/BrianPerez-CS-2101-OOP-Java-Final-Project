@@ -1,3 +1,6 @@
+package Documents;
+import Users.*;
+import Database.DatabaseConnection;
 import java.util.ArrayList;
 
 public class Job {
@@ -10,7 +13,7 @@ public class Job {
 
    public Job(String title, String jobDesc, int salary, ArrayList<String> benefits, String employerName){
 
-       Database database = new Database();
+       DatabaseConnection database = new DatabaseConnection();
 
        this.employer = database.loadEmployer(employerName);
        this.jobTitle = title;

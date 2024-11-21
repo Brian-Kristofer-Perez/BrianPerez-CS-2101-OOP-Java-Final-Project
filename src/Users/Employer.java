@@ -1,3 +1,7 @@
+package Users;
+import Database.DatabaseConnection;
+import Documents.Job;
+import Users.User;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -5,7 +9,7 @@ public class Employer extends User {
 
     public Employer(String name){
         super(name);
-        Database database = new Database();
+        DatabaseConnection database = new DatabaseConnection();
         setEmail(database.queryEmployerEmail(name));
         setContactNumber(database.queryEmployerContactNo(name));
     }
@@ -84,7 +88,7 @@ public class Employer extends User {
 
         // create the posting object, and add to database
         newPosting = new Job(jobTitle, jobDesc, salary,benefits, this.name);
-        Database database = new Database();
+        DatabaseConnection database = new DatabaseConnection();
         database.addPosting(this.name, newPosting);
 
         System.out.println("Job successfully created!");
@@ -134,7 +138,7 @@ public class Employer extends User {
 
         String strChoice;
         int choice;
-        Database database = new Database();
+        DatabaseConnection database = new DatabaseConnection();
         ArrayList<Job> jobList = database.queryJobs(this.name);
 
         if(jobList.isEmpty()){
@@ -182,7 +186,7 @@ public class Employer extends User {
 
     private void reviewPostings(Scanner input){
 
-        Database database = new Database();
+        DatabaseConnection database = new DatabaseConnection();
         String strChoice;
         int choice;
         ArrayList<Job> jobList = database.queryJobs(this.name);
@@ -236,7 +240,7 @@ public class Employer extends User {
 
     }
 
-    private void workerHireMenu(Scanner input, Job job, ArrayList<Worker> applicationList, Database database){
+    private void workerHireMenu(Scanner input, Job job, ArrayList<Worker> applicationList, DatabaseConnection database){
 
         String stringChoice;
         int choice;
@@ -276,7 +280,7 @@ public class Employer extends User {
 
     private void manageEmployees(Scanner input){
 
-        Database database = new Database();
+        DatabaseConnection database = new DatabaseConnection();
         int idEmployer = database.queryEmployerID(this.name);
 
         ArrayList<Worker> employeeList = database.queryEmployees(idEmployer);
@@ -378,7 +382,7 @@ public class Employer extends User {
         System.out.print("Input the new contact number: ");
         newContact = input.nextLine();
 
-        Database database = new Database();
+        DatabaseConnection database = new DatabaseConnection();
         database.setEmployerContactDetails(newEmail, newContact, this.name);
 
         this.setEmail(newEmail);
