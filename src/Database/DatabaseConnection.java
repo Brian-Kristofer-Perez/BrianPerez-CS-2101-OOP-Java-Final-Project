@@ -19,7 +19,7 @@ public class DatabaseConnection {
         }
     }
 
-
+    // version used for login
     public boolean searchWorker(String name, String password){
 
         boolean isFound = false;
@@ -39,6 +39,7 @@ public class DatabaseConnection {
 
 
     // overloading the method! the first one takes name and password, and this one takes only the name.
+    // version used for sign up
     public boolean searchWorker(String name){
 
         boolean isFound = false;
@@ -93,7 +94,6 @@ public class DatabaseConnection {
     public void addWorker(String name, String password){
 
         try {
-
             // Add the workers themselves
             PreparedStatement statement = this.connection.prepareStatement("INSERT INTO workers (name, password) VALUES (?, ?);");
             statement.setString(1, name);
@@ -178,7 +178,6 @@ public class DatabaseConnection {
         Resume resume = new Resume();
 
         try {
-
             // get the resume of the person from resume table
             PreparedStatement statement = connection.prepareStatement("SELECT * FROM resumes WHERE idWorker = ?");
             statement.setInt(1, workerID);

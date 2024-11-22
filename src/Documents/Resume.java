@@ -18,8 +18,6 @@ public class Resume {
         this.certifications = certifications;
     }
 
-
-
     // Setters, for editing!
     public void setSummary(String summary){
         this.summary = summary;

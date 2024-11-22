@@ -413,30 +413,12 @@ public class Worker extends User {
         }
 
         else {
+
             System.out.println("====================================================");
             System.out.println("                CURRENT JOB DETAILS                ");
             System.out.println("====================================================");
-            System.out.println("Job Title: " + this.occupation.getJobTitle());
-            System.out.println("Description: " + this.occupation.getJobDesc());
-            System.out.println("Monthly Salary: " + this.occupation.getSalary() + " PHP");
-            System.out.println("Employer: " + this.occupation.getEmployer().getName());
-            System.out.println("\t- Email: " + this.occupation.getEmployer().getEmail());
-            System.out.println("\t- Contact No: " + this.occupation.getEmployer().getContactNumber());
-            System.out.println("Benefits: ");
 
-            if (this.occupation.getBenefits() != null && !this.occupation.getBenefits().isEmpty()) {
-                for (String j : this.occupation.getBenefits()) {
-
-                    if (!(j == null) && !j.isBlank()) {
-                        System.out.println("\t - " + j);
-                    } else {
-                        System.out.println("\tNo benefits listed.");
-                    }
-                }
-                System.out.println();
-            } else {
-                System.out.println("\tNo benefits listed.");
-            }
+            this.occupation.print();
 
             String choiceStr;
             DatabaseConnection database = new DatabaseConnection();

@@ -107,23 +107,7 @@ public class Employer extends User {
             System.out.println("====================================================");
 
             for (Job i : jobList) {
-                System.out.println("Job #" + (++counter));
-                System.out.println("----------------------------------------------------");
-                System.out.println("Job Title       : " + i.getJobTitle());
-                System.out.println("Job Description : " + i.getJobDesc());
-                System.out.println("Salary          : PHP " + i.getSalary());
-
-                System.out.println("Benefits        : ");
-                if (i.getBenefits() != null && !i.getBenefits().isEmpty()) {
-                    for (String benefit : i.getBenefits()) {
-                        if (benefit != null && !benefit.isBlank()) {
-                            System.out.println("  - " + benefit);
-                        }
-                    }
-                } else {
-                    System.out.println("  No benefits listed.");
-                }
-                System.out.println("----------------------------------------------------\n");
+                i.print(++counter);
             }
 
             System.out.println("====================================================");
