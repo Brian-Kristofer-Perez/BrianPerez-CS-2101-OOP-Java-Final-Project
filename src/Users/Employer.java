@@ -1,5 +1,6 @@
 package Users;
 import Database.DatabaseConnection;
+import Database.Service.EmployerService;
 import Documents.Job;
 import Users.User;
 import java.util.ArrayList;
@@ -264,10 +265,8 @@ public class Employer extends User {
 
     private void manageEmployees(Scanner input){
 
-        DatabaseConnection database = new DatabaseConnection();
-        int idEmployer = database.queryEmployerID(this.name);
-
-        ArrayList<Worker> employeeList = database.queryEmployees(idEmployer);
+        EmployerService employerService = new EmployerService();
+        ArrayList<Worker> employeeList = employerService.queryEmployees(this.name);
 
         System.out.println("====================================================");
         System.out.println("                    EMPLOYEE LIST                  ");
@@ -310,7 +309,7 @@ public class Employer extends User {
             }
 
             else if(choiceStr.equalsIgnoreCase("y")){
-                database.fireWorker(employee.getName());
+                employerService.fireWorker(employee.getName());
                 System.out.println("Employee fired. Goodbye, " + employee.getName() +"!");
                 return;
             }
@@ -366,8 +365,8 @@ public class Employer extends User {
         System.out.print("Input the new contact number: ");
         newContact = input.nextLine();
 
-        DatabaseConnection database = new DatabaseConnection();
-        database.setEmployerContactDetails(newEmail, newContact, this.name);
+        EmployerService employerService = new EmployerService();
+        EmployerService.setEmployerContactDetails(newEmail, newContact, this.name);
 
         this.setEmail(newEmail);
         this.setContactNumber(newContact);
