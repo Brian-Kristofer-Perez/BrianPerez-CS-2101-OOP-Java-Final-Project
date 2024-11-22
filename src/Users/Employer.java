@@ -1,16 +1,15 @@
 package Users;
-import Database.DatabaseConnection;
-import Database.Service.EmployerService;
+import Database.*;
 import Documents.Job;
-import Users.User;
 import java.util.ArrayList;
+import java.util.Queue;
 import java.util.Scanner;
 
 public class Employer extends User {
 
     public Employer(String name){
         super(name);
-        DatabaseConnection database = new DatabaseConnection();
+        EmployerDAO database = new EmployerDAO();
         setEmail(database.queryEmployerEmail(name));
         setContactNumber(database.queryEmployerContactNo(name));
     }
@@ -89,7 +88,7 @@ public class Employer extends User {
 
         // create the posting object, and add to database
         newPosting = new Job(jobTitle, jobDesc, salary,benefits, this.name);
-        DatabaseConnection database = new DatabaseConnection();
+        JobDAO database = new JobDAO();
         database.addPosting(this.name, newPosting);
 
         System.out.println("Job successfully created!");
@@ -123,7 +122,7 @@ public class Employer extends User {
 
         String strChoice;
         int choice;
-        DatabaseConnection database = new DatabaseConnection();
+        JobDAO database = new JobDAO();
         ArrayList<Job> jobList = database.queryJobs(this.name);
 
         if(jobList.isEmpty()){
@@ -164,14 +163,14 @@ public class Employer extends User {
             }
         }
 
-        database.deleteJob(jobList.get(choice), this.name);
+        database.deleteJob(jobList.get(choice));
         System.out.println("Job deleted!");
 
     }
 
     private void reviewPostings(Scanner input){
 
-        DatabaseConnection database = new DatabaseConnection();
+        JobDAO database = new JobDAO();
         String strChoice;
         int choice;
         ArrayList<Job> jobList = database.queryJobs(this.name);
@@ -208,7 +207,7 @@ public class Employer extends User {
         }
 
         Job jobSelection = jobList.get(choice);
-        ArrayList<Worker> applicationList = database.queryWorkersApplyingFor(jobSelection);
+        ArrayList<Worker> applicationList = database.queryApplicants(jobSelection);
         int ctr = 0;
 
         if(applicationList.isEmpty()){
@@ -220,15 +219,16 @@ public class Employer extends User {
                 w.printResume(++ctr);
             }
 
-            workerHireMenu(input, jobSelection, applicationList, database);
+            workerHireMenu(input, jobSelection, applicationList);
         }
 
     }
 
-    private void workerHireMenu(Scanner input, Job job, ArrayList<Worker> applicationList, DatabaseConnection database){
+    private void workerHireMenu(Scanner input, Job job, ArrayList<Worker> applicationList){
 
         String stringChoice;
         int choice;
+        WorkerDAO database = new WorkerDAO();
 
         while(true){
             System.out.print("Input the number of the applicant you want to hire (leave empty to return): ");
@@ -265,8 +265,8 @@ public class Employer extends User {
 
     private void manageEmployees(Scanner input){
 
-        EmployerService employerService = new EmployerService();
-        ArrayList<Worker> employeeList = employerService.queryEmployees(this.name);
+        EmployerDAO database = new EmployerDAO();
+        ArrayList<Worker> employeeList = database.queryEmployees(this.name);
 
         System.out.println("====================================================");
         System.out.println("                    EMPLOYEE LIST                  ");
@@ -309,7 +309,7 @@ public class Employer extends User {
             }
 
             else if(choiceStr.equalsIgnoreCase("y")){
-                employerService.fireWorker(employee.getName());
+                database.fireWorker(employee.getName());
                 System.out.println("Employee fired. Goodbye, " + employee.getName() +"!");
                 return;
             }
@@ -365,8 +365,8 @@ public class Employer extends User {
         System.out.print("Input the new contact number: ");
         newContact = input.nextLine();
 
-        EmployerService employerService = new EmployerService();
-        EmployerService.setEmployerContactDetails(newEmail, newContact, this.name);
+        EmployerDAO database = new EmployerDAO();
+        database.setEmployerContactDetails(newEmail, newContact, this.name);
 
         this.setEmail(newEmail);
         this.setContactNumber(newContact);

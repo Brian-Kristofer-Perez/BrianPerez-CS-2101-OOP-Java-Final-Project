@@ -1,9 +1,8 @@
 package Users;
 import java.util.ArrayList;
 import java.util.Scanner;
-import Database.DatabaseConnection;
+import Database.*;
 import Documents.*;
-import Users.*;
 
 public class Worker extends User {
     private Resume resume;
@@ -14,7 +13,7 @@ public class Worker extends User {
         super(name);
         this.resume = new Resume();
 
-        DatabaseConnection database = new DatabaseConnection();
+        WorkerDAO database = new WorkerDAO();
         this.setResume(database.loadResume(name));
         this.setEmail(database.queryWorkerEmail(name));
         this.setContactNumber(database.queryWorkerContactNo(name));
@@ -43,7 +42,7 @@ public class Worker extends User {
         // user log-in menu
 
         // preload stuff, load resume, and job
-        DatabaseConnection database = new DatabaseConnection();
+        WorkerDAO database = new WorkerDAO();
         this.resume = database.loadResume(this.name);
         this.occupation = database.loadOccupation(this.name);
 
@@ -207,7 +206,7 @@ public class Worker extends User {
     // auto-queries the db stuff, irrespective of order
     private void printAllPostings() {
 
-        DatabaseConnection database = new DatabaseConnection();
+        JobDAO database = new JobDAO();
 
         ArrayList<Job> jobList = database.queryAllPostings();
 
@@ -341,8 +340,8 @@ public class Worker extends User {
         this.resume.setCertifications(newCertifications);
 
         // Update the resume in the database
-        DatabaseConnection database = new DatabaseConnection();
-        database.updateResume(this.name, newSummary, newExperience, newCertifications);
+        WorkerDAO database = new WorkerDAO();
+        database.updateWorkerResume(this.name, newSummary, newExperience, newCertifications);
 
         // Confirm that the resume has been updated
         System.out.println("========================================");
@@ -351,10 +350,11 @@ public class Worker extends User {
     }
 
     private void applyForJob(Scanner input){
-        DatabaseConnection database = new DatabaseConnection();
+        WorkerDAO database = new WorkerDAO();
         int idWorker = database.queryWorkerID(this.name);
 
-        ArrayList<Job> jobList = database.queryAllPostings();
+        JobDAO jobDB = new JobDAO();
+        ArrayList<Job> jobList = jobDB.queryAllPostings();
         String strChoice;
         int choice, jobID;
         Job job;
@@ -383,7 +383,7 @@ public class Worker extends User {
 
             else{
                 job = jobList.get(choice);
-                jobID = database.queryJobID(job);
+                jobID = jobDB.queryJobID(job);
             }
 
             if(database.applicationExists(idWorker, jobID)){
@@ -421,7 +421,9 @@ public class Worker extends User {
             this.occupation.print();
 
             String choiceStr;
-            DatabaseConnection database = new DatabaseConnection();
+            JobDAO database = new JobDAO();
+
+            System.out.println("====================================================");
 
             while(true) {
                 System.out.print("Do you wish to resign? (y/n): ");
@@ -432,15 +434,16 @@ public class Worker extends User {
                 }
 
                 else if(choiceStr.equalsIgnoreCase("y")){
-                    database.fireWorker(this.name);
+                    EmployerDAO employerDAO = new EmployerDAO();
+                    employerDAO.fireWorker(this.name);
                     this.occupation = new Job();
                     System.out.println("You have successfully resigned!");
-                    System.out.println("====================================================");
+                    System.out.println();
                     return;
                 }
 
                 else if(choiceStr.equalsIgnoreCase("n")){
-                    System.out.println("====================================================");
+                    System.out.println();
                     return;
                 }
 
@@ -462,7 +465,7 @@ public class Worker extends User {
         System.out.print("Input the new contact number: ");
         newContact = input.nextLine();
 
-        DatabaseConnection database = new DatabaseConnection();
+        WorkerDAO database = new WorkerDAO();
         database.setWorkerContactDetails(newEmail, newContact, this.name);
 
         this.setEmail(newEmail);

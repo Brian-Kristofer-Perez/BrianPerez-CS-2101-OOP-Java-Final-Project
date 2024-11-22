@@ -12,6 +12,9 @@ public class EmployerDAO {
 
     private Connection connection;
 
+    // This is the Data Access Object (DAO) of the Employer class.
+    // This should handle the database operations related to the said class
+
     // connect to database!
     public EmployerDAO() {
         try {
@@ -95,6 +98,48 @@ public class EmployerDAO {
         }
 
         return employer;
+    }
+
+    public String queryEmployerEmail(String employerName){
+
+        int idEmployer = queryEmployerID(employerName);
+        String email = null;
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM employers WHERE idEmployer = ?");
+            preparedStatement.setInt(1, idEmployer);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+
+            email = resultSet.getString("email");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return email;
+    }
+
+    public String queryEmployerContactNo(String employerName){
+
+        int idEmployer = queryEmployerID(employerName);
+        String contact = null;
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM employers WHERE idEmployer = ?");
+            preparedStatement.setInt(1, idEmployer);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+
+            contact = resultSet.getString("contactno");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return contact;
     }
 
 
@@ -197,109 +242,6 @@ public class EmployerDAO {
         }
 
         return workerList;
-    }
-
-
-    public ArrayList<Job> queryAllPostings(){
-
-        HashMap<Integer, Job> jobMap = new HashMap<>();
-
-        try {
-
-            // get all jobID's
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM jobs LEFT JOIN benefits on jobs.idJob = benefits.idJob;");
-            ResultSet resultSet = statement.executeQuery();
-
-            // loop through resultSet
-            while(resultSet.next()){
-
-                // get their jobID
-                Integer idJob = resultSet.getInt("idJob");
-
-                // if it's already in the hashmap, get it, add a new benefit, put it back.
-                if(jobMap.containsKey(idJob)){
-
-                    Job job = jobMap.get(idJob);
-                    job.addBenefits(resultSet.getString("benefit"));
-                    jobMap.replace(idJob, job);
-                }
-
-                // else, add it to the hashmap
-                else{
-
-                    int idEmployer = resultSet.getInt("idEmployer");
-                    Employer employer = queryEmployerFromID(idEmployer);
-
-                    String title = resultSet.getString("title");
-                    String description = resultSet.getString("description");
-                    int salary = resultSet.getInt("salary");
-                    ArrayList<String> benefits = new ArrayList<>();
-                    Job job = new Job(title, description, salary, benefits, employer.getName());
-                    job.addBenefits(resultSet.getString("benefit"));
-
-                    jobMap.put(idJob, job);
-                }
-
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        // pass it to a return arraylist
-        return new ArrayList<>(jobMap.values());
-    }
-
-    // EmployerService
-    public ArrayList<Job> queryJobs(String employerName){
-
-        // get employer id
-        int employerID = queryEmployerID(employerName);
-        HashMap<Integer, Job> jobMap = new HashMap<>();
-
-        // query all jobs that have employerID as employer
-        try {
-
-            // get all jobID's that belong to that employer
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM jobs LEFT JOIN benefits ON jobs.idJob = benefits.idJob WHERE idEmployer = ? AND NOT EXISTS (SELECT * FROM occupations WHERE occupations.idJob = jobs.idJob)");
-            statement.setInt(1, employerID);
-
-            ResultSet resultSet = statement.executeQuery();
-
-            // loop through resultSet
-            while(resultSet.next()){
-
-                // get their jobID
-                Integer id = resultSet.getInt("idJob");
-
-                // if it's already in the hashmap, get it, add a new benefit, put it back.
-                if(jobMap.containsKey(id)){
-
-                    Job job = jobMap.get(id);
-                    job.addBenefits(resultSet.getString("benefit"));
-                    jobMap.replace(id, job);
-                }
-
-                // else, add it to the hashmap
-                else{
-
-                    String title = resultSet.getString("title");
-                    String description = resultSet.getString("description");
-                    int salary = resultSet.getInt("salary");
-                    ArrayList<String> benefits = new ArrayList<>();
-                    Job job = new Job(title, description, salary, benefits, employerName);
-                    job.addBenefits(resultSet.getString("benefit"));
-
-                    jobMap.put(id, job);
-                }
-
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        // pass it to a return arraylist
-        return new ArrayList<>(jobMap.values());
     }
 }
 

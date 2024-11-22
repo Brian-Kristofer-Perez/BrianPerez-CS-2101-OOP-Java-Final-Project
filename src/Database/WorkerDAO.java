@@ -12,9 +12,7 @@ public class WorkerDAO {
     private Connection connection;
 
     // This is the Data Access Object (DAO) of the Worker class.
-    // This should handle the database operations related to the worker class.
-    // This may or may not also work with database operations of other classes once in a while
-    // But most operations should still be for the worker.
+    // This should handle the database operations related to the worker class,
     public WorkerDAO(){
         try{
             this.connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/testschema", "root", "12345678");

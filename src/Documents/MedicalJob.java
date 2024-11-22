@@ -67,6 +67,7 @@ public class MedicalJob extends Job{
         System.out.println("Job #" + (++counter) + " (Management)");
         System.out.println("----------------------------------------------------");
         System.out.println("Job Title       : " + this.jobTitle);
+        System.out.println("Employer        : " + this.jobTitle);
         System.out.println("Job Description : " + this.jobDesc);
         System.out.println("Salary          : PHP " + this.salary);
         System.out.println("Benefits        : ");

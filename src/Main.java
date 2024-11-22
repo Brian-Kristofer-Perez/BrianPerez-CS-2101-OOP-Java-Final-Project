@@ -1,4 +1,4 @@
-import Database.DatabaseConnection;
+import Database.*;
 import Users.Employer;
 import Users.Worker;
 
@@ -153,7 +153,7 @@ public class Main {
             }
 
             // connect to database
-            DatabaseConnection database = new DatabaseConnection();
+            WorkerDAO database = new WorkerDAO();
 
             boolean valid = database.searchWorker(name, password);
 
@@ -204,7 +204,7 @@ public class Main {
             }
 
             // connect to database
-            DatabaseConnection database = new DatabaseConnection();
+            EmployerDAO database = new EmployerDAO();
             boolean valid = database.searchEmployer(name, password);
 
             // if user is found!
@@ -254,7 +254,7 @@ public class Main {
                 return;
             }
 
-            DatabaseConnection database = new DatabaseConnection();
+            WorkerDAO database = new WorkerDAO();
             boolean found = database.searchWorker(name);
 
             if (!found) {
@@ -290,9 +290,7 @@ public class Main {
             }
 
             // connect to database
-            DatabaseConnection database = new DatabaseConnection();
-
-            // check if the person's name exists in db
+            EmployerDAO database = new EmployerDAO();
             boolean exists = database.searchEmployer(name);
 
             // if user is valid (doesn't exist yet)!

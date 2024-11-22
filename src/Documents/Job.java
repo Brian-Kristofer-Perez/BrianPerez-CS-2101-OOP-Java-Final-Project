@@ -1,6 +1,6 @@
 package Documents;
+import Database.EmployerDAO;
 import Users.*;
-import Database.DatabaseConnection;
 import java.util.ArrayList;
 
 public class Job {
@@ -13,9 +13,9 @@ public class Job {
 
    public Job(String title, String jobDesc, int salary, ArrayList<String> benefits, String employerName){
 
-       DatabaseConnection database = new DatabaseConnection();
+       EmployerDAO database = new EmployerDAO();
 
-       this.employer = database.loadEmployer(employerName);
+       this.employer = database.queryEmployerFromName(employerName);
        this.jobTitle = title;
        this.jobDesc = jobDesc;
        this.salary = salary;
@@ -80,6 +80,7 @@ public class Job {
         System.out.println("Job #" + (++counter));
         System.out.println("----------------------------------------------------");
         System.out.println("Job Title       : " + this.jobTitle);
+        System.out.println("Employer        : " + this.jobTitle);
         System.out.println("Job Description : " + this.jobDesc);
         System.out.println("Salary          : PHP " + this.salary);
         System.out.println("Benefits        : ");
