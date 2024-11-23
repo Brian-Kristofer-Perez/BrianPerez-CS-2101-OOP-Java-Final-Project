@@ -1,5 +1,6 @@
 package Users;
 import Database.*;
+import Documents.EngineeringJob;
 import Documents.Job;
 import java.util.ArrayList;
 import java.util.Queue;
@@ -14,86 +15,266 @@ public class Employer extends User {
         setContactNumber(database.queryEmployerContactNo(name));
     }
 
-    // Getters and setters
-    public void setName(String name) {
-        this.name = name;
+    private void createJobMenu(Scanner input){
+
+        String jobTypeChoice;
+        char jobType;
+
+        while(true) {
+            System.out.println("1. Engineering");
+            System.out.println("2. Medical");
+            System.out.println("3. Management");
+            System.out.println("4. General");
+            System.out.print("Input the number of your job type: ");
+
+            jobTypeChoice = input.nextLine();
+
+            if(jobTypeChoice.isBlank()){
+                System.out.println("Input a valid choice!");
+                continue;
+            }
+
+            jobType = jobTypeChoice.charAt(0);
+
+            switch (jobType){
+                case '1':
+                    createEngineeringJob(input);
+                    break;
+                case '2':
+
+                    break;
+                case '3':
+
+                    break;
+                case '4':
+                    createJob(input);
+                    break;
+                default:
+                    System.out.println("Input a valid choice!");
+                    continue;
+            }
+            break;
+        }
     }
 
-
-    private void createJob(Scanner input){
+    private Job getJobCreationInputs(Scanner input){
 
         String jobTitle, jobDesc, benefit, strSalary;
         int salary;
         ArrayList<String> benefits = new ArrayList<>();
         Job newPosting;
 
-        // collect user input
+        System.out.println("====================================================");
+        System.out.println("            CREATE NEW JOB POSTING                 ");
+        System.out.println("====================================================");
+
+        // collect job title
+        System.out.print("Input the job title (leave empty to return): ");
+        jobTitle = input.nextLine();
+
+        if (jobTitle.isBlank()) {
+            return null;
+        }
+
+        // collect job description
+        System.out.print("Input the job description (leave empty to return): ");
+        jobDesc = input.nextLine();
+
+        if (jobDesc.isBlank()) {
+            return null;
+        }
+
+        // collect salary
         while(true) {
-            System.out.println("====================================================");
-            System.out.println("            CREATE NEW JOB POSTING                 ");
-            System.out.println("====================================================");
-            System.out.print("Input the job title: ");
-            jobTitle = input.nextLine();
-
-            if (jobTitle.isBlank()) {
-                System.out.println("Please provide a proper value");
-                continue;
-            }
-
-            System.out.print("Input the job description: ");
-            jobDesc = input.nextLine();
-
-            if (jobDesc.isBlank()) {
-                System.out.println("Please provide a proper value");
-                continue;
-            }
-
-            // making sure the integer input is valid
             try {
-                System.out.print("Input the job's monthly salary: ");
+                System.out.print("Input the job's monthly salary (leave empty to return): ");
                 strSalary = input.nextLine();
 
-                if(strSalary.isBlank()){
-                    System.out.println("Please provide a proper value");
-                    continue;
+                if (strSalary.isBlank()) {
+                    return null;
                 }
 
                 salary = Integer.parseInt(strSalary);
-
                 if (salary <= 0) {
                     System.out.println("Please provide a proper value");
-                    continue;
+                }
+
+                else{
+                    break;
                 }
 
             } catch (RuntimeException e) {
                 System.out.println("Please input a valid number!");
-                continue;
             }
+        }
 
-            // benefits input!
+        // benefits input!
+        while(true) {
+            System.out.print("List down the other job benefits (leave empty to end): ");
+            benefit = input.nextLine();
 
-            while(true) {
-                System.out.print("List down the other job benefits (leave empty to end): ");
-                benefit = input.nextLine();
-
-                if (benefit.isBlank()) {
-                    break;
-                } else {
-                    benefits.add(benefit);
-                }
+            if (benefit.isBlank()) {
+                break;
+            } else {
+                benefits.add(benefit);
             }
-
-            break;
         }
 
         // create the posting object, and add to database
-        newPosting = new Job(jobTitle, jobDesc, salary,benefits, this.name);
+        newPosting = new Job(jobTitle, jobDesc, salary, benefits, this.name);
+
+        return newPosting;
+    }
+
+    private void createJob(Scanner input){
+
+        Job newPosting;
+
+        newPosting = getJobCreationInputs(input);
+
+        if(newPosting == null){
+            System.out.println("Returning to menu...");
+            return;
+        }
+
         JobDAO database = new JobDAO();
         database.addPosting(this.name, newPosting);
 
         System.out.println("Job successfully created!");
         System.out.println("====================================================");
     }
+
+    private void createEngineeringJob(Scanner input){
+
+        Job newPosting = getJobCreationInputs(input);
+        int locationChoice;
+        int travelChoice;
+        int contractChoice;
+        String location, locationType;
+        String travel, travelRequirement;
+        String contract, contractType;
+        String projectType;
+
+        while(true) {
+            System.out.print("Input the job's project type: ");
+            projectType = input.nextLine();
+
+            // get project type!
+            if (projectType.isBlank()) {
+                System.out.println("Project must have a type!");
+                continue;
+            }
+            break;
+        }
+
+        // get location type!
+        while(true) {
+            System.out.println("1. Onsite");
+            System.out.println("2. Remote");
+            System.out.println("3. Flexible");
+            System.out.print("Input the number of the job's location type: "); // onsite, remote, flexible
+
+            try {
+                location = input.nextLine();
+                locationChoice = Integer.parseInt(location);
+            } catch (RuntimeException e) {
+                System.out.println("Input a valid number!");
+                continue;
+            }
+
+            switch (locationChoice){
+                case 1:
+                    locationType = "Onsite";
+                    break;
+                case 2:
+                    locationType = "Remote";
+                    break;
+                case 3:
+                    locationType = "Flexible";
+                    break;
+                default:
+                    System.out.println("Input a valid choice!");
+                    continue;
+            }
+            break;
+        }
+
+        // get travel requirement!
+        while(true) {
+            System.out.println("1. Frequent");
+            System.out.println("2. Occasional");
+            System.out.println("3. Never");
+            System.out.print("Input the number of the job's travel requirement: ");
+            try {
+                travel = input.nextLine();
+                travelChoice = Integer.parseInt(travel);
+            } catch (RuntimeException e) {
+                System.out.println("Input a valid number!");
+                continue;
+            }
+
+            switch (travelChoice){
+                case 1:
+                    travelRequirement = "Frequent";
+                    break;
+                case 2:
+                    travelRequirement = "Occasional";
+                    break;
+                case 3:
+                    travelRequirement = "Never";
+                    break;
+                default:
+                    System.out.println("Input a valid choice!");
+                    continue;
+            }
+            break;
+        }
+
+        // get contract type!
+        while(true) {
+            System.out.println("1. Permanent");
+            System.out.println("2. Temporary");
+            System.out.println("3. Contract");
+            System.out.print("Input the number of the job's contract type: ");
+            try {
+                contract = input.nextLine();
+                contractChoice = Integer.parseInt(contract);
+            } catch (RuntimeException e) {
+                System.out.println("Input a valid number!");
+                continue;
+            }
+
+            switch (contractChoice){
+                case 1:
+                    contractType = "Permanent";
+                    break;
+                case 2:
+                    contractType = "Temporary";
+                    break;
+                case 3:
+                    contractType = "Contract";
+                    break;
+                default:
+                    System.out.println("Input a valid choice!");
+                    continue;
+            }
+            break;
+        }
+
+        EngineeringJob newJob = new EngineeringJob(newPosting, projectType, locationType, travelRequirement, contractType);
+
+        EngineeringDAO database = new EngineeringDAO();
+
+        database.addPosting(this.name, newJob);
+
+        System.out.println("Job successfully created!");
+        System.out.println("====================================================");
+
+    };
+
+    private void createMedicalJob(Scanner input){};
+
+    private void createManagementJob(Scanner input){};
 
 
     private void viewPostings(ArrayList<Job> jobList){
@@ -397,7 +578,7 @@ public class Employer extends User {
 
             switch (choice) {
                 case '1':
-                    createJob(input);
+                    createJobMenu(input);
                     break;
                 case '2':
                     reviewPostings(input);

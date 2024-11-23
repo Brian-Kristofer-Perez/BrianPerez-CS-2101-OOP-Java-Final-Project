@@ -26,6 +26,7 @@ public class EngineeringJob extends Job{
     String travelRequirements;
     String contractType;
 
+    // Pass all the inputs manually
     public EngineeringJob(String title, String jobDesc, int salary, ArrayList<String> benefits, String employerName, String projectType, String locationType, String travelRequirements, String contractType){
 
         super(title, jobDesc, salary, benefits, employerName);
@@ -34,6 +35,16 @@ public class EngineeringJob extends Job{
         this.travelRequirements = travelRequirements;
         this.contractType = contractType;
 
+    }
+
+    // Or "aggregate" them into one job object, and use it instead!
+    public EngineeringJob(Job job, String projectType, String locationType, String travelRequirements, String contractType){
+
+        super(job.getJobTitle(), job.getJobDesc(), job.getSalary(), job.getBenefits(), job.getEmployer().getName());
+        this.projectType = projectType;
+        this.locationType = locationType;
+        this.travelRequirements = travelRequirements;
+        this.contractType = contractType;
     }
 
     // Getters!

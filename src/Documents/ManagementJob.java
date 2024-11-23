@@ -12,7 +12,7 @@ public class ManagementJob extends Job{
     LeadershipLevel leadershipLevel;
     String department;
 
-    public ManagementJob(String title, String jobDesc, int salary, ArrayList<String> benefits, String employerName, ProjectType projectType, int teamSize, String department, LeadershipLevel leadershipLevel){
+    public ManagementJob(String title, String jobDesc, int salary, ArrayList<String> benefits, String employerName, String projectType, int teamSize, String department, LeadershipLevel leadershipLevel){
 
         super(title, jobDesc, salary, benefits, employerName);
         this.department = department;
