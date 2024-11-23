@@ -2,6 +2,8 @@ package Users;
 import Database.*;
 import Jobs.EngineeringJob;
 import Jobs.Job;
+import Jobs.MedicalJob;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -40,7 +42,7 @@ public class Employer extends User {
                     createEngineeringJob(input);
                     break;
                 case '2':
-
+                    createMedicalJob(input);
                     break;
                 case '3':
 
@@ -271,7 +273,64 @@ public class Employer extends User {
 
     };
 
-    private void createMedicalJob(Scanner input){};
+    private void createMedicalJob(Scanner input){
+        Job newPosting = getJobCreationInputs(input);
+        int shiftChoice;
+        String department, shiftType, shift;
+
+        while(true) {
+            System.out.print("Input the job department: ");
+            department = input.nextLine();
+
+            if (department.isBlank()) {
+                System.out.println("There must be a valid department!");
+                continue;
+            }
+            break;
+        }
+
+        // get the shift!
+        while(true) {
+            System.out.println("1. Day");
+            System.out.println("2. Night");
+            System.out.println("3. Rotating");
+            System.out.print("Input the corresponding number of the job shift: ");
+
+            try {
+                shift = input.nextLine();
+                shiftChoice = Integer.parseInt(shift);
+            } catch (RuntimeException e) {
+                System.out.println("Input a valid number!");
+                continue;
+            }
+
+            switch (shiftChoice){
+                case 1:
+                    shiftType = "Day";
+                    break;
+                case 2:
+                    shiftType = "Night";
+                    break;
+                case 3:
+                    shiftType = "Rotating";
+                    break;
+                default:
+                    System.out.println("Input a valid choice!");
+                    continue;
+            }
+            break;
+        }
+
+        MedicalJob newJob = new MedicalJob(newPosting, department, shiftType);
+
+        MedicalDAO database = new MedicalDAO();
+
+        database.addPosting(this.name, newJob);
+
+        System.out.println("Job successfully created!");
+        System.out.println("====================================================");
+
+    };
 
     private void createManagementJob(Scanner input){};
 

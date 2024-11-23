@@ -17,6 +17,12 @@ public class MedicalJob extends Job{
         this.shiftType = shiftType;
     }
 
+    public MedicalJob(Job job, String department, String shiftType){
+        super(job.getJobTitle(), job.getJobDesc(), job.getSalary(), job.getBenefits(), job.getEmployer().getName());
+        this.department = department;
+        this.shiftType = shiftType;
+    }
+
     // Setters!
     public void setDepartment(String department) {
         this.department = department;
