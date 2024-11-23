@@ -2,17 +2,17 @@ package Jobs;
 import java.util.ArrayList;
 
 
-enum LeadershipLevel{
-    Director, TeamLeader, Manager, ChiefPosition
-}
+//enum LeadershipLevel{
+//    Director, TeamLeader, Manager, ChiefPosition
+//}
 
 public class ManagementJob extends Job{
 
     int teamSize;
-    LeadershipLevel leadershipLevel;
+    String leadershipLevel;
     String department;
 
-    public ManagementJob(String title, String jobDesc, int salary, ArrayList<String> benefits, String employerName, String projectType, int teamSize, String department, LeadershipLevel leadershipLevel){
+    public ManagementJob(String title, String jobDesc, int salary, ArrayList<String> benefits, String employerName, int teamSize, String department, String leadershipLevel){
 
         super(title, jobDesc, salary, benefits, employerName);
         this.department = department;
@@ -25,7 +25,7 @@ public class ManagementJob extends Job{
     public String getDepartment() {
         return this.department;
     }
-    public LeadershipLevel getLeadershipLevel() {
+    public String getLeadershipLevel() {
         return this.leadershipLevel;
     }
     public int getTeamSize() {
@@ -36,7 +36,7 @@ public class ManagementJob extends Job{
     public void setDepartment(String department) {
         this.department = department;
     }
-    public void setLeadershipLevel(LeadershipLevel leadershipLevel) {
+    public void setLeadershipLevel(String leadershipLevel) {
         this.leadershipLevel = leadershipLevel;
     }
     public void setTeamSize(int teamSize) {
