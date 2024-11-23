@@ -1,4 +1,4 @@
-package Documents;
+package Jobs;
 import java.util.ArrayList;
 
 //enum ProjectType{

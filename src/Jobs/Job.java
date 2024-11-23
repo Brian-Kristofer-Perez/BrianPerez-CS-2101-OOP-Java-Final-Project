@@ -1,4 +1,4 @@
-package Documents;
+package Jobs;
 import Database.EmployerDAO;
 import Users.*;
 import java.util.ArrayList;

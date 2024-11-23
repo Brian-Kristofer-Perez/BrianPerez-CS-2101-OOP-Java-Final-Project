@@ -1,36 +1,46 @@
-package Documents;
-
+package Jobs;
 import java.util.ArrayList;
 
-enum ShiftType{
-    Day, Night, Rotating
+
+enum LeadershipLevel{
+    Director, TeamLeader, Manager, ChiefPosition
 }
 
-public class MedicalJob extends Job{
+public class ManagementJob extends Job{
 
+    int teamSize;
+    LeadershipLevel leadershipLevel;
     String department;
-    ShiftType shiftType;
 
-    public MedicalJob(String title, String jobDesc, int salary, ArrayList<String> benefits, String employerName, String department, ShiftType shiftType){
+    public ManagementJob(String title, String jobDesc, int salary, ArrayList<String> benefits, String employerName, String projectType, int teamSize, String department, LeadershipLevel leadershipLevel){
+
         super(title, jobDesc, salary, benefits, employerName);
         this.department = department;
-        this.shiftType = shiftType;
+        this.leadershipLevel = leadershipLevel;
+        this.teamSize = teamSize;
+
+    }
+
+    // Getters!
+    public String getDepartment() {
+        return this.department;
+    }
+    public LeadershipLevel getLeadershipLevel() {
+        return this.leadershipLevel;
+    }
+    public int getTeamSize() {
+        return this.teamSize;
     }
 
     // Setters!
     public void setDepartment(String department) {
         this.department = department;
     }
-    public void setShiftType(ShiftType shiftType) {
-        this.shiftType = shiftType;
+    public void setLeadershipLevel(LeadershipLevel leadershipLevel) {
+        this.leadershipLevel = leadershipLevel;
     }
-
-    // Getters!
-    public String getDepartment() {
-        return department;
-    }
-    public ShiftType getShiftType() {
-        return shiftType;
+    public void setTeamSize(int teamSize) {
+        this.teamSize = teamSize;
     }
 
     // print, but in non-listing form. Displays the job and further details!
@@ -50,7 +60,8 @@ public class MedicalJob extends Job{
         System.out.println("Miscellaneous Details");
         System.out.println("------------------------------------------------");
         System.out.println("Department: " + this.department);
-        System.out.println("Shift type: " + this.shiftType);
+        System.out.println("Leadership level: " + this.leadershipLevel);
+        System.out.println("Team size: " + this.teamSize);
         System.out.println();
 
         System.out.println("Employer Details");
@@ -76,7 +87,8 @@ public class MedicalJob extends Job{
 
         System.out.println("Miscellaneous Details");
         System.out.println("\t- Department: " + this.department);
-        System.out.println("\t- Shift type: " + this.shiftType);
+        System.out.println("\t- Leadership level: " + this.leadershipLevel);
+        System.out.println("\t- Team size: " + this.teamSize);
         System.out.println();
         System.out.println("----------------------------------------------------\n");
     }

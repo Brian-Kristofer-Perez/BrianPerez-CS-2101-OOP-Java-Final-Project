@@ -1,12 +1,10 @@
 package Database;
 
-import Documents.Job;
 import Users.Employer;
 import Users.Worker;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class EmployerDAO {
 

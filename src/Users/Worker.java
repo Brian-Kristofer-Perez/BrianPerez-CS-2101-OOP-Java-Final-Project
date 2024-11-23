@@ -2,7 +2,7 @@ package Users;
 import java.util.ArrayList;
 import java.util.Scanner;
 import Database.*;
-import Documents.*;
+import Jobs.*;
 
 public class Worker extends User {
     private Resume resume;

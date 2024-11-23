@@ -1,6 +1,6 @@
 package Database;
 
-import Documents.Job;
+import Jobs.Job;
 import Users.Employer;
 import Users.Worker;
 

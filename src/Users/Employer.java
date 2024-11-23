@@ -1,9 +1,8 @@
 package Users;
 import Database.*;
-import Documents.EngineeringJob;
-import Documents.Job;
+import Jobs.EngineeringJob;
+import Jobs.Job;
 import java.util.ArrayList;
-import java.util.Queue;
 import java.util.Scanner;
 
 public class Employer extends User {

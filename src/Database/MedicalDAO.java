@@ -1,23 +1,20 @@
 package Database;
 
-import Jobs.EngineeringJob;
-import Jobs.Job;
-import Users.Employer;
-import Users.Worker;
-
+import Jobs.*;
+import Users.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class EngineeringDAO{
+public class MedicalDAO{
 
     private Connection connection;
 
-    // This is the Data Access Object (DAO) of the EngineeringJob class.
+    // This is the Data Access Object (DAO) of the MedicalJob class.
     // This should handle the database operations related to the said class
 
     // connect to database!
-    public EngineeringDAO(){
+    public MedicalDAO(){
         try{
             this.connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/testschema", "root", "12345678");
         }
@@ -27,17 +24,15 @@ public class EngineeringDAO{
     }
 
     // Add Job to Database
-    public void addJob(EngineeringJob job, int employerID){
+    public void addJob(MedicalJob job, int employerID){
         try {
-            PreparedStatement statement = this.connection.prepareStatement("INSERT INTO engineeringjobs (salary, description, idEmployer, title, projectType, locationType, travelRequirements, contractType) VALUES (?, ?, ?, ?, ?, ?, ?, ?);");
+            PreparedStatement statement = this.connection.prepareStatement("INSERT INTO medicaljobs (salary, description, idEmployer, title, department, shift) VALUES (?, ?, ?, ?, ?, ?);");
             statement.setInt(1, job.getSalary());
             statement.setString(2, job.getJobDesc());
             statement.setInt(3, employerID);
             statement.setString(4, job.getJobTitle());
-            statement.setString(5, job.getProjectType());
-            statement.setString(6, job.getLocationType());
-            statement.setString(7, job.getTravelRequirements());
-            statement.setString(8, job.getContractType());
+            statement.setString(5, job.getDepartment());
+            statement.setString(6, job.getShiftType());
             statement.executeUpdate();
         }
         catch(SQLException e){
@@ -49,7 +44,7 @@ public class EngineeringDAO{
     // Add benefit to Database
     public void addBenefit(int idJob, String benefit){
         try {
-            PreparedStatement addToBenefits = this.connection.prepareStatement("INSERT INTO engineeringbenefits (idEngineeringJob, benefit) VALUES (?, ?);");
+            PreparedStatement addToBenefits = this.connection.prepareStatement("INSERT INTO medicalbenefits (idMedicalJob, benefit) VALUES (?, ?);");
             addToBenefits.setInt(1, idJob);
             addToBenefits.setString(2, benefit);
             addToBenefits.executeUpdate();
@@ -59,14 +54,14 @@ public class EngineeringDAO{
         }
     }
 
-    public void deleteJob(EngineeringJob job){
+    public void deleteJob(MedicalJob job){
 
         try {
             // get jobID from traits
             int jobID = queryJobID(job);
 
             // delete from jobs table
-            PreparedStatement statement = connection.prepareStatement("DELETE FROM engineeringjobs WHERE idEngineeringJob = ?");
+            PreparedStatement statement = connection.prepareStatement("DELETE FROM medicaljobs WHERE idMedicalJob = ?");
             statement.setInt(1, jobID);
             statement.executeUpdate();
         }
@@ -75,23 +70,21 @@ public class EngineeringDAO{
         }
     }
 
-    public int queryJobID(EngineeringJob job){
+    public int queryJobID(MedicalJob job){
 
         int idJob = 0;
 
         // get job id
         try {
-            PreparedStatement getJobID = connection.prepareStatement("SELECT * FROM engineeringjobs WHERE title = ? AND description = ? AND salary = ? AND projectType = ? AND locationType = ? AND travelRequirements = ? AND contractType = ?");
+            PreparedStatement getJobID = connection.prepareStatement("SELECT * FROM medicaljobs WHERE title = ? AND description = ? AND salary = ? AND shift = ? AND department = ?");
             getJobID.setString(1, job.getJobTitle());
             getJobID.setString(2, job.getJobDesc());
             getJobID.setInt(3, job.getSalary());
-            getJobID.setString(4, job.getProjectType());
-            getJobID.setString(5, job.getLocationType());
-            getJobID.setString(6, job.getTravelRequirements());
-            getJobID.setString(7, job.getContractType());
+            getJobID.setString(4, job.getShiftType());
+            getJobID.setString(5, job.getDepartment());
             ResultSet jobSet = getJobID.executeQuery();
             jobSet.next();
-            idJob = jobSet.getInt("idEngineeringJob");
+            idJob = jobSet.getInt("idMedicalJob");
         }
         catch(SQLException e){
             e.printStackTrace();
@@ -100,7 +93,7 @@ public class EngineeringDAO{
         return idJob;
     }
 
-    public void addPosting(String name, EngineeringJob job){
+    public void addPosting(String name, MedicalJob job){
 
         EmployerDAO employerDAO = new EmployerDAO();
 
@@ -116,27 +109,27 @@ public class EngineeringDAO{
 
     }
 
-    // view ALL jobs, both occupied and not (engineering only)
+    // view ALL jobs, both occupied and not (medical only)
     public ArrayList<Job> queryAllPostings(){
 
-        HashMap<Integer, EngineeringJob> jobMap = new HashMap<>();
+        HashMap<Integer, MedicalJob> jobMap = new HashMap<>();
 
         try {
 
             // get all jobID's
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM engineeringjobs LEFT JOIN engineeringbenefits on engineeringjobs.idJob = engineeringbenefits.idJob;");
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM medicaljobs LEFT JOIN medicalbenefits on medicaljobs.idMedicalJob = medicalbenefits.idMedicalJob;");
             ResultSet resultSet = statement.executeQuery();
 
             // loop through resultSet
             while(resultSet.next()){
 
                 // get their jobID
-                Integer idJob = resultSet.getInt("idEngineeringJob");
+                Integer idJob = resultSet.getInt("idMedicalJob");
 
                 // if it's already in the hashmap, get it, add a new benefit, put it back.
                 if(jobMap.containsKey(idJob)){
 
-                    EngineeringJob job = jobMap.get(idJob);
+                    MedicalJob job = jobMap.get(idJob);
                     job.addBenefits(resultSet.getString("benefit"));
                     jobMap.replace(idJob, job);
                 }
@@ -151,14 +144,12 @@ public class EngineeringDAO{
                     String title = resultSet.getString("title");
                     String description = resultSet.getString("description");
                     int salary = resultSet.getInt("salary");
-                    String projectType = resultSet.getString("projectType");
-                    String locationType = resultSet.getString("locationType");
-                    String travelRequirements = resultSet.getString("travelRequirements");
-                    String contractType = resultSet.getString("contractType");
+                    String department = resultSet.getString("department");
+                    String shift = resultSet.getString("shift");
 
 
                     ArrayList<String> benefits = new ArrayList<>();
-                    EngineeringJob job = new EngineeringJob(title, description, salary, benefits, employer.getName(), projectType, locationType, travelRequirements, contractType);
+                    MedicalJob job = new MedicalJob(title, description, salary, benefits, employer.getName(), department, shift);
                     job.addBenefits(resultSet.getString("benefit"));
 
                     jobMap.put(idJob, job);
@@ -174,7 +165,7 @@ public class EngineeringDAO{
     }
 
     // get the list of workers that are applying for this job
-    public ArrayList<Worker> queryApplicants(EngineeringJob job){
+    public ArrayList<Worker> queryApplicants(MedicalJob job){
 
         WorkerDAO workerDAO = new WorkerDAO();
         int idJob = queryJobID(job);
@@ -184,7 +175,7 @@ public class EngineeringDAO{
         try {
 
             // query all applications for that specific job ID
-            PreparedStatement getAllApps = connection.prepareStatement("SELECT * FROM engineeringapplications WHERE idEngineeringJob = ?");
+            PreparedStatement getAllApps = connection.prepareStatement("SELECT * FROM medicalapplications WHERE idMedicalJob = ?");
             getAllApps.setInt(1, idJob);
             ResultSet workerIDSet = getAllApps.executeQuery();
 
@@ -207,12 +198,12 @@ public class EngineeringDAO{
         return applications;
     }
 
-    public EngineeringJob jobFromID(int idJob){
+    public MedicalJob jobFromID(int idJob){
 
         EmployerDAO employerDAO = new EmployerDAO();
-        EngineeringJob job = null;
+        MedicalJob job = null;
         try {
-            PreparedStatement getJob = connection.prepareStatement("SELECT * FROM engineeringjobs WHERE idEngineeringJob = ?");
+            PreparedStatement getJob = connection.prepareStatement("SELECT * FROM medicaljobs WHERE idMedicalJob = ?");
             getJob.setInt(1, idJob);
 
             ResultSet jobRS = getJob.executeQuery();
@@ -225,14 +216,12 @@ public class EngineeringDAO{
             Employer employer = employerDAO.queryEmployerFromID(idEmployer);
             ArrayList<String> benefits = new ArrayList<>();
 
-            String projectType = jobRS.getString("projectType");
-            String locationType = jobRS.getString("locationType");
-            String travelRequirements = jobRS.getString("travelRequirements");
-            String contractType = jobRS.getString("contractType");
+            String shift = jobRS.getString("shift");
+            String department = jobRS.getString("department");
 
-            job = new EngineeringJob(title, description, salary, benefits, employer.getName(), projectType, locationType, travelRequirements, contractType);
+            job = new MedicalJob(title, description, salary, benefits, employer.getName(), department, shift);
 
-            PreparedStatement getBenefits = connection.prepareStatement("SELECT * FROM engineeringbenefits WHERE idEngineeringJob = ?");
+            PreparedStatement getBenefits = connection.prepareStatement("SELECT * FROM medicalbenefits WHERE idMedicalJob = ?");
             getBenefits.setInt(1, idJob);
             ResultSet benefitsRS = getBenefits.executeQuery();
 
@@ -248,19 +237,19 @@ public class EngineeringDAO{
     }
 
     // query ALL open postings only.
-    public ArrayList<EngineeringJob> queryOpenPostings(String employerName){
+    public ArrayList<MedicalJob> queryOpenPostings(String employerName){
 
         EmployerDAO employerDAO = new EmployerDAO();
 
         // get employer id
         int employerID = employerDAO.queryEmployerID(employerName);
-        HashMap<Integer, EngineeringJob> jobMap = new HashMap<>();
+        HashMap<Integer, MedicalJob> jobMap = new HashMap<>();
 
         // query all jobs that have employerID as employer
         try {
 
             // get all jobID's that belong to that employer, and filter out the ones that are occupied already
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM engineeringjobs LEFT JOIN engineeringbenefits ON engineeringjobs.idEngineeringJob = engineeringbenefits.idEngineeringJob WHERE idEmployer = ? AND NOT EXISTS (SELECT * FROM engineeringoccupations WHERE engineeringoccupations.idEngineeringJob = engineeringjobs.idEngineeringJob)");
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM medicaljobs LEFT JOIN medicalbenefits ON medicaljobs.idMedicalJob = medicalbenefits.idMedicalBenefits WHERE idEmployer = ? AND NOT EXISTS (SELECT * FROM medicaloccupations WHERE medicaloccupations.idMedicalJob = medicaljobs.idMedicalJob)");
             statement.setInt(1, employerID);
 
             ResultSet resultSet = statement.executeQuery();
@@ -269,12 +258,12 @@ public class EngineeringDAO{
             while(resultSet.next()){
 
                 // get their jobID
-                Integer id = resultSet.getInt("idEngineeringJob");
+                Integer id = resultSet.getInt("idMedicalJob");
 
                 // if it's already in the hashmap, get it, add a new benefit, put it back.
                 if(jobMap.containsKey(id)){
 
-                    EngineeringJob job = jobMap.get(id);
+                    MedicalJob job = jobMap.get(id);
                     job.addBenefits(resultSet.getString("benefit"));
                     jobMap.replace(id, job);
                 }
@@ -285,12 +274,10 @@ public class EngineeringDAO{
                     String title = resultSet.getString("title");
                     String description = resultSet.getString("description");
                     int salary = resultSet.getInt("salary");
-                    String projectType = resultSet.getString("projectType");
-                    String locationType = resultSet.getString("locationType");
-                    String travelRequirements = resultSet.getString("travelRequirements");
-                    String contractType = resultSet.getString("contractType");
+                    String department = resultSet.getString("department");
+                    String shift = resultSet.getString("shift");
                     ArrayList<String> benefits = new ArrayList<>();
-                    EngineeringJob job = new EngineeringJob(title, description, salary, benefits, employerName, projectType,locationType, travelRequirements,contractType);
+                    MedicalJob job = new MedicalJob(title, description, salary, benefits, employerName, department, shift);
                     job.addBenefits(resultSet.getString("benefit"));
 
                     jobMap.put(id, job);

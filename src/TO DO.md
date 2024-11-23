@@ -2,12 +2,22 @@
 
 - Final stretch:
   - Implement DAO's for all new jobs
-    - EngineeringDAO (current task!)
-    - MedicalDAO
+    - EngineeringDAO (done!) 
+    - MedicalDAO (current task!)
     - ManagementDAO
+    
   - Integrate to UI
+    - CreateJob()
+      - CreateMedicalJob()
+      - CreateManagementJob()
+      
+    - DeleteJob()
+    
+    - ReviewPostings()?
+    
   - Clean SQL
     - Get init.sql
+    
   - PUSH!!!!!!!
 
 
