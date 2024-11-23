@@ -1,32 +1,32 @@
 package Documents;
 import java.util.ArrayList;
 
-enum ProjectType{
-    Software, Mechanical, Civil, Chemical
-}
-
-enum LocationType{
-    onsite, remote, flexible
-}
-
-enum TravelRequirements{
-    none,
-    occasional,
-    frequent
-}
-
-enum ContractType{
-    permanent, temporary, contract
-}
+//enum ProjectType{
+//    Software, Mechanical, Civil, Chemical
+//}
+//
+//enum LocationType{
+//    onsite, remote, flexible
+//}
+//
+//enum TravelRequirements{
+//    none,
+//    occasional,
+//    frequent
+//}
+//
+//enum ContractType{
+//    permanent, temporary, contract
+//}
 
 public class EngineeringJob extends Job{
 
-    ProjectType projectType;
-    LocationType locationType;
-    TravelRequirements travelRequirements;
-    ContractType contractType;
+    String projectType;
+    String locationType;
+    String travelRequirements;
+    String contractType;
 
-    public EngineeringJob(String title, String jobDesc, int salary, ArrayList<String> benefits, String employerName, ProjectType projectType, LocationType locationType, ContractType contractType, TravelRequirements travelRequirements){
+    public EngineeringJob(String title, String jobDesc, int salary, ArrayList<String> benefits, String employerName, String projectType, String locationType, String travelRequirements, String contractType){
 
         super(title, jobDesc, salary, benefits, employerName);
         this.projectType = projectType;
@@ -37,30 +37,30 @@ public class EngineeringJob extends Job{
     }
 
     // Getters!
-    public ProjectType getProjectType() {
+    public String getProjectType() {
         return projectType;
     }
-    public LocationType getLocationType() {
+    public String getLocationType() {
         return locationType;
     }
-    public TravelRequirements getTravelRequirements() {
+    public String getTravelRequirements() {
         return travelRequirements;
     }
-    public ContractType getContractType() {
+    public String getContractType() {
         return contractType;
     }
 
     // Setters!
-    public void setProjectType(ProjectType projectType) {
+    public void setProjectType(String projectType) {
         this.projectType = projectType;
     }
-    public void setLocationType(LocationType locationType) {
+    public void setLocationType(String locationType) {
         this.locationType = locationType;
     }
-    public void setTravelRequirements(TravelRequirements travelRequirements) {
+    public void setTravelRequirements(String travelRequirements) {
         this.travelRequirements = travelRequirements;
     }
-    public void setContractType(ContractType contractType) {
+    public void setContractType(String contractType) {
         this.contractType = contractType;
     }
 
