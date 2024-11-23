@@ -2,6 +2,7 @@ package Users;
 import Database.*;
 import Jobs.EngineeringJob;
 import Jobs.Job;
+import Jobs.ManagementJob;
 import Jobs.MedicalJob;
 
 import java.util.ArrayList;
@@ -45,7 +46,7 @@ public class Employer extends User {
                     createMedicalJob(input);
                     break;
                 case '3':
-
+                    createManagementJob(input);
                     break;
                 case '4':
                     createJob(input);
@@ -332,7 +333,68 @@ public class Employer extends User {
 
     };
 
-    private void createManagementJob(Scanner input){};
+    private void createManagementJob(Scanner input){
+
+        Job newPosting = getJobCreationInputs(input);
+        int teamSize;
+        String strTeamSize;
+        String department;
+        String leadershipLevel;
+
+        while(true){
+            try {
+                System.out.print("Input the number of people to be managed (minimum 3): ");
+                strTeamSize = input.nextLine();
+
+                if(strTeamSize.isBlank()){
+                    System.out.println("Input a valid number!");
+                    continue;
+                }
+
+                teamSize = Integer.parseInt(strTeamSize);
+
+                if(teamSize < 3){
+                    System.out.println("The minimum team size is 3 members.");
+                    continue;
+                }
+                break;
+
+            } catch (RuntimeException e) {
+                System.out.println("Input a valid number!");
+            }
+        }
+
+        while(true){
+            System.out.print("Input the name of the department to be managed: ");
+            department = input.nextLine();
+
+            if(department.isBlank()){
+                System.out.println("Input a department name!");
+                continue;
+            }
+            break;
+        }
+
+        while(true){
+            System.out.print("Input the level of the management position: ");
+            leadershipLevel = input.nextLine();
+
+            if(leadershipLevel.isBlank()){
+                System.out.println("Input a proper title!");
+                continue;
+            }
+            break;
+        }
+
+        ManagementJob newJob = new ManagementJob(newPosting, teamSize, department, leadershipLevel);
+
+        ManagementDAO database = new ManagementDAO();
+
+        database.addPosting(this.name, newJob);
+
+        System.out.println("Job successfully created!");
+        System.out.println("====================================================");
+    };
 
 
     private void viewPostings(ArrayList<Job> jobList){

@@ -10,7 +10,7 @@ public class ManagementDAO{
 
     private Connection connection;
 
-    // This is the Data Access Object (DAO) of the MedicalJob class.
+    // This is the Data Access Object (DAO) of the ManagementJob class.
     // This should handle the database operations related to the said class
 
     // connect to database!
@@ -26,11 +26,11 @@ public class ManagementDAO{
     // Add Job to Database
     public void addJob(ManagementJob job, int employerID){
         try {
-            PreparedStatement statement = this.connection.prepareStatement("INSERT INTO managementjobs (salary, description, idEmployer, teamSize, leadershipLevel, department) VALUES (?, ?, ?, ?, ?, ?);");
-            statement.setInt(1, job.getSalary());
+            PreparedStatement statement = this.connection.prepareStatement("INSERT INTO managementjobs (title, description, salary, idEmployer, teamSize, leadershipLevel, department) VALUES (?, ?, ?, ?, ?, ?, ?);");
+            statement.setString(1, job.getJobTitle());
             statement.setString(2, job.getJobDesc());
-            statement.setInt(3, employerID);
-            statement.setString(4, job.getJobTitle());
+            statement.setInt(3, job.getSalary());
+            statement.setInt(4, employerID);
             statement.setInt(5, job.getTeamSize());
             statement.setString(6, job.getLeadershipLevel());
             statement.setString(7, job.getDepartment());
@@ -86,7 +86,7 @@ public class ManagementDAO{
             getJobID.setString(6, job.getDepartment());
             ResultSet jobSet = getJobID.executeQuery();
             jobSet.next();
-            idJob = jobSet.getInt("idMedicalJob");
+            idJob = jobSet.getInt("idManagementJob");
         }
         catch(SQLException e){
             e.printStackTrace();
@@ -111,7 +111,7 @@ public class ManagementDAO{
 
     }
 
-    // view ALL jobs, both occupied and not (medical only)
+    // view ALL jobs, both occupied and not (management only)
     public ArrayList<Job> queryAllPostings(){
 
         HashMap<Integer, ManagementJob> jobMap = new HashMap<>();

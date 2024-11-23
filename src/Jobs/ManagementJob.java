@@ -21,6 +21,14 @@ public class ManagementJob extends Job{
 
     }
 
+    public ManagementJob(Job job, int teamSize, String department, String leadershipLevel){
+
+        super(job.getJobTitle(), job.getJobDesc(), job.getSalary(), job.getBenefits(), job.getEmployer().getName());
+        this.teamSize = teamSize;
+        this.department = department;
+        this.leadershipLevel = leadershipLevel;
+    }
+
     // Getters!
     public String getDepartment() {
         return this.department;
