@@ -363,34 +363,52 @@ public class WorkerDAO {
 
     public Job loadOccupation(String workerName){
 
-        JobDAO jobDAO = new JobDAO();
-
         int idWorker = queryWorkerID(workerName);
-        Job job = new Job();
+        Job outputJob = new Job();
+        try {
+            PreparedStatement isJob = connection.prepareStatement("SELECT * FROM occupations WHERE idWorker = ?");
+            isJob.setInt(1, idWorker);
+            ResultSet job = isJob.executeQuery();
 
-        // load job from occupations.idJob -> idJob -> jobFromID()
-        try{
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM occupations WHERE idWorker = ?");
-            statement.setInt(1, idWorker);
+            PreparedStatement isEngineering = connection.prepareStatement("SELECT * FROM engineeringoccupations WHERE idWorker = ?");
+            isEngineering.setInt(1, idWorker);
+            ResultSet engineering = isEngineering.executeQuery();
 
-            ResultSet idRS = statement.executeQuery();
+            PreparedStatement isMedical = connection.prepareStatement("SELECT * FROM medicaloccupations WHERE idWorker = ?");
+            isMedical.setInt(1, idWorker);
+            ResultSet medical = isMedical.executeQuery();
 
-            // if a job exists (user has a job!)
-            if(idRS.next()){
-                int idJob = idRS.getInt("idJob");
-                job = jobDAO.jobFromID(idJob);
+            PreparedStatement isManagement = connection.prepareStatement("SELECT * FROM managementoccupations WHERE idWorker = ?");
+            isManagement.setInt(1, idWorker);
+            ResultSet management = isManagement.executeQuery();
+
+            if(management.next()){
+                int idManagementJob = management.getInt("idManagementJob");
+                ManagementDAO managementDAO = new ManagementDAO();
+                outputJob = managementDAO.jobFromID(idManagementJob);
+            }
+            if(medical.next()){
+                int idMedicalJob = medical.getInt("idMedicalJob");
+                MedicalDAO medicalDAO = new MedicalDAO();
+                outputJob = medicalDAO.jobFromID(idMedicalJob);
+            }
+            if(engineering.next()){
+                int idEngineeringJob = engineering.getInt("idEngineeringJob");
+                EngineeringDAO engineeringDAO = new EngineeringDAO();
+                outputJob = engineeringDAO.jobFromID(idEngineeringJob);
             }
 
-            // else, return the base job value
-            else{
-                return job;
+            if(job.next()){
+                int idJob = job.getInt("idJob");
+                JobDAO jobDAO = new JobDAO();
+                outputJob = jobDAO.jobFromID(idJob);
             }
-        }
-        catch(SQLException e){
+
+
+        } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return job;
+        return outputJob;
     }
-
 }

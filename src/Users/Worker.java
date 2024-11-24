@@ -17,7 +17,7 @@ public class Worker extends User {
         this.setResume(database.loadResume(name));
         this.setEmail(database.queryWorkerEmail(name));
         this.setContactNumber(database.queryWorkerContactNo(name));
-//        this.setOccupation(database.loadOccupation(name));
+        this.setOccupation(database.loadOccupation(name));
     }
 
     // Getters!
@@ -395,10 +395,8 @@ public class Worker extends User {
             this.occupation.print();
 
             String choiceStr;
-            JobDAO database = new JobDAO();
 
             System.out.println("====================================================");
-
             while(true) {
                 System.out.print("Do you wish to resign? (y/n): ");
                 choiceStr = input.nextLine();
@@ -408,8 +406,21 @@ public class Worker extends User {
                 }
 
                 else if(choiceStr.equalsIgnoreCase("y")){
-                    EmployerDAO employerDAO = new EmployerDAO();
-                    employerDAO.fireWorker(this.name);
+
+                    // auto find the DAO based on what the jobtype of the occupation is
+                    JobDAO DAO = new JobDAO();
+
+                    if(this.occupation instanceof EngineeringJob){
+                        DAO = new EngineeringDAO();
+                    }
+                    if(this.occupation instanceof MedicalJob){
+                        DAO = new MedicalDAO();
+                    }
+                    if(this.occupation instanceof ManagementJob){
+                        DAO = new ManagementDAO();
+                    }
+
+                    DAO.fireWorker(this.name);
                     this.occupation = new Job();
                     System.out.println("You have successfully resigned!");
                     System.out.println();
