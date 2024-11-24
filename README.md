@@ -70,11 +70,13 @@ ___
 
 ### Steps:
 1. Clone the repository using the command `git clone https://github.com/Brian-Kristofer-Perez/BrianPerez-CS-2101-OOP-Java-Final-Project.git`
-2. Set up MySQL server
-3. 
-2. Open your IDE, and in your terminal, navigate to the project directory.
-3. In the terminal, type the following commands:
+2. Set up MySQL server, and start it
+3. Log into MySQL as the root user. You may be prompted to create a password. If so, use the password 12345678.
+4. In MySQL, run the following SQL command: `CREATE DATABASE testschema;`
+5. Using the init.sql file in the project folder, construct the given database schema.
+6. Open your IDE, and in your terminal, navigate to the project directory.
+7. In the terminal, type the following commands:
 `mkdir -p bin`
 `javac -cp lib/mysql-connector-j-9.1.0.jar -d bin src/Main.java src/Database/*.java src/Jobs/*.java src/Users/*.java`
-4. In order to run the program, in the terminal, type:
+8. In order to run the program, in the terminal, type:
 `java -cp "bin;lib/mysql-connector-j-9.1.0.jar" Main`
