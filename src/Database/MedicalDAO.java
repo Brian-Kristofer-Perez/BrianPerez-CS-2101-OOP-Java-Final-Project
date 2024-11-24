@@ -384,4 +384,19 @@ public class MedicalDAO extends JobDAO{
 
         return workerList;
     }
+
+    public void fireWorker(String workerName){
+
+        WorkerDAO workerDAO = new WorkerDAO();
+        int idWorker = workerDAO.queryWorkerID(workerName);
+
+        try{
+            PreparedStatement fireEmployee = connection.prepareStatement("DELETE FROM medicaloccupations WHERE idWorker = ?");
+            fireEmployee.setInt(1, idWorker);
+            fireEmployee.executeUpdate();
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
 }

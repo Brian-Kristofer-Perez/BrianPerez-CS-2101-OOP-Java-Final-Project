@@ -165,23 +165,6 @@ public class EmployerDAO {
         return employer;
     }
 
-
-    public void fireWorker(String workerName){
-
-        WorkerDAO workerDAO = new WorkerDAO();
-        int idWorker = workerDAO.queryWorkerID(workerName);
-
-        try{
-            PreparedStatement fireEmployee = connection.prepareStatement("DELETE FROM occupations WHERE idWorker = ?");
-            fireEmployee.setInt(1, idWorker);
-            fireEmployee.executeUpdate();
-        }
-        catch(SQLException e){
-            e.printStackTrace();
-        }
-    }
-
-
     // validating the login!
     public boolean searchEmployer(String name, String password){
         boolean isFound = false;

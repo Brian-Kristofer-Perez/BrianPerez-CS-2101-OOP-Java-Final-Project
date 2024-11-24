@@ -604,7 +604,7 @@ public class Employer extends User {
 
     private void manageEmployees(Scanner input){
 
-//        EmployerDAO database = new EmployerDAO();
+        JobDAO database = selectPostingType(input);
         ArrayList<Worker> employeeList = database.queryEmployees(this.name);
 
         System.out.println("====================================================");
