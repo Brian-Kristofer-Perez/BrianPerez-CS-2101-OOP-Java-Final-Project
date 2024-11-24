@@ -332,6 +332,10 @@ public class Worker extends User {
         Job job;
         printAllPostings(jobList);
 
+        if(jobList.isEmpty()){
+            return;
+        }
+
         while(true){
             System.out.print("Input the number of the job you want to apply for (leave empty to return): ");
             strChoice = input.nextLine();
