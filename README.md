@@ -68,4 +68,13 @@ ___
 2. Install MySQL Server 8.0
 3. Ensure the MySQL Connector/J is included in the project's lib folder.
 
-   
+### Steps:
+1. Clone the repository using the command `git clone https://github.com/Brian-Kristofer-Perez/BrianPerez-CS-2101-OOP-Java-Final-Project.git`
+2. Set up MySQL server
+3. 
+2. Open your IDE, and in your terminal, navigate to the project directory.
+3. In the terminal, type the following commands:
+`mkdir -p bin`
+`javac -cp lib/mysql-connector-j-9.1.0.jar -d bin src/Main.java src/Database/*.java src/Jobs/*.java src/Users/*.java`
+4. In order to run the program, in the terminal, type:
+`java -cp "bin;lib/mysql-connector-j-9.1.0.jar" Main`
