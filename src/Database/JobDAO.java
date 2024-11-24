@@ -386,4 +386,66 @@ public class JobDAO {
         }
     }
 
+    public boolean applicationExists(int idWorker, int idJob){
+        // check if the current application (idWorker, idJob) already exists
+        try {
+            PreparedStatement getApplicationSet = connection.prepareStatement("SELECT * FROM applications WHERE idWorker = ? AND idJob = ?");
+            getApplicationSet.setInt(1, idWorker);
+            getApplicationSet.setInt(2, idJob);
+            ResultSet applicationSet = getApplicationSet.executeQuery();
+
+            // if applications exists,
+            return applicationSet.next();
+
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    public void createApplication(String workerName, Job job){
+
+        WorkerDAO workerDAO = new WorkerDAO();
+        int idWorker = workerDAO.queryWorkerID(workerName);
+        int idJob = queryJobID(job);
+
+        try {
+            // insert into applications
+            PreparedStatement addApplication = connection.prepareStatement("INSERT INTO applications (idWorker, idJob) VALUES (?, ?)");
+            addApplication.setInt(1, idWorker);
+            addApplication.setInt(2, idJob);
+            addApplication.executeUpdate();
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+
+    }
+
+    public void hireWorker(Worker worker, Job job){
+
+        WorkerDAO workerDAO = new WorkerDAO();
+        int idWorker = workerDAO.queryWorkerID(worker.getName());
+        int idJob = queryJobID(job);
+
+        try{
+            // hiring the worker
+            PreparedStatement hireWorker = connection.prepareStatement("INSERT INTO occupations (idWorker, idJob) VALUES (?, ?)");
+            hireWorker.setInt(1, idWorker);
+            hireWorker.setInt(2, idJob);
+
+            hireWorker.executeUpdate();
+
+            // clearing ALL other applications once hired
+            PreparedStatement clearApps = connection.prepareStatement("DELETE FROM applications WHERE idJob = ?");
+            clearApps.setInt(1, idJob);
+            clearApps.executeUpdate();
+
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
 }

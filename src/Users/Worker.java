@@ -360,14 +360,14 @@ public class Worker extends User {
                 jobID = jobDB.queryJobID(job);
             }
 
-            if(database.applicationExists(idWorker, jobID)){
+            if(jobDB.applicationExists(idWorker, jobID)){
                 System.out.println("Application already exists!");
             }
             else if (database.alreadyEmployed(idWorker)) {
                 System.out.println("You are already employed. Don't overwork yourself!");
             }
             else {
-                database.createApplication(this.name, job);
+                jobDB.createApplication(this.name, job);
                 System.out.println("Application submitted!");
                 return;
             }

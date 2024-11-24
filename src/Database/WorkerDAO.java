@@ -171,25 +171,6 @@ public class WorkerDAO {
         return resume;
     }
 
-    public boolean applicationExists(int idWorker, int idJob){
-        // check if the current application (idWorker, idJob) already exists
-        try {
-            PreparedStatement getApplicationSet = connection.prepareStatement("SELECT * FROM applications WHERE idWorker = ? AND idJob = ?");
-            getApplicationSet.setInt(1, idWorker);
-            getApplicationSet.setInt(2, idJob);
-            ResultSet applicationSet = getApplicationSet.executeQuery();
-
-            // if applications exists,
-            return applicationSet.next();
-
-        }
-        catch(SQLException e){
-            e.printStackTrace();
-        }
-
-        return false;
-    }
-
     public boolean alreadyEmployed(int idWorker){
 
         try{
@@ -279,31 +260,6 @@ public class WorkerDAO {
     }
 
 
-    public void hireWorker(Worker worker, Job job){
-
-        JobDAO jobDAO = new JobDAO();
-        int idWorker = queryWorkerID(worker.getName());
-        int idJob = jobDAO.queryJobID(job);
-
-        try{
-            // hiring the worker
-            PreparedStatement hireWorker = connection.prepareStatement("INSERT INTO occupations (idWorker, idJob) VALUES (?, ?)");
-            hireWorker.setInt(1, idWorker);
-            hireWorker.setInt(2, idJob);
-
-            hireWorker.executeUpdate();
-
-            // clearing ALL other applications once hired
-            PreparedStatement clearApps = connection.prepareStatement("DELETE FROM applications WHERE idJob = ?");
-            clearApps.setInt(1, idJob);
-            clearApps.executeUpdate();
-
-        }
-        catch (SQLException e){
-            e.printStackTrace();
-        }
-    }
-
     public void updateWorkerResume(String workerName, String newSummary, ArrayList<String> newExperience, ArrayList<String> newCertifications){
 
         try {
@@ -352,25 +308,6 @@ public class WorkerDAO {
         catch(SQLException e){
             e.printStackTrace();
         }
-    }
-
-    public void createApplication(String workerName, Job job){
-
-        JobDAO jobDAO = new JobDAO();
-        int idWorker = queryWorkerID(workerName);
-        int idJob = jobDAO.queryJobID(job);
-
-        try {
-            // insert into applications
-            PreparedStatement addApplication = connection.prepareStatement("INSERT INTO applications (idWorker, idJob) VALUES (?, ?)");
-            addApplication.setInt(1, idWorker);
-            addApplication.setInt(2, idJob);
-            addApplication.executeUpdate();
-        }
-        catch(SQLException e){
-            e.printStackTrace();
-        }
-
     }
 
     public Job loadOccupation(String workerName){
