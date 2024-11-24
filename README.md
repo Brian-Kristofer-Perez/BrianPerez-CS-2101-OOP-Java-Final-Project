@@ -56,9 +56,16 @@ InsideJob is a job management software that provides ease of use for both users 
     - The application supports the use of polymorphism both in the forms of method overloading and overriding.
     - Example: `Job` superclass provides a baseline level of functionality, which the more "specialized" jobs (like for example, engineering) can inherit and override.
     - Method overloading is also present in the application. For example, in `Job` class, jobs can be printed, and it can be either printed in a numbered (list) format, or in a normal format contingent on whether you pass an integer "counter" value to it, or not.
-    ___
-### SDG Integration
+___
+## SDG Integration
 
 The application supports SDG 8 (Decent Work and Economic Growth) and SDG 9 (Industry, Innovation, and Infrastructure) by providing ease of access to job management and applications, allowing for more workers to find their opportunity to contribute to the economy.
 ___
-### Instructions for Running the Program
+## Instructions for Running the Program
+
+### Requirements: 
+1. Install Java Development Kit (JDK 23), or higher
+2. Install MySQL Server 8.0
+3. Ensure the MySQL Connector/J is included in the project's lib folder.
+
+   
