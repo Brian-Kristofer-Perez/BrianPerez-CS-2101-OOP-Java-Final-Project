@@ -558,12 +558,12 @@ public class Employer extends User {
                 w.printResume(++ctr);
             }
 
-            workerHireMenu(input, jobSelection, applicationList);
+            workerHireMenu(input, jobSelection, applicationList, database);
         }
 
     }
 
-    private void workerHireMenu(Scanner input, Job job, ArrayList<Worker> applicationList){
+    private void workerHireMenu(Scanner input, Job job, ArrayList<Worker> applicationList, JobDAO jobDAO){
 
         String stringChoice;
         int choice;
@@ -591,7 +591,7 @@ public class Employer extends User {
 
             else{
                 Worker worker = applicationList.get(choice);
-                database.hireWorker(worker, job);
+                jobDAO.hireWorker(worker, job);
                 worker.setOccupation(job);
                 System.out.println("Worker successfully hired!");
 
