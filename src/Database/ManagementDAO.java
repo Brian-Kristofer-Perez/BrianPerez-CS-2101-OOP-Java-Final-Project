@@ -24,7 +24,9 @@ public class ManagementDAO extends JobDAO{
     }
 
     // Add Job to Database
-    public void addJob(ManagementJob job, int employerID){
+    public void addJob(Job genericJob, int employerID){
+
+        ManagementJob job = (ManagementJob) genericJob;
         try {
             PreparedStatement statement = this.connection.prepareStatement("INSERT INTO managementjobs (title, description, salary, idEmployer, teamSize, leadershipLevel, department) VALUES (?, ?, ?, ?, ?, ?, ?);");
             statement.setString(1, job.getJobTitle());

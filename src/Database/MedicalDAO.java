@@ -24,7 +24,9 @@ public class MedicalDAO extends JobDAO{
     }
 
     // Add Job to Database
-    public void addJob(MedicalJob job, int employerID){
+    public void addJob(Job genericJob, int employerID){
+
+        MedicalJob job = (MedicalJob) genericJob;
         try {
             PreparedStatement statement = this.connection.prepareStatement("INSERT INTO medicaljobs (salary, description, idEmployer, title, department, shift) VALUES (?, ?, ?, ?, ?, ?);");
             statement.setInt(1, job.getSalary());

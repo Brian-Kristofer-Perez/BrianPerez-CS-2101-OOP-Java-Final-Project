@@ -193,11 +193,23 @@ public class WorkerDAO {
     public boolean alreadyEmployed(int idWorker){
 
         try{
-            PreparedStatement preparedStatement = connection.prepareStatement( "SELECT * FROM occupations WHERE idWorker = ?");
-            preparedStatement.setInt(1, idWorker);
-            ResultSet resultSet = preparedStatement.executeQuery();
+            PreparedStatement isJob = connection.prepareStatement("SELECT * FROM occupations WHERE idWorker = ?");
+            isJob.setInt(1, idWorker);
+            ResultSet job = isJob.executeQuery();
 
-            return resultSet.next();
+            PreparedStatement isEngineering = connection.prepareStatement("SELECT * FROM engineeringoccupations WHERE idWorker = ?");
+            isEngineering.setInt(1, idWorker);
+            ResultSet engineering = isEngineering.executeQuery();
+
+            PreparedStatement isMedical = connection.prepareStatement("SELECT * FROM medicaloccupations WHERE idWorker = ?");
+            isMedical.setInt(1, idWorker);
+            ResultSet medical = isMedical.executeQuery();
+
+            PreparedStatement isManagement = connection.prepareStatement("SELECT * FROM managementoccupations WHERE idWorker = ?");
+            isManagement.setInt(1, idWorker);
+            ResultSet management = isManagement.executeQuery();
+
+            return (job.next() || engineering.next() || medical.next() || management.next());
         }
         catch(SQLException e){
             e.printStackTrace();
