@@ -55,7 +55,7 @@ public class ManagementDAO extends JobDAO{
         }
     }
 
-    public void deleteJob(ManagementJob job){
+    public void deleteJob(Job job){
 
         try {
             // get jobID from traits
@@ -95,7 +95,7 @@ public class ManagementDAO extends JobDAO{
         return idJob;
     }
 
-    public void addPosting(String name, ManagementJob job){
+    public void addPosting(String name, Job job){
 
         EmployerDAO employerDAO = new EmployerDAO();
 
@@ -168,7 +168,7 @@ public class ManagementDAO extends JobDAO{
     }
 
     // get the list of workers that are applying for this job
-    public ArrayList<Worker> queryApplicants(ManagementJob job){
+    public ArrayList<Worker> queryApplicants(Job job){
 
         WorkerDAO workerDAO = new WorkerDAO();
         int idJob = queryJobID(job);

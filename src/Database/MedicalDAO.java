@@ -54,7 +54,7 @@ public class MedicalDAO extends JobDAO{
         }
     }
 
-    public void deleteJob(MedicalJob job){
+    public void deleteJob(Job job){
 
         try {
             // get jobID from traits
@@ -165,7 +165,7 @@ public class MedicalDAO extends JobDAO{
     }
 
     // get the list of workers that are applying for this job
-    public ArrayList<Worker> queryApplicants(MedicalJob job){
+    public ArrayList<Worker> queryApplicants(Job job){
 
         WorkerDAO workerDAO = new WorkerDAO();
         int idJob = queryJobID(job);

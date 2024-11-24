@@ -59,11 +59,15 @@ public class EngineeringDAO extends JobDAO{
         }
     }
 
-    public void deleteJob(EngineeringJob job){
+    @Override
+    public void deleteJob(Job job){
 
         try {
+            // We take a generic type, but for safety, we will immediately downcast it to the sub type
+            EngineeringJob engineeringJob = (EngineeringJob) job;
+
             // get jobID from traits
-            int jobID = queryJobID(job);
+            int jobID = queryJobID(engineeringJob);
 
             // delete from jobs table
             PreparedStatement statement = connection.prepareStatement("DELETE FROM engineeringjobs WHERE idEngineeringJob = ?");
@@ -75,9 +79,15 @@ public class EngineeringDAO extends JobDAO{
         }
     }
 
-    public int queryJobID(EngineeringJob job){
+    @Override
+    public int queryJobID(Job genericJob){
 
         int idJob = 0;
+
+        // we'll once again take a generic type, and downcast it to specific.
+        // that way, we can use the same method over different DAO classes, and take the same generic input
+
+        EngineeringJob job = (EngineeringJob) genericJob;
 
         // get job id
         try {
@@ -174,7 +184,7 @@ public class EngineeringDAO extends JobDAO{
     }
 
     // get the list of workers that are applying for this job
-    public ArrayList<Worker> queryApplicants(EngineeringJob job){
+    public ArrayList<Worker> queryApplicants(Job job){
 
         WorkerDAO workerDAO = new WorkerDAO();
         int idJob = queryJobID(job);
