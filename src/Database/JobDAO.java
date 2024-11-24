@@ -228,7 +228,7 @@ public class JobDAO {
         return job;
     }
 
-    public ArrayList<Job> queryJobs(String employerName){
+    public ArrayList<Job> queryOpenPostings(String employerName){
 
         EmployerDAO employerDAO = new EmployerDAO();
 

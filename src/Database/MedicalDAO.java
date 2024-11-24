@@ -6,7 +6,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class MedicalDAO{
+public class MedicalDAO extends JobDAO{
 
     private Connection connection;
 
@@ -237,7 +237,7 @@ public class MedicalDAO{
     }
 
     // query ALL open postings only.
-    public ArrayList<MedicalJob> queryOpenPostings(String employerName){
+    public ArrayList<Job> queryOpenPostings(String employerName){
 
         EmployerDAO employerDAO = new EmployerDAO();
 

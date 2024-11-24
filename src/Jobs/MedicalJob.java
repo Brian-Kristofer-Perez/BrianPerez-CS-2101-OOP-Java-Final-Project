@@ -70,10 +70,10 @@ public class MedicalJob extends Job{
     // If you need to print jobs, but in a listing form
     @Override
     public void print(int counter){
-        System.out.println("Job #" + (++counter) + " (Management)");
+        System.out.println("Job #" + (counter) + " (Medical)");
         System.out.println("----------------------------------------------------");
         System.out.println("Job Title       : " + this.jobTitle);
-        System.out.println("Employer        : " + this.jobTitle);
+        System.out.println("Employer        : " + this.employer.getName());
         System.out.println("Job Description : " + this.jobDesc);
         System.out.println("Salary          : PHP " + this.salary);
         System.out.println("Benefits        : ");

@@ -223,24 +223,7 @@ public class Worker extends User {
         System.out.println("========================================");
 
         for (Job job : jobList) {
-            System.out.println(String.format("\nJob #%d: %s", ++counter, job.getJobTitle()));
-            System.out.println("\tEmployer: " + job.getEmployer().getName());
-            System.out.println("\tEmail: " + job.getEmployer().getEmail());
-            System.out.println("\tContact Number: " + job.getEmployer().getEmail());
-            System.out.println("\tDescription: " + job.getJobDesc());
-            System.out.println("\tSalary: Php " + job.getSalary());
-            System.out.println("\tBenefits:");
-
-
-            if (job.getBenefits() != null && !job.getBenefits().isEmpty()) {
-                for (String benefit : job.getBenefits()) {
-                    if (benefit != null && !benefit.isBlank()) {
-                        System.out.println("\t - " + benefit);
-                    }
-                }
-            } else {
-                System.out.println("\t - No benefits listed.");
-            }
+            job.print(++counter);
         }
 
         System.out.println("\n========================================");
@@ -264,24 +247,7 @@ public class Worker extends User {
         System.out.println("========================================");
 
         for (Job job : jobList) {
-
-            System.out.println(String.format("\nJob #%d: %s", ++counter, job.getJobTitle()));
-            System.out.println("\tEmployer: " + job.getEmployer().getName());
-            System.out.println("\tEmail: " + job.getEmployer().getEmail());
-            System.out.println("\tContact Number: " + job.getEmployer().getEmail());
-            System.out.println("\tDescription: " + job.getJobDesc());
-            System.out.println("\tSalary: Php " + job.getSalary());
-            System.out.println("\tBenefits:");
-
-            if (job.getBenefits() != null && !job.getBenefits().isEmpty()) {
-                for (String benefit : job.getBenefits()) {
-                    if (benefit != null && !benefit.isBlank()) {
-                        System.out.println("\t - " + benefit);
-                    }
-                }
-            } else {
-                System.out.println("\t - No benefits listed.");
-            }
+            job.print(++counter);
         }
 
         System.out.println("\n========================================");

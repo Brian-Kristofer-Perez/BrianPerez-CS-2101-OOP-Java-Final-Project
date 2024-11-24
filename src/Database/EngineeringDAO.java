@@ -9,7 +9,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class EngineeringDAO{
+public class EngineeringDAO extends JobDAO{
 
     private Connection connection;
 
@@ -248,7 +248,7 @@ public class EngineeringDAO{
     }
 
     // query ALL open postings only.
-    public ArrayList<EngineeringJob> queryOpenPostings(String employerName){
+    public ArrayList<Job> queryOpenPostings(String employerName){
 
         EmployerDAO employerDAO = new EmployerDAO();
 

@@ -396,6 +396,42 @@ public class Employer extends User {
         System.out.println("====================================================");
     };
 
+    // select which specific field you will query the jobs from
+    private JobDAO selectPostingType(Scanner input){
+
+        String jobTypeChoice;
+        char jobType;
+
+        while(true) {
+            System.out.println("1. Engineering");
+            System.out.println("2. Medical");
+            System.out.println("3. Management");
+            System.out.println("4. General");
+            System.out.print("Input the number of the desired job type: ");
+
+            jobTypeChoice = input.nextLine();
+
+            if(jobTypeChoice.isBlank()){
+                System.out.println("Input a valid choice!");
+                continue;
+            }
+
+            jobType = jobTypeChoice.charAt(0);
+
+            switch (jobType){
+                case '1':
+                    return new EngineeringDAO();
+                case '2':
+                    return new MedicalDAO();
+                case '3':
+                    return new ManagementDAO();
+                case '4':
+                    return new JobDAO();
+                default:
+                    System.out.println("Input a valid choice!");
+            }
+        }
+    }
 
     private void viewPostings(ArrayList<Job> jobList){
 
@@ -423,10 +459,12 @@ public class Employer extends User {
 
         String strChoice;
         int choice;
-        JobDAO database = new JobDAO();
-        ArrayList<Job> jobList = database.queryJobs(this.name);
+
+        JobDAO DAO = selectPostingType(input);
+        ArrayList<Job> jobList = DAO.queryAllPostings();
 
         if(jobList.isEmpty()){
+            System.out.println("No postings found for that job type.");
             return;
         }
 
@@ -464,17 +502,17 @@ public class Employer extends User {
             }
         }
 
-        database.deleteJob(jobList.get(choice));
+        DAO.deleteJob(jobList.get(choice));
         System.out.println("Job deleted!");
 
     }
 
     private void reviewPostings(Scanner input){
 
-        JobDAO database = new JobDAO();
+        JobDAO database = selectPostingType(input);
         String strChoice;
         int choice;
-        ArrayList<Job> jobList = database.queryJobs(this.name);
+        ArrayList<Job> jobList = database.queryOpenPostings(this.name);
 
         viewPostings(jobList);
 
