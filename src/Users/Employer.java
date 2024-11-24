@@ -461,7 +461,7 @@ public class Employer extends User {
         int choice;
 
         JobDAO DAO = selectPostingType(input);
-        ArrayList<Job> jobList = DAO.queryAllPostings(this.name);
+        ArrayList<Job> jobList = DAO.queryAllOwnedPostings(this.name);
 
         if(jobList.isEmpty()){
             System.out.println("No postings found for that job type.");
@@ -512,7 +512,7 @@ public class Employer extends User {
         JobDAO database = selectPostingType(input);
         String strChoice;
         int choice;
-        ArrayList<Job> jobList = database.queryOpenPostings(this.name);
+        ArrayList<Job> jobList = database.queryOwnedOpenPostings(this.name);
 
         viewPostings(jobList);
 

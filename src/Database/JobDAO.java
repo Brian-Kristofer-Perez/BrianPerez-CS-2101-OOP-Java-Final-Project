@@ -115,13 +115,13 @@ public class JobDAO {
         HashMap<Integer, Job> jobMap = new HashMap<>();
 
         EmployerDAO database = new EmployerDAO();
-
         int idEmployer = database.queryEmployerID(employerName);
 
         try {
 
             // get all jobID's
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM jobs LEFT JOIN benefits on jobs.idJob = benefits.idJob;");
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM jobs LEFT JOIN benefits on jobs.idJob = benefits.idJob where idEmployer = ?;");
+            statement.setInt(1, idEmployer);
             ResultSet resultSet = statement.executeQuery();
 
             // loop through resultSet
