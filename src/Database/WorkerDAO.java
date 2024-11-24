@@ -1,7 +1,7 @@
 package Database;
 
 import Jobs.Job;
-import Jobs.Resume;
+import Users.Resume;
 import Users.Worker;
 
 import java.sql.*;

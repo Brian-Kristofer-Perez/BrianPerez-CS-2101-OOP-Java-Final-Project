@@ -57,12 +57,11 @@ public class Worker extends User {
             System.out.println("2. Edit Resume");
             System.out.println("3. View Contact details");
             System.out.println("4. Edit Contact details");
-            System.out.println("5. View Job Postings");
-            System.out.println("6. Apply for a Job");
-            System.out.println("7. View Current Job");
-            System.out.println("8. Log out");
+            System.out.println("5. Apply for a Job");
+            System.out.println("6. View Current Job");
+            System.out.println("7. Log out");
 
-            System.out.print("Please enter your choice (1-8): ");
+            System.out.print("Please enter your choice (1-7): ");
 
             // catch empty input errors!
             try {
@@ -86,17 +85,15 @@ public class Worker extends User {
                     editContactDetails(input);
                     break;
                 case '5':
-//                    printAllPostings();
-                    break;
-                case '6':
                     applyForJob(input);
                     break;
-                case '7':
+                case '6':
                     displayCurrentJob(input);
                     break;
-                case '8':
+                case '7':
                     System.out.println("Logging out... Goodbye!");
                     return;
+
                 default:
                     System.out.println("Please provide a valid input.");
             }
@@ -292,6 +289,7 @@ public class Worker extends User {
         char jobType;
 
         while(true) {
+            System.out.println();
             System.out.println("1. Engineering");
             System.out.println("2. Medical");
             System.out.println("3. Management");

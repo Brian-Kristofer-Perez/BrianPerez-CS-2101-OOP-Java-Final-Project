@@ -715,6 +715,9 @@ public class Employer extends User {
         // user log-in menu here
         char choice;
         while (true) {
+            System.out.println("\n========================================");
+            System.out.println("    Welcome to Your Employer Portal     ");
+            System.out.println("========================================");
             System.out.println(String.format("Welcome, %s!", this.name));
             System.out.println("1. Create Job postings");
             System.out.println("2. Review Job postings");
@@ -723,8 +726,9 @@ public class Employer extends User {
             System.out.println("5. Manage employees");
             System.out.println("6. Delete job postings");
             System.out.println("7. Log out");
-
+            System.out.println();
             System.out.print("Input your choice: ");
+
 
             // catch empty input errors!
             try {
@@ -754,7 +758,7 @@ public class Employer extends User {
                     deleteJobMenu(input);
                     break;
                 case '7':
-                    System.out.println("Logging out. Goodbye!W");
+                    System.out.println("Logging out. Goodbye!");
                     return;
 
                 default:

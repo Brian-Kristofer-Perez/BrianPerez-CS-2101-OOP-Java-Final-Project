@@ -1,4 +1,4 @@
-package Jobs;
+package Users;
 import java.util.ArrayList;
 
 public class Resume {

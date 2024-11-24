@@ -199,7 +199,7 @@ public class MedicalDAO extends JobDAO{
         try {
 
             // get all jobID's
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM medicaljobs LEFT JOIN medicalbenefits on medicaljobs.idMedicalJob = medicalbenefits.idMedicalJob AND NOT EXISTS (SELECT * FROM medicaloccupations WHERE medicaloccupations.idMedicalJob = medicaljobs.idMedicalJob);");
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM medicaljobs LEFT JOIN medicalbenefits on medicaljobs.idMedicalJob = medicalbenefits.idMedicalJob WHERE NOT EXISTS (SELECT * FROM medicaloccupations WHERE medicaloccupations.idMedicalJob = medicaljobs.idMedicalJob);");
             ResultSet resultSet = statement.executeQuery();
 
             // loop through resultSet
