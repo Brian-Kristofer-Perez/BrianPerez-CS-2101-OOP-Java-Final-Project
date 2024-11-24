@@ -362,4 +362,31 @@ public class ManagementDAO extends JobDAO{
         // pass it to a return arraylist
         return new ArrayList<>(jobMap.values());
     }
+
+    public ArrayList<Worker> queryEmployees(String employerName){
+
+        EmployerDAO employerDAO = new EmployerDAO();
+
+        ArrayList<Worker> workerList = new ArrayList<>();
+        int employerID = employerDAO.queryEmployerID(employerName);
+
+        try{
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM managementoccupations JOIN managementjobs ON managementoccupations.idManagementJob = managementjobs.idManagementJob JOIN workers ON managementoccupations.idWorker = workers.idWorker WHERE idEmployer = ?;");
+            statement.setInt(1, employerID);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            while(resultSet.next()){
+
+                String workerName = resultSet.getString("name");
+                Worker newWorker = new Worker(workerName);
+                workerList.add(newWorker);
+            }
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+
+        return workerList;
+    }
 }

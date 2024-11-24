@@ -17,7 +17,7 @@ public class Worker extends User {
         this.setResume(database.loadResume(name));
         this.setEmail(database.queryWorkerEmail(name));
         this.setContactNumber(database.queryWorkerContactNo(name));
-        this.setOccupation(database.loadOccupation(name));
+//        this.setOccupation(database.loadOccupation(name));
     }
 
     // Getters!
@@ -86,7 +86,7 @@ public class Worker extends User {
                     editContactDetails(input);
                     break;
                 case '5':
-                    printAllPostings();
+//                    printAllPostings();
                     break;
                 case '6':
                     applyForJob(input);
