@@ -459,6 +459,19 @@ public class MedicalDAO extends JobDAO{
             clearApps.setInt(1, idJob);
             clearApps.executeUpdate();
 
+            // clear the worker's applications toward other jobs once hired
+            PreparedStatement clearApps2 = connection.prepareStatement("DELETE FROM engineeringapplications WHERE idWorker = ?");
+            clearApps2.setInt(1, idWorker);
+            clearApps2.executeUpdate();
+
+            PreparedStatement clearApps3 = connection.prepareStatement("DELETE FROM applications WHERE idWorker = ?");
+            clearApps3.setInt(1, idWorker);
+            clearApps3.executeUpdate();
+
+            PreparedStatement clearApps4 = connection.prepareStatement("DELETE FROM managementapplications WHERE idWorker = ?");
+            clearApps4.setInt(1, idWorker);
+            clearApps4.executeUpdate();
+
         }
         catch (SQLException e){
             e.printStackTrace();
