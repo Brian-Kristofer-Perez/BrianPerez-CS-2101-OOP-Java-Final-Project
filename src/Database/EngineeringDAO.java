@@ -205,10 +205,14 @@ public class EngineeringDAO extends JobDAO{
 
         HashMap<Integer, EngineeringJob> jobMap = new HashMap<>();
 
+        EmployerDAO employerDAO = new EmployerDAO();
+        int idEmployer = employerDAO.queryEmployerID(employerName);
+
         try {
 
             // get all jobID's
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM engineeringjobs LEFT JOIN engineeringbenefits on engineeringjobs.idEngineeringJob = engineeringbenefits.idEngineeringJob;");
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM engineeringjobs LEFT JOIN engineeringbenefits on engineeringjobs.idEngineeringJob = engineeringbenefits.idEngineeringJob WHERE idEmployer = ?;");
+            statement.setInt(1, idEmployer);
             ResultSet resultSet = statement.executeQuery();
 
             // loop through resultSet
@@ -227,10 +231,6 @@ public class EngineeringDAO extends JobDAO{
 
                 // else, add it to the hashmap
                 else{
-                    EmployerDAO employerDAO = new EmployerDAO();
-
-                    int idEmployer = resultSet.getInt("idEmployer");
-                    Employer employer = employerDAO.queryEmployerFromID(idEmployer);
 
                     String title = resultSet.getString("title");
                     String description = resultSet.getString("description");
@@ -240,9 +240,8 @@ public class EngineeringDAO extends JobDAO{
                     String travelRequirements = resultSet.getString("travelRequirements");
                     String contractType = resultSet.getString("contractType");
 
-
                     ArrayList<String> benefits = new ArrayList<>();
-                    EngineeringJob job = new EngineeringJob(title, description, salary, benefits, employer.getName(), projectType, locationType, travelRequirements, contractType);
+                    EngineeringJob job = new EngineeringJob(title, description, salary, benefits, employerName, projectType, locationType, travelRequirements, contractType);
                     job.addBenefits(resultSet.getString("benefit"));
 
                     jobMap.put(idJob, job);
