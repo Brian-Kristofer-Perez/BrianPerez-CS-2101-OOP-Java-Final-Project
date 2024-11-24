@@ -1,9 +1,6 @@
 package Users;
 import Database.*;
-import Jobs.EngineeringJob;
-import Jobs.Job;
-import Jobs.ManagementJob;
-import Jobs.MedicalJob;
+import Jobs.*;
 
 import java.util.ArrayList;
 import java.util.Scanner;

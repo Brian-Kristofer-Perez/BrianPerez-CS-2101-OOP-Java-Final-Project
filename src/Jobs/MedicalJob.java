@@ -2,10 +2,6 @@ package Jobs;
 
 import java.util.ArrayList;
 
-//enum ShiftType{
-//    Day, Night, Rotating
-//}
-
 public class MedicalJob extends Job{
 
     String department;

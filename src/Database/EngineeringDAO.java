@@ -1,11 +1,7 @@
 package Database;
 
-import Jobs.EngineeringJob;
-import Jobs.Job;
-import Jobs.MedicalJob;
-import Users.Employer;
-import Users.Worker;
-
+import Jobs.*;
+import Users.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;

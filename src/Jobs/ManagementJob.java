@@ -1,11 +1,6 @@
 package Jobs;
 import java.util.ArrayList;
 
-
-//enum LeadershipLevel{
-//    Director, TeamLeader, Manager, ChiefPosition
-//}
-
 public class ManagementJob extends Job{
 
     int teamSize;

@@ -1,9 +1,7 @@
 package Database;
 
 import Jobs.Job;
-import Users.Resume;
-import Users.Worker;
-
+import Users.*;
 import java.sql.*;
 import java.util.ArrayList;
 

@@ -1,23 +1,6 @@
 package Jobs;
 import java.util.ArrayList;
 
-//enum ProjectType{
-//    Software, Mechanical, Civil, Chemical
-//}
-//
-//enum LocationType{
-//    onsite, remote, flexible
-//}
-//
-//enum TravelRequirements{
-//    none,
-//    occasional,
-//    frequent
-//}
-//
-//enum ContractType{
-//    permanent, temporary, contract
-//}
 
 public class EngineeringJob extends Job{
 

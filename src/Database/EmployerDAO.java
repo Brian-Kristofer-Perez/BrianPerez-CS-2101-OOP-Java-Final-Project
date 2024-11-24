@@ -1,10 +1,7 @@
 package Database;
 
 import Users.Employer;
-import Users.Worker;
-
 import java.sql.*;
-import java.util.ArrayList;
 
 public class EmployerDAO {
 
