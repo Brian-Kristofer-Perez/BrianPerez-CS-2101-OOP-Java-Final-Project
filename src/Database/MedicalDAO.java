@@ -54,7 +54,11 @@ public class MedicalDAO extends JobDAO{
         }
     }
 
-    public void deleteJob(Job job){
+    public void deleteJob(Job genericJob){
+
+        // We take a generic type to override the parent function,
+        // but we will immediately downcast it to the sub type for specific implementation
+        MedicalJob job = (MedicalJob) genericJob;
 
         try {
             // get jobID from traits
@@ -70,9 +74,13 @@ public class MedicalDAO extends JobDAO{
         }
     }
 
-    public int queryJobID(MedicalJob job){
+    public int queryJobID(Job genericJob){
 
         int idJob = 0;
+
+        // We take a generic type to override the parent function,
+        // but we will immediately downcast it to the sub type for specific implementation
+        MedicalJob job = (MedicalJob) genericJob;
 
         // get job id
         try {

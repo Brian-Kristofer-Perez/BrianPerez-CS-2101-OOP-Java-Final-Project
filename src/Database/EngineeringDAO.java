@@ -2,6 +2,7 @@ package Database;
 
 import Jobs.EngineeringJob;
 import Jobs.Job;
+import Jobs.MedicalJob;
 import Users.Employer;
 import Users.Worker;
 
@@ -63,7 +64,8 @@ public class EngineeringDAO extends JobDAO{
     public void deleteJob(Job job){
 
         try {
-            // We take a generic type, but for safety, we will immediately downcast it to the sub type
+            // We take a generic type to override the parent function,
+            // but we will immediately downcast it to the sub type for specific implementation
             EngineeringJob engineeringJob = (EngineeringJob) job;
 
             // get jobID from traits
@@ -79,15 +81,13 @@ public class EngineeringDAO extends JobDAO{
         }
     }
 
-    @Override
     public int queryJobID(Job genericJob){
 
-        int idJob = 0;
-
-        // we'll once again take a generic type, and downcast it to specific.
-        // that way, we can use the same method over different DAO classes, and take the same generic input
-
+        // We take a generic type to override the parent function,
+        // but we will immediately downcast it to the sub type for specific implementation
         EngineeringJob job = (EngineeringJob) genericJob;
+
+        int idJob = 0;
 
         // get job id
         try {

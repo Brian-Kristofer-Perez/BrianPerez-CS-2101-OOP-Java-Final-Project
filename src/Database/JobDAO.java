@@ -14,6 +14,8 @@ public class JobDAO {
 
     // This is the Data Access Object (DAO) of the Job class.
     // This should handle the database operations related to the said class
+    // This also has another functionality, serving as the parent "container" class for each job DAO,
+    // for shared functionality across different DAOs.
 
     // connect to database!
     public JobDAO(){
