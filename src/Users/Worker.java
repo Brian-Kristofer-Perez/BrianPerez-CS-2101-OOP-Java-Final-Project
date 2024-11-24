@@ -202,35 +202,6 @@ public class Worker extends User {
         System.out.println("=====================================================");
     }
 
-
-    // auto-queries the db stuff, irrespective of order
-    private void printAllPostings() {
-
-        JobDAO database = new JobDAO();
-
-        ArrayList<Job> jobList = database.queryAllPostings();
-
-        int counter = 0;
-
-        if (jobList.isEmpty()) {
-            System.out.println("\nNo job postings available at the moment.");
-            System.out.println("Please check back later.");
-            return;
-        }
-
-        System.out.println("\n========================================");
-        System.out.println("        Available Job Postings          ");
-        System.out.println("========================================");
-
-        for (Job job : jobList) {
-            job.print(++counter);
-        }
-
-        System.out.println("\n========================================");
-        System.out.println();
-
-    }
-
     // takes a preset manually queried job order, used in cases where indexing is needed
     private void printAllPostings(ArrayList<Job> jobList) {
 
@@ -315,12 +286,49 @@ public class Worker extends User {
         System.out.println("========================================");
     }
 
+    private JobDAO selectPostingType(Scanner input){
+
+        String jobTypeChoice;
+        char jobType;
+
+        while(true) {
+            System.out.println("1. Engineering");
+            System.out.println("2. Medical");
+            System.out.println("3. Management");
+            System.out.println("4. General");
+            System.out.print("Input the number of the desired job type: ");
+
+            jobTypeChoice = input.nextLine();
+
+            if(jobTypeChoice.isBlank()){
+                System.out.println("Input a valid choice!");
+                continue;
+            }
+
+            jobType = jobTypeChoice.charAt(0);
+
+            switch (jobType){
+                case '1':
+                    return new EngineeringDAO();
+                case '2':
+                    return new MedicalDAO();
+                case '3':
+                    return new ManagementDAO();
+                case '4':
+                    return new JobDAO();
+                default:
+                    System.out.println("Input a valid choice!");
+            }
+        }
+    }
+
     private void applyForJob(Scanner input){
         WorkerDAO database = new WorkerDAO();
         int idWorker = database.queryWorkerID(this.name);
 
-        JobDAO jobDB = new JobDAO();
-        ArrayList<Job> jobList = jobDB.queryAllPostings();
+        JobDAO jobDB = selectPostingType(input);
+        ArrayList<Job> jobList = jobDB.queryAllOpenPostings();
+
         String strChoice;
         int choice, jobID;
         Job job;

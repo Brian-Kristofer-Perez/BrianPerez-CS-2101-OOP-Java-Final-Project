@@ -120,6 +120,7 @@ public class ManagementDAO extends JobDAO{
     }
 
     // view ALL jobs, both occupied and not (management only)
+    // this is usually used for deletion
     public ArrayList<Job> queryAllPostings(){
 
         HashMap<Integer, ManagementJob> jobMap = new HashMap<>();

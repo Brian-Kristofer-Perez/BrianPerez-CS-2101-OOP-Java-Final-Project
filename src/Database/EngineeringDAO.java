@@ -126,63 +126,6 @@ public class EngineeringDAO extends JobDAO{
 
     }
 
-    // view ALL jobs, both occupied and not (engineering only)
-    public ArrayList<Job> queryAllPostings(){
-
-        HashMap<Integer, EngineeringJob> jobMap = new HashMap<>();
-
-        try {
-
-            // get all jobID's
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM engineeringjobs LEFT JOIN engineeringbenefits on engineeringjobs.idJob = engineeringbenefits.idJob;");
-            ResultSet resultSet = statement.executeQuery();
-
-            // loop through resultSet
-            while(resultSet.next()){
-
-                // get their jobID
-                Integer idJob = resultSet.getInt("idEngineeringJob");
-
-                // if it's already in the hashmap, get it, add a new benefit, put it back.
-                if(jobMap.containsKey(idJob)){
-
-                    EngineeringJob job = jobMap.get(idJob);
-                    job.addBenefits(resultSet.getString("benefit"));
-                    jobMap.replace(idJob, job);
-                }
-
-                // else, add it to the hashmap
-                else{
-                    EmployerDAO employerDAO = new EmployerDAO();
-
-                    int idEmployer = resultSet.getInt("idEmployer");
-                    Employer employer = employerDAO.queryEmployerFromID(idEmployer);
-
-                    String title = resultSet.getString("title");
-                    String description = resultSet.getString("description");
-                    int salary = resultSet.getInt("salary");
-                    String projectType = resultSet.getString("projectType");
-                    String locationType = resultSet.getString("locationType");
-                    String travelRequirements = resultSet.getString("travelRequirements");
-                    String contractType = resultSet.getString("contractType");
-
-
-                    ArrayList<String> benefits = new ArrayList<>();
-                    EngineeringJob job = new EngineeringJob(title, description, salary, benefits, employer.getName(), projectType, locationType, travelRequirements, contractType);
-                    job.addBenefits(resultSet.getString("benefit"));
-
-                    jobMap.put(idJob, job);
-                }
-
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        // pass it to a return arraylist
-        return new ArrayList<>(jobMap.values());
-    }
-
     // get the list of workers that are applying for this job
     public ArrayList<Worker> queryApplicants(Job job){
 
@@ -257,8 +200,125 @@ public class EngineeringDAO extends JobDAO{
         return job;
     }
 
-    // query ALL open postings only.
-    public ArrayList<Job> queryOpenPostings(String employerName){
+    // view ALL owned jobs, open or not
+    public ArrayList<Job> queryAllOwnedPostings(String employerName){
+
+        HashMap<Integer, EngineeringJob> jobMap = new HashMap<>();
+
+        try {
+
+            // get all jobID's
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM engineeringjobs LEFT JOIN engineeringbenefits on engineeringjobs.idEngineeringJob = engineeringbenefits.idEngineeringJob;");
+            ResultSet resultSet = statement.executeQuery();
+
+            // loop through resultSet
+            while(resultSet.next()){
+
+                // get their jobID
+                Integer idJob = resultSet.getInt("idEngineeringJob");
+
+                // if it's already in the hashmap, get it, add a new benefit, put it back.
+                if(jobMap.containsKey(idJob)){
+
+                    EngineeringJob job = jobMap.get(idJob);
+                    job.addBenefits(resultSet.getString("benefit"));
+                    jobMap.replace(idJob, job);
+                }
+
+                // else, add it to the hashmap
+                else{
+                    EmployerDAO employerDAO = new EmployerDAO();
+
+                    int idEmployer = resultSet.getInt("idEmployer");
+                    Employer employer = employerDAO.queryEmployerFromID(idEmployer);
+
+                    String title = resultSet.getString("title");
+                    String description = resultSet.getString("description");
+                    int salary = resultSet.getInt("salary");
+                    String projectType = resultSet.getString("projectType");
+                    String locationType = resultSet.getString("locationType");
+                    String travelRequirements = resultSet.getString("travelRequirements");
+                    String contractType = resultSet.getString("contractType");
+
+
+                    ArrayList<String> benefits = new ArrayList<>();
+                    EngineeringJob job = new EngineeringJob(title, description, salary, benefits, employer.getName(), projectType, locationType, travelRequirements, contractType);
+                    job.addBenefits(resultSet.getString("benefit"));
+
+                    jobMap.put(idJob, job);
+                }
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        // pass it to a return arraylist
+        return new ArrayList<>(jobMap.values());
+    }
+
+    // query All open postings, regardless of ownership
+    public ArrayList<Job> queryAllOpenPostings(){
+
+        EmployerDAO employerDAO = new EmployerDAO();
+        HashMap<Integer, EngineeringJob> jobMap = new HashMap<>();
+
+        // query all engineering jobs
+        try {
+
+            // get all jobID's that belong in engineering, and filter out the ones that are occupied already
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM engineeringjobs LEFT JOIN engineeringbenefits ON engineeringjobs.idEngineeringJob = engineeringbenefits.idEngineeringJob WHERE NOT EXISTS (SELECT * FROM engineeringoccupations WHERE engineeringoccupations.idEngineeringJob = engineeringjobs.idEngineeringJob)");
+            ResultSet resultSet = statement.executeQuery();
+
+            // loop through resultSet
+            while(resultSet.next()){
+
+                // get their jobID
+                Integer id = resultSet.getInt("idEngineeringJob");
+
+                // if it's already in the hashmap, get it, add a new benefit, put it back.
+                if(jobMap.containsKey(id)){
+
+                    EngineeringJob job = jobMap.get(id);
+                    job.addBenefits(resultSet.getString("benefit"));
+                    jobMap.replace(id, job);
+                }
+
+                // else, add it to the hashmap
+                else{
+
+                    String title = resultSet.getString("title");
+                    String description = resultSet.getString("description");
+                    int salary = resultSet.getInt("salary");
+                    String projectType = resultSet.getString("projectType");
+                    String locationType = resultSet.getString("locationType");
+                    String travelRequirements = resultSet.getString("travelRequirements");
+                    String contractType = resultSet.getString("contractType");
+                    ArrayList<String> benefits = new ArrayList<>();
+
+                    // slightly more complex logic, to query the employerName
+                    int idEmployer = resultSet.getInt("idEmployer");
+                    String employerName = employerDAO.queryEmployerFromID(idEmployer).getName();
+
+
+                    EngineeringJob job = new EngineeringJob(title, description, salary, benefits, employerName, projectType,locationType, travelRequirements,contractType);
+                    job.addBenefits(resultSet.getString("benefit"));
+
+                    jobMap.put(id, job);
+                }
+
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        // pass it to a return arraylist
+        return new ArrayList<>(jobMap.values());
+    }
+
+    // query owned open
+    public ArrayList<Job> queryOwnedOpenPostings(String employerName){
 
         EmployerDAO employerDAO = new EmployerDAO();
 

@@ -118,6 +118,7 @@ public class MedicalDAO extends JobDAO{
     }
 
     // view ALL jobs, both occupied and not (medical only)
+    // this is usually used for deletion
     public ArrayList<Job> queryAllPostings(){
 
         HashMap<Integer, MedicalJob> jobMap = new HashMap<>();
