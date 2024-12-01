@@ -11,7 +11,7 @@ InsideJob is a job management software that provides ease of use for both users 
   - ### Resume Editing
     - Create and edit your own resume, and freely configure it to suit you!
     - Create a brief summary or description of your professional life, and educational history
-    - Add your individial work experiences and list them down!
+    - Add your individual work experiences and list them down!
       
   - ### Contact Information
     - Keep you and your colleagues connected, by sharing your email and other contact information.
@@ -49,7 +49,7 @@ InsideJob is a job management software that provides ease of use for both users 
       - It also has attributes and non-abstract methods to be inherited for shared functionality between the child classes.
 
   - ### Inheritance
-    - The application supports different inheritance hierarchies. Like mentioned above, inheritance is applied with the `User` abstract class, but inheritance is also applied with the `Job` superclass, serving as both an "object wrapper", shairing attributes, and even being a class with instantiable objects in and of itself.
+    - The application supports different inheritance hierarchies. Like mentioned above, inheritance is applied with the `User` abstract class, but inheritance is also applied with the `Job` superclass, serving as both an "object wrapper", sharing attributes, and even being a class with instantiable objects in and of itself.
     - Inheritance also allows the sharing of attributes and functionalities, allowing the parent class to provide a base of attributes and methods that child classes can build off of.            
     
   - ### Polymorphism
