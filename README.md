@@ -11,7 +11,7 @@ InsideJob is a job management software that provides ease of use for both users 
   - ### Resume Editing
     - Create and edit your own resume, and freely configure it to suit you!
     - Create a brief summary or description of your professional life, and educational history
-    - Add your individial work experiences and list them down!
+    - Add your individual work experiences and list them down!
       
   - ### Contact Information
     - Keep you and your colleagues connected, by sharing your email and other contact information.
