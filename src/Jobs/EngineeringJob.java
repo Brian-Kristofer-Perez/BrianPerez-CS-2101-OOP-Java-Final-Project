@@ -4,10 +4,10 @@ import java.util.ArrayList;
 
 public class EngineeringJob extends Job{
 
-    String projectType;
-    String locationType;
-    String travelRequirements;
-    String contractType;
+    private String projectType;
+    private String locationType;
+    private String travelRequirements;
+    private String contractType;
 
     // Pass all the inputs manually
     public EngineeringJob(String title, String jobDesc, int salary, ArrayList<String> benefits, String employerName, String projectType, String locationType, String travelRequirements, String contractType){

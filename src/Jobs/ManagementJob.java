@@ -3,9 +3,9 @@ import java.util.ArrayList;
 
 public class ManagementJob extends Job{
 
-    int teamSize;
-    String leadershipLevel;
-    String department;
+    private int teamSize;
+    private String leadershipLevel;
+    private String department;
 
     public ManagementJob(String title, String jobDesc, int salary, ArrayList<String> benefits, String employerName, int teamSize, String department, String leadershipLevel){
 

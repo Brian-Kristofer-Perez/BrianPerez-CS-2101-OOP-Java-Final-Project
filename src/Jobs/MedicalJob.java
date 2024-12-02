@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 public class MedicalJob extends Job{
 
-    String department;
-    String shiftType;
+    private String department;
+    private String shiftType;
 
     public MedicalJob(String title, String jobDesc, int salary, ArrayList<String> benefits, String employerName, String department, String shiftType){
         super(title, jobDesc, salary, benefits, employerName);
