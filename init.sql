@@ -1,6 +1,8 @@
+CREATE DATABASE  IF NOT EXISTS `testschema` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `testschema`;
 -- MySQL dump 10.13  Distrib 8.0.38, for Win64 (x86_64)
 --
--- Host: localhost    Database: testschema
+-- Host: 127.0.0.1    Database: testschema
 -- ------------------------------------------------------
 -- Server version	8.0.39
 
@@ -419,4 +421,4 @@ CREATE TABLE `workexperience` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-11-24 21:29:10
+-- Dump completed on 2024-12-01 16:43:17
