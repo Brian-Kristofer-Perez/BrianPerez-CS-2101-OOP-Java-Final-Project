@@ -1,7 +1,7 @@
 # InsideJob: A Specialized Job Management Software 💼
 ___
 
-![InsideJob Logo](assets/Logo%20image.png)
+![InsideJob Logo](assets/Logo%20image.jpg)
 
 ## 🌟 Overview
 
