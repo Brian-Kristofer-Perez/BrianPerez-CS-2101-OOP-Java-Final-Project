@@ -75,7 +75,7 @@ ___
 2. Set up MySQL server, and start it
 3. Log into MySQL as the root user. You may be prompted to create a password. If so, use the password 12345678, otherwise, set your current password to so.
 4. In MySQL, run the following SQL command: `CREATE DATABASE testschema;`
-5. Using the init.sql file in the project folder, construct the given database schema.
+5. Using the init.sql file in the db folder, construct the given database schema.
 6. Open your IDE, and in your terminal, navigate to the project directory.
 7. In the terminal, type the following commands:
 `mkdir -p bin`
